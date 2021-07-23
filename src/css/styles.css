@@ -1,0 +1,183 @@
+.fondoH {
+  background-color: #eeeeee;
+  color: #eeeeee;
+}
+
+.bttn {
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;  
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;  
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.boton {
+  color: #093c71;
+  text-align: center;
+  font-size: 18px;
+  border-radius: 8px;
+  width: 200px;
+}
+
+.logoH {
+  widows: 243px;
+  height: 46px;
+}
+
+.fondoN {
+  background: #093c71;
+}
+
+.btnN {
+  background-color: #093c71;
+}
+
+.v {
+  background-color: #97daf7;
+}
+
+#footer {
+  width: 100%;
+  height: 205px;
+}
+
+.spanFooter {
+  color: white;
+  font-size: 14px;
+}
+
+.copy {
+  font-size: 14px;
+  color: white;
+}
+
+.logoF {
+  width: 162;
+  height: 30;
+}
+
+.fondoF {
+  background: #093c71;
+}
+
+.bien {
+  font-size: 20px;
+}
+
+.nom {
+  font-size: 14px;
+}
+
+.pro {
+  font-size: 10px;
+}
+
+.plan {
+  font-size: 15px;
+}
+
+.up {
+  font-size: 13px;
+}
+
+.upBtn {
+  font-size: 12px;
+}
+
+.doc {
+  font-size: 13px;
+  color: white;
+  margin-left: 10px;
+}
+
+.doc2 {
+  font-size: 13px;
+  color: #093c71;
+  margin-left: 10px;
+}
+
+.btnUp {
+  color: #093c71;
+  border-color: #093c71;
+  background-color: #97daf7;
+  width: 140px;
+}
+
+.btnCom {
+  color: #093c71;
+  border-color: #093c71;
+  background-color: #97daf7;
+  font-size: 14px;
+}
+
+.btnR {
+  height: 40px;
+  background-color: red;
+}
+
+.btnW {
+  height: 40px;
+}
+
+.color1 {
+  color: #093c71;
+}
+
+.color2 {
+  color: #97daf7;
+}
+
+.imgPun {
+  width: 5%;
+}
+
+.imgDoc {
+  width: 6%;
+}
+
+.imgRotar {
+  transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+}
+
+.tam {
+  width:155px;
+}
+.act {
+  background-color:#97daf7;
+  color: #093c71;
+}
+
+.tamMin{
+  min-width: 150px;
+}
+.margbb{
+  margin-block: 5px;
+}
+.margintt{
+  margin-top: -2px;
+}
+.marginrr {
+  margin-right: 1%;
+}
+.margtt20 {
+  margin-top: 20px;
+}
+.margtt40 {
+  margin-top: 40px;
+}
+.barra {
+  width: 1px;
+  background-color: #093c71;
+  height: 90%;
+  float: left;
+}
