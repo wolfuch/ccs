@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "frontproveedorapp.fullname" . }}
+  name: {{ template "frontloginapp.fullname" . }}
   labels:
-    app: {{ template "frontproveedorapp.name" . }}
-    chart: {{ template "frontproveedorapp.chart" . }}
+    app: {{ template "frontloginapp.name" . }}
+    chart: {{ template "frontloginapp.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
@@ -19,5 +19,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: {{ template "frontproveedorapp.name" . }}
+    app: {{ template "frontloginapp.name" . }}
     release: {{ .Release.Name }}

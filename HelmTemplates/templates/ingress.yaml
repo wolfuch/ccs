@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "frontproveedorapp.fullname" . -}}
-{{- $serviceName := include "frontproveedorapp.name" . -}}
+{{- $fullName := include "frontloginapp.fullname" . -}}
+{{- $serviceName := include "frontloginapp.name" . -}}
 {{- $servicePort := .Values.service.port -}}
 apiVersion: extensions/v1beta1
 kind: Ingress

@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "frontproveedorapp.fullname" . }}
+  name: {{ template "frontloginapp.fullname" . }}
   labels:
-    app: {{ template "frontproveedorapp.name" . }}
-    chart: {{ template "frontproveedorapp.chart" . }}
+    app: {{ template "frontloginapp.name" . }}
+    chart: {{ template "frontloginapp.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ template "frontproveedorapp.name" . }}
+      app: {{ template "frontloginapp.name" . }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ template "frontproveedorapp.name" . }}
+        app: {{ template "frontloginapp.name" . }}
         release: {{ .Release.Name }}
     spec:
       containers:
@@ -46,7 +46,7 @@ spec:
             - name: {{ $ref | upper }}_{{ $key | upper }}
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "frontproveedorapp.fullname" $root }}-{{ $ref }}
+                  name: {{ template "frontloginapp.fullname" $root }}-{{ $ref }}
                   key: {{ $key }}
             {{- end }}
             {{- end }}
