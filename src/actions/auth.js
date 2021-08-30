@@ -12,10 +12,10 @@ export const iniciarLogin = ( email, password, callbackurl ) => {
                 
                 dispatch( login({
                     uid: body.resultado.idUsuario,
-                    nombre: "pepito"
+                    nombre: body.resultado.nombre
                 }) );
 
-                window.location.href = `${ callbackurl }?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}`;
+                window.location.href = `${ callbackurl }?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
 
             } else {
                 console.log(body?.errores[0].descripcion);
