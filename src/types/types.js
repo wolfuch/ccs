@@ -1,5 +1,9 @@
 
 export const types = {
-    authLogin: '[auth] Login',
+    authLoginConUno: '[auth] Logeo con uno',
+    authLoginConMas: '[auth] Logeo con mas',
     authLogout: '[auth] Logout',
+
+    uiStartLoading: '[UI] Start loading',
+    uiFinishLoading: '[UI] Finish loading',
 }

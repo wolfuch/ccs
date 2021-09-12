@@ -1,19 +1,26 @@
 import { types } from '../types/types';
 
 const initialState = {
-    checking: true,
+    paso: 1
 }
 
 export const authReducer = ( state = initialState, action ) => {
 
     switch ( action.type ) {
         
-        case types.authLogin:
+        case types.authLoginConUno:
+            return {
+                ...state,
+                ...action.payload
+            }
+
+            case types.authLoginConMas:
             return {
                 ...state,
                 ...action.payload,
-                checking: false
+                paso: 2
             }
+
 
         case types.authLogout:
             return {
