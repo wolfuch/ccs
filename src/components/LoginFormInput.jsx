@@ -1,9 +1,10 @@
 import React from 'react'
 import { useDispatch } from 'react-redux';
 import { iniciarLogin } from '../actions/auth';
+import { showChangePassword, showRecoveryPassword } from '../actions/ui';
 import { useForm } from '../hooks/useForm';
 
-export const LoginFormInput = (url) => {
+export const LoginFormInput = (url = '') => {
     
     const dispatch = useDispatch();
     
@@ -18,6 +19,18 @@ export const LoginFormInput = (url) => {
         e.preventDefault();
         
         dispatch( iniciarLogin( email, password, url ) );
+    }
+
+    const handlePasswordRecovery = ( e ) => {
+        e.preventDefault();
+        
+        dispatch( showRecoveryPassword() );
+    }
+
+    const handleChangePassword = ( e ) => {
+        e.preventDefault();
+        
+        dispatch( showChangePassword() );
     }
 
     return (
@@ -40,6 +53,7 @@ export const LoginFormInput = (url) => {
                                         value={ email }
                                         onChange={ handleLoginInputChange }
                                         required
+                                        autoComplete="off"
                                     />
                                 </div>
                                 <div className="form-group">
@@ -53,9 +67,12 @@ export const LoginFormInput = (url) => {
                                         maxLength={8}
                                         minLength={6}
                                         required
+                                        autoComplete="off"
                                     />
                                 </div>
-                                <a href="#"><p className="textClave mt-4 mb-4" >¿Olvido su Clave?</p></a>
+                                <a href="#"><p className="textClave mt-4 mb-2" onClick={ handlePasswordRecovery }>¿Olvido su Clave?</p></a>
+
+                                <a href="#"><p className="textClave mt-2 mb-4" onClick={ handleChangePassword }>Cambiar Clave</p></a>
 
                                 <div className="form-group">
                                     <input 

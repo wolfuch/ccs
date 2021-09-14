@@ -1,11 +1,27 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { showLogin } from '../actions/ui';
 
 export const LoginOpcionUsuario = () => {
     
-    const { listadoSistemas }  = useSelector( state => state.auth );
+    const dispatch = useDispatch();
+
+    const { listadoSistemas, token, nombre, idUsuario, email }  = useSelector( state => state.auth );
 
     console.log(listadoSistemas);
+
+
+    const handleBack = ( e ) => {
+        e.preventDefault();
+
+        dispatch(showLogin());
+    }
+
+    const handleButtonSystem = ( e, sistema ) => {
+        e.preventDefault();
+
+        window.location.href = `${ sistema }?t=${token}&n=${nombre}&uid=${idUsuario}&email=${email}`;
+    }
 
     return (
         
@@ -21,18 +37,19 @@ export const LoginOpcionUsuario = () => {
             {
                 listadoSistemas && 
                 listadoSistemas.map(sistema =>(
-                    <div className="form-group mt-2">
+                    <div key={sistema.idSistema} className="form-group mt-2">
                         <button 
                         className="btnSubmit btnLogin"
-                        value="INGRESAR" 
-                        key={sistema.idSistema}>
+                        key={sistema.idSistema}
+                        onClick={ (e) => handleButtonSystem(e, sistema.urlSistema)}
+                        >
                             {sistema.nombreSistema}
                         </button>
                     </div>
                 ))
             }
 
-
+                <a href="#"><p className="textClave mt-4 mb-4" onClick={ handleBack } >Regresar</p></a>
 
 
                                 
