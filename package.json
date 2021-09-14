@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "crypto-js": "^4.1.1",
     "query-string": "^4.3.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -10,6 +11,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "redux-thunk": "^2.3.0",
+    "sweetalert2": "^11.1.5",
     "validator": "^13.6.0"
   },
   "scripts": {
