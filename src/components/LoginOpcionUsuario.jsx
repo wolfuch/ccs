@@ -8,9 +8,6 @@ export const LoginOpcionUsuario = () => {
 
     const { listadoSistemas, token, nombre, idUsuario, email }  = useSelector( state => state.auth );
 
-    console.log(listadoSistemas);
-
-
     const handleBack = ( e ) => {
         e.preventDefault();
 
@@ -50,9 +47,6 @@ export const LoginOpcionUsuario = () => {
             }
 
                 <a href="#"><p className="textClave mt-4 mb-4" onClick={ handleBack } >Regresar</p></a>
-
-
-                                
                             
             </div>
         </div>

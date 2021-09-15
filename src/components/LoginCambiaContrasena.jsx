@@ -1,5 +1,5 @@
-import React from 'react'
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { cambiarContrasena } from '../actions/auth';
 import { useForm } from '../hooks/useForm';
 import Swal from 'sweetalert2';
@@ -8,9 +8,10 @@ import { showLogin } from '../actions/ui';
 export const LoginCambiaContrasena = (url = '') => {
     
     const dispatch = useDispatch();
-    
+    const obtener = useSelector( state => state.auth );
+
     const [ formLoginValues, handleLoginInputChange ] = useForm({
-        email: '',
+        email: obtener.email,
         contrasenaActual: '',
         contrasenaNueva: '',
         passwordRepite: ''       

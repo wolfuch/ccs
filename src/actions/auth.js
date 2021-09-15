@@ -18,6 +18,13 @@ export const iniciarLogin = ( email, password, callbackurl = '') => {
             if( body.success === 'OK') {
 
                 if (!body.resultado.contrasenaValidada){
+                    dispatch(login({
+                        token: body.resultado.token,
+                        nombre: body.resultado.nombre,
+                        idUsuario: body.resultado.idUsuario,
+                        email: body.resultado.email,
+                        listadoSistemas: body.resultado.listadoSistemas
+                    }));
                     dispatch(showChangePassword());
                 }else{
 
@@ -75,8 +82,6 @@ export const restablecerContrasena = ( email ) => {
 
             const resp = await fetchSinToken( `auth/recoveryRequest/${email}`);
             const body = await resp.json();
-            
-            console.log(body);
 
             dispatch(finishLoading());
 
@@ -148,14 +153,20 @@ export const cambiarContrasena = ( email, contrasenaActual, contrasenaNueva, cal
                     padding: "2rem",
                     buttonsStyling: "false"
                 }).then((result) => {
-                    if (body.resultado.listadoSistemas.length > 1)
+                    if (callbackurl.url == '' && body.resultado.listadoSistemas.length > 1){
                         dispatch(login({
-                            uid: body.resultado.idUsuario,
+                            token: body.resultado.token,
                             nombre: body.resultado.nombre,
+                            idUsuario: body.resultado.idUsuario,
+                            email: body.resultado.email,
                             listadoSistemas: body.resultado.listadoSistemas
                         }));
-                    else
-                        window.location.href = `${ callbackurl.url }?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
+
+                        dispatch(showMultipleSystem());
+                    
+                }   
+                else
+                    window.location.href = `${ callbackurl.url }?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                   });
                 
              

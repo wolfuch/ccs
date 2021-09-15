@@ -93,7 +93,7 @@ export const LoginScreen = () => {
                 
                 {paso === 2 && <LoginRecuperarContrasena />}
 
-                {paso === 3 && <LoginCambiaContrasena />}
+                {paso === 3 && <LoginCambiaContrasena url={q} />}
 
                 {paso === 4 && <LoginOpcionUsuario />}
             </div>
