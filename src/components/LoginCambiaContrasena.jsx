@@ -22,11 +22,28 @@ export const LoginCambiaContrasena = (url = '') => {
     const handleLogin = ( e ) => {
         e.preventDefault();
 
+        let regex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+
         if (contrasenaNueva !== contrasenaRepite){
             Swal.fire({
                 title: "Reestablecer Contraseña.",
                 icon: "info",
                 text: 'La contraseña que esta ingresando no es igual al repetir contraseña.',
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#083c70",
+                width: "40%",
+                padding: "2rem",
+                buttonsStyling: "false"
+            });
+
+            return;
+        }
+
+        if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(contrasenaNueva))) {
+            Swal.fire({
+                title: "Reestablecer Contraseña.",
+                icon: "info",
+                text: 'La contraseña ingresada no cumple los requisitos de seguridad.',
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#083c70",
                 width: "40%",
