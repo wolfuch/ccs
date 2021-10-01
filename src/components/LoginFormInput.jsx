@@ -64,8 +64,7 @@ export const LoginFormInput = (url = '') => {
                                         name="password"
                                         value={ password }
                                         onChange={ handleLoginInputChange }
-                                        maxLength={8}
-                                        minLength={6}
+                                        minLength={8}
                                         required
                                         autoComplete="off"
                                     />

@@ -97,8 +97,7 @@ export const LoginCambiaContrasena = (url = '') => {
                                         name="contrasenaActual"
                                         value={ contrasenaActual }
                                         onChange={ handleLoginInputChange }
-                                        maxLength={8}
-                                        minLength={6}
+                                        minLength={8}
                                         required
                                         autoComplete="off"
                                     />
@@ -112,8 +111,7 @@ export const LoginCambiaContrasena = (url = '') => {
                                         name="contrasenaNueva"
                                         value={ contrasenaNueva }
                                         onChange={ handleLoginInputChange }
-                                        maxLength={8}
-                                        minLength={6}
+                                        minLength={8}
                                         required
                                         autoComplete="off"
                                     />
@@ -127,8 +125,7 @@ export const LoginCambiaContrasena = (url = '') => {
                                         name="contrasenaRepite"
                                         value={ contrasenaRepite }
                                         onChange={ handleLoginInputChange }
-                                        maxLength={8}
-                                        minLength={6}
+                                        minLength={8}
                                         required
                                         autoComplete="off"
                                     />
