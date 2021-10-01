@@ -22,11 +22,28 @@ export const LoginCambiaContrasena = (url = '') => {
     const handleLogin = ( e ) => {
         e.preventDefault();
 
+        let regex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+
         if (contrasenaNueva !== contrasenaRepite){
             Swal.fire({
                 title: "Reestablecer Contraseña.",
                 icon: "info",
                 text: 'La contraseña que esta ingresando no es igual al repetir contraseña.',
+                confirmButtonText: "Aceptar",
+                confirmButtonColor: "#083c70",
+                width: "40%",
+                padding: "2rem",
+                buttonsStyling: "false"
+            });
+
+            return;
+        }
+
+        if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(contrasenaNueva))) {
+            Swal.fire({
+                title: "Reestablecer Contraseña.",
+                icon: "info",
+                text: 'La contraseña ingresada no cumple los requisitos de seguridad.',
                 confirmButtonText: "Aceptar",
                 confirmButtonColor: "#083c70",
                 width: "40%",
@@ -80,8 +97,7 @@ export const LoginCambiaContrasena = (url = '') => {
                                         name="contrasenaActual"
                                         value={ contrasenaActual }
                                         onChange={ handleLoginInputChange }
-                                        maxLength={8}
-                                        minLength={6}
+                                        minLength={8}
                                         required
                                         autoComplete="off"
                                     />
@@ -95,8 +111,7 @@ export const LoginCambiaContrasena = (url = '') => {
                                         name="contrasenaNueva"
                                         value={ contrasenaNueva }
                                         onChange={ handleLoginInputChange }
-                                        maxLength={8}
-                                        minLength={6}
+                                        minLength={8}
                                         required
                                         autoComplete="off"
                                     />
@@ -110,8 +125,7 @@ export const LoginCambiaContrasena = (url = '') => {
                                         name="contrasenaRepite"
                                         value={ contrasenaRepite }
                                         onChange={ handleLoginInputChange }
-                                        maxLength={8}
-                                        minLength={6}
+                                        minLength={8}
                                         required
                                         autoComplete="off"
                                     />
