@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { cambiarContrasena } from '../actions/auth';
 import { useForm } from '../hooks/useForm';
@@ -21,8 +21,6 @@ export const LoginCambiaContrasena = (url = '') => {
 
     const handleLogin = ( e ) => {
         e.preventDefault();
-
-        let regex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
 
         if (contrasenaNueva !== contrasenaRepite){
             Swal.fire({

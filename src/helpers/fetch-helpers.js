@@ -1,5 +1,5 @@
-const apiBaseUrl = process.env.REACT_APP_API_URL;
-const apiVersion = process.env.REACT_APP_API_VERSION;
+const apiBaseUrl = window.REACT_APP_API_URL;
+const apiVersion = window.REACT_APP_API_VERSION;
 
 // Metodo para hacer consultas a la api sin token 
 const fetchSinToken = ( endpoint, data, method = 'GET' ) => {
