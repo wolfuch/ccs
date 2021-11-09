@@ -3,19 +3,17 @@ import { types } from '../types/types';
 import { finishLoading, showChangePassword, showLogin, showMultipleSystem, startLoading } from './ui';
 import Swal from 'sweetalert2';
 
-export const iniciarLogin = ( email, password, callbackurl = '') => {
+export const iniciarLogin = ( email, password, callbackurl = '', idSistema = 0) => {
     
     return async( dispatch ) => {
 
         try {
             dispatch(startLoading());
 
-            const resp = await fetchSinToken( 'auth', { email, password }, 'POST' );
+            const resp = await fetchSinToken( 'auth', { email, password, idSistema }, 'POST' );
             const body = await resp.json();
 
             dispatch(finishLoading());
-
-            console.log(body)
 
             if( body.success === 'OK') {
                 
