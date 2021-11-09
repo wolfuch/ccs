@@ -5,7 +5,7 @@ import { useForm } from '../hooks/useForm';
 import Swal from 'sweetalert2';
 import { showLogin } from '../actions/ui';
 
-export const LoginCambiaContrasena = (url = '') => {
+export const LoginCambiaContrasena = (url = '', idSistema = 0) => {
     
     const dispatch = useDispatch();
     const obtener = useSelector( state => state.auth );
@@ -52,7 +52,7 @@ export const LoginCambiaContrasena = (url = '') => {
             return;
         }
 
-        dispatch( cambiarContrasena( email , contrasenaActual, contrasenaNueva, url ) );
+        dispatch( cambiarContrasena( email , contrasenaActual, contrasenaNueva, url, idSistema ) );
     }
 
     const handleBack = ( e ) => {

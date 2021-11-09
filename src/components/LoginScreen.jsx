@@ -20,8 +20,9 @@ export const LoginScreen = () => {
     const { loading, paso } = useSelector( state => state.ui );
     // const {  }  = useSelector( state => state.auth );
 
-    const { q = '' } = queryString.parse(location.search);
+    const { q = '', idSistema = 0 } = queryString.parse(location.search);
 
+    //console.log(idSistema);
     // var wuea;
 
 
@@ -89,11 +90,11 @@ export const LoginScreen = () => {
         <div className="jumbotron">
             <div className="container containerprueba login-container">
                 
-                {paso === 1 && <LoginFormInput url={q}/>}
+                {paso === 1 && <LoginFormInput url={q} idSistema={idSistema}/>}
                 
                 {paso === 2 && <LoginRecuperarContrasena />}
 
-                {paso === 3 && <LoginCambiaContrasena url={q} />}
+                {paso === 3 && <LoginCambiaContrasena url={q} idSistema={idSistema} />}
 
                 {paso === 4 && <LoginOpcionUsuario />}
             </div>
