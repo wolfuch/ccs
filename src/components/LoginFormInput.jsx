@@ -4,7 +4,7 @@ import { iniciarLogin } from '../actions/auth';
 import { showChangePassword, showRecoveryPassword } from '../actions/ui';
 import { useForm } from '../hooks/useForm';
 
-export const LoginFormInput = (url = '', idSistema = 0) => {
+export const LoginFormInput = (url = '') => {
     
     const dispatch = useDispatch();
     
@@ -18,7 +18,7 @@ export const LoginFormInput = (url = '', idSistema = 0) => {
     const handleLogin = ( e ) => {
         e.preventDefault();
         
-        dispatch( iniciarLogin( email, password, url, idSistema ) );
+        dispatch( iniciarLogin( email, password, url ) );
     }
 
     const handlePasswordRecovery = ( e ) => {
