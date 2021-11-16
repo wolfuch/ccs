@@ -45,7 +45,7 @@ const Footer = () => {
                             <br/>
                             Todos los Derechos Reservados
                             <br/>
-                            Términos y condiciones
+                            <a className='ater' href="http://rednegocioprod.azurewebsites.net/terminos-condiciones/">Términos y condiciones</a>
                         </p>
                     </div>
                 </div>
