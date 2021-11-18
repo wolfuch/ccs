@@ -25,17 +25,23 @@ export const iniciarLogin = ( email, password, callbackurl = '', idSistema = 0) 
                         email: body.resultado.email,
                         listadoSistemas: body.resultado.listadoSistemas
                     }));
+
                     dispatch(showChangePassword());
                 }else{
-
+    
+                    console.log(`body.resultado.listadoSistemas`, body.resultado.listadoSistemas)
+                    console.log(`callbackurl.url`, callbackurl.url)
                     if (callbackurl.url === '' && body.resultado.listadoSistemas.length > 1){
-                            dispatch(login({
+                        console.log(body)    
+                        dispatch(login({
                                 token: body.resultado.token,
                                 nombre: body.resultado.nombre,
                                 idUsuario: body.resultado.idUsuario,
                                 email: body.resultado.email,
                                 listadoSistemas: body.resultado.listadoSistemas
                             }));
+
+                            
     
                             dispatch(showMultipleSystem());
                         
