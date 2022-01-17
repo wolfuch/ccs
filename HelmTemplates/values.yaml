@@ -17,9 +17,10 @@ imagePullSecrets: []
 service:
   port: 80
 
+environment: "dev"
+
 ingress:
   enabled: false
-environment: "dev"
   path: VALUE_TO_BE_OVERRIDDEN
   hostname: VALUE_TO_BE_OVERRIDDEN
   
