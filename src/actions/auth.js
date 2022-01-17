@@ -3,20 +3,20 @@ import { types } from '../types/types';
 import { finishLoading, showChangePassword, showLogin, showMultipleSystem, startLoading } from './ui';
 import Swal from 'sweetalert2';
 
-export const iniciarLogin = ( email, password, callbackurl = '') => {
+export const iniciarLogin = ( email, password, callbackurl = '', idSistema = 0) => {
     
     return async( dispatch ) => {
 
         try {
             dispatch(startLoading());
 
-            const resp = await fetchSinToken( 'auth', { email, password }, 'POST' );
+            const resp = await fetchSinToken( 'auth', { email, password, idSistema }, 'POST' );
             const body = await resp.json();
 
             dispatch(finishLoading());
 
             if( body.success === 'OK') {
-
+                
                 if (!body.resultado.contrasenaValidada){
                     dispatch(login({
                         token: body.resultado.token,
@@ -25,21 +25,29 @@ export const iniciarLogin = ( email, password, callbackurl = '') => {
                         email: body.resultado.email,
                         listadoSistemas: body.resultado.listadoSistemas
                     }));
+
                     dispatch(showChangePassword());
                 }else{
-
-                    if (callbackurl.url == '' && body.resultado.listadoSistemas.length > 1){
-                            dispatch(login({
+    
+                    console.log(`body.resultado.listadoSistemas`, body.resultado.listadoSistemas)
+                    console.log(`callbackurl.url`, callbackurl.url)
+                    if (callbackurl.url === '' && body.resultado.listadoSistemas.length > 1){
+                        console.log(body)    
+                        dispatch(login({
                                 token: body.resultado.token,
                                 nombre: body.resultado.nombre,
                                 idUsuario: body.resultado.idUsuario,
                                 email: body.resultado.email,
                                 listadoSistemas: body.resultado.listadoSistemas
                             }));
+
+                            
     
                             dispatch(showMultipleSystem());
                         
                     }   
+                    else if (callbackurl.url === '' && body.resultado.listadoSistemas.length === 1)
+                        window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                     else
                         window.location.href = `${ callbackurl.url }?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                 }
@@ -153,7 +161,7 @@ export const cambiarContrasena = ( email, contrasenaActual, contrasenaNueva, cal
                     padding: "2rem",
                     buttonsStyling: "false"
                 }).then((result) => {
-                    if (callbackurl.url == '' && body.resultado.listadoSistemas.length > 1){
+                    if (callbackurl.url === '' && body.resultado.listadoSistemas.length > 1){
                         dispatch(login({
                             token: body.resultado.token,
                             nombre: body.resultado.nombre,
@@ -165,8 +173,10 @@ export const cambiarContrasena = ( email, contrasenaActual, contrasenaNueva, cal
                         dispatch(showMultipleSystem());
                     
                 }   
-                else
-                    window.location.href = `${ callbackurl.url }?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
+                else if (callbackurl.url === '' && body.resultado.listadoSistemas.length === 1)
+                window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
+            else
+                window.location.href = `${ callbackurl.url }?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                   });
                 
              

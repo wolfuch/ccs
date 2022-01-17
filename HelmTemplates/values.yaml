@@ -20,9 +20,13 @@ service:
 ingress:
   enabled: false
   annotations:
-    kubernetes.io/ingress.class: addon-http-application-routing
-  path: /
+    kubernetes.io/ingress.class: azure/application-gateway
+    appgw.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/acme-challenge-type: http01
+  path: VALUE_TO_BE_OVERRIDDEN
   hostname: VALUE_TO_BE_OVERRIDDEN
+  
 
 secrets: {}
   # Optionally specify a set of secret objects whose values

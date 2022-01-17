@@ -22,8 +22,11 @@ export const LoginScreen = () => {
 
     const { q = '' } = queryString.parse(location.search);
 
+    //console.log(idSistema);
     // var wuea;
 
+
+           
 
 
 
@@ -89,7 +92,7 @@ export const LoginScreen = () => {
         <div className="jumbotron">
             <div className="container containerprueba login-container">
                 
-                {paso === 1 && <LoginFormInput url={q}/>}
+                {paso === 1 && <LoginFormInput url={q} />}
                 
                 {paso === 2 && <LoginRecuperarContrasena />}
 
