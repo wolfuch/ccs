@@ -19,10 +19,16 @@ service:
 
 ingress:
   enabled: false
+environment: "dev"
   annotations:
     kubernetes.io/ingress.class: azure/application-gateway
-    appgw.ingress.kubernetes.io/appgw-ssl-certificate: "cert-agic-rednegocios"
     appgw.ingress.kubernetes.io/ssl-redirect: "true"
+    {{- if eq .Values.environment "prod" }}
+      appgw.ingress.kubernetes.io/appgw-ssl-certificate: "cert-agic-rednegocios"
+    {{- else }}
+      cert-manager.io/cluster-issuer: letsencrypt-staging
+      cert-manager.io/acme-challenge-type: http01
+    {{- end }}
   path: VALUE_TO_BE_OVERRIDDEN
   hostname: VALUE_TO_BE_OVERRIDDEN
   
