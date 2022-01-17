@@ -11,9 +11,18 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 {{- with .Values.ingress.annotations }}
+# {{- with .Values.ingress.annotations }}
   annotations:
-{{ toYaml . | indent 4 }}
-{{- end }}
+    kubernetes.io/ingress.class: azure/application-gateway
+    appgw.ingress.kubernetes.io/ssl-redirect: "true"
+    {{if eq .Values.environment "prod" }}
+      appgw.ingress.kubernetes.io/appgw-ssl-certificate: "cert-agic-rednegocios"
+    {{- else }}
+      cert-manager.io/cluster-issuer: letsencrypt-staging
+      cert-manager.io/acme-challenge-type: http01
+    {{- end }}
+# {{ toYaml . | indent 4 }}
+# {{- end }}
 spec:
 {{- if .Values.ingress.tls }}
   tls:
