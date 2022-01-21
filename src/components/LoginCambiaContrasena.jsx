@@ -2,8 +2,8 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { cambiarContrasena } from '../actions/auth';
 import { useForm } from '../hooks/useForm';
-import Swal from 'sweetalert2';
 import { showLogin } from '../actions/ui';
+import { MostrarMensaje } from '../helpers/MostrarMensaje';
 
 export const LoginCambiaContrasena = (url = '') => {
     
@@ -23,32 +23,14 @@ export const LoginCambiaContrasena = (url = '') => {
         e.preventDefault();
 
         if (contrasenaNueva !== contrasenaRepite){
-            Swal.fire({
-                title: "Reestablecer Contraseña.",
-                icon: "info",
-                text: 'La contraseña que esta ingresando no es igual al repetir contraseña.',
-                confirmButtonText: "Aceptar",
-                confirmButtonColor: "#083c70",
-                width: "40%",
-                padding: "2rem",
-                buttonsStyling: "false"
-            });
-
-            return;
+            MostrarMensaje('Reestablecer Contraseña.', 'La contraseña que esta ingresando no es igual al repetir contraseña.', 'info')
+            
+            return
         }
 
         if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(contrasenaNueva))) {
-            Swal.fire({
-                title: "Reestablecer Contraseña.",
-                icon: "info",
-                text: 'La contraseña ingresada no cumple los requisitos de seguridad.',
-                confirmButtonText: "Aceptar",
-                confirmButtonColor: "#083c70",
-                width: "40%",
-                padding: "2rem",
-                buttonsStyling: "false"
-            });
-
+            MostrarMensaje('Reestablecer Contraseña.', 'La contraseña ingresada no cumple los requisitos de seguridad.', 'info')
+            
             return;
         }
 

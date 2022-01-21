@@ -1,2 +1,2 @@
-REACT_APP_API_URL="https://localhost:44392/api"
+REACT_APP_API_URL="https://localhost:44366/api"
 REACT_APP_API_VERSION="v1"

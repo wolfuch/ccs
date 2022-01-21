@@ -1,7 +1,8 @@
 import { fetchSinToken } from '../helpers/fetch-helpers';
 import { types } from '../types/types';
 import { finishLoading, showChangePassword, showLogin, showMultipleSystem, startLoading } from './ui';
-import Swal from 'sweetalert2';
+
+import { MostrarMensaje } from '../helpers/MostrarMensaje';
 
 export const iniciarLogin = ( email, password, callbackurl = '', idSistema = 0) => {
     
@@ -53,30 +54,14 @@ export const iniciarLogin = ( email, password, callbackurl = '', idSistema = 0) 
                 }
 
             } else {
-                Swal.fire({
-                    title: "Iniciar Sesión",
-                    icon: "warning",
-                    text: body?.errores[0].descripcion,
-                    confirmButtonText: "Aceptar",
-                    confirmButtonColor: "#083c70",
-                    width: "40%",
-                    padding: "2rem",
-                    buttonsStyling: "false"
-                });
+                
+                MostrarMensaje('Iniciar Sesión.', body?.errores[0].descripcion, 'warning')
                 
             }
         } catch(e) {
             dispatch(finishLoading());
-            Swal.fire({
-                title: "Iniciar Sesión",
-                icon: "error",
-                text: "Se produjo un error vuelva a intentarlo.",
-                confirmButtonText: "Aceptar",
-                confirmButtonColor: "#083c70",
-                width: "40%",
-                padding: "2rem",
-                buttonsStyling: "false"
-            });
+
+            MostrarMensaje('Iniciar Sesión.', 'Se produjo un error vuelva a intentarlo.', 'error')
         }   
     }
 }
@@ -95,44 +80,20 @@ export const restablecerContrasena = ( email ) => {
 
             if( body.success === 'OK') {
 
-                Swal.fire({
-                    title: "Reestablecer Contraseña.",
-                    icon: "success",
-                    text: 'Se ha enviado un correo con la nueva contraseña.',
-                    confirmButtonText: "Aceptar",
-                    confirmButtonColor: "#083c70",
-                    width: "40%",
-                    padding: "2rem",
-                    buttonsStyling: "false"
-                });
+                MostrarMensaje('Reestablecer Contraseña.', 'Se ha enviado un correo con la nueva contraseña.', 'success')
                 
                 dispatch(showLogin());
                 
             } else {
-                Swal.fire({
-                    title: "Reestablecer Contraseña.",
-                    icon: "warning",
-                    text: body?.errores[0].descripcion,
-                    confirmButtonText: "Aceptar",
-                    confirmButtonColor: "#083c70",
-                    width: "40%",
-                    padding: "2rem",
-                    buttonsStyling: "false"
-                });
+
+                MostrarMensaje('Reestablecer Contraseña.', body?.errores[0].descripcion, 'warning')
                 
             }
         } catch(e) {
             dispatch(finishLoading());
-            Swal.fire({
-                title: "Reestablecer Contraseña.",
-                icon: "error",
-                text: "Se produjo un error vuelva a intentarlo.",
-                confirmButtonText: "Aceptar",
-                confirmButtonColor: "#083c70",
-                width: "40%",
-                padding: "2rem",
-                buttonsStyling: "false"
-            });
+
+            MostrarMensaje('Reestablecer Contraseña.', 'Se produjo un error vuelva a intentarlo.', 'error')
+
         }   
     }
 }
@@ -151,16 +112,7 @@ export const cambiarContrasena = ( email, contrasenaActual, contrasenaNueva, cal
 
             if( body.success === 'OK') {
 
-                Swal.fire({
-                    title: "Cambiar Contraseña.",
-                    icon: "success",
-                    text: 'Se ha cambiado la contraseña correctamente.',
-                    confirmButtonText: "Aceptar",
-                    confirmButtonColor: "#083c70",
-                    width: "40%",
-                    padding: "2rem",
-                    buttonsStyling: "false"
-                }).then((result) => {
+                MostrarMensaje('Cambiar Contraseña.', 'Se ha cambiado la contraseña correctamente.', 'success', ()=>{
                     if (callbackurl.url === '' && body.resultado.listadoSistemas.length > 1){
                         dispatch(login({
                             token: body.resultado.token,
@@ -177,35 +129,15 @@ export const cambiarContrasena = ( email, contrasenaActual, contrasenaNueva, cal
                 window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
             else
                 window.location.href = `${ callbackurl.url }?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
-                  });
-                
-             
+                  })
                 
             } else {
-                Swal.fire({
-                    title: "Cambiar Contraseña.",
-                    icon: "warning",
-                    text: body?.errores[0].descripcion,
-                    confirmButtonText: "Aceptar",
-                    confirmButtonColor: "#083c70",
-                    width: "40%",
-                    padding: "2rem",
-                    buttonsStyling: "false"
-                });
-                
+                MostrarMensaje('Cambiar Contraseña.', body?.errores[0].descripcion, 'warning');
             }
         } catch(e) {
             dispatch(finishLoading());
-            Swal.fire({
-                title: "Cambiar Contraseña.",
-                icon: "error",
-                text: "Se produjo un error vuelva a intentarlo.",
-                confirmButtonText: "Aceptar",
-                confirmButtonColor: "#083c70",
-                width: "40%",
-                padding: "2rem",
-                buttonsStyling: "false"
-            });
+
+            MostrarMensaje('Cambiar Contraseña.', 'Se produjo un error vuelva a intentarlo.', 'error');
         }   
     }
 }
