@@ -48,9 +48,9 @@ export const iniciarLogin = ( email, password, callbackurl = '', idSistema = 0) 
                         
                     }   
                     else if (callbackurl.url === '' && body.resultado.listadoSistemas.length === 1)
-                        window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?token=${body.resultado.token}`;
+                        window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                     else
-                        window.location.href = `${ callbackurl.url }?token=${body.resultado.token}`;
+                        window.location.href = `${ callbackurl.url }?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                 }
 
             } else {
@@ -126,9 +126,9 @@ export const cambiarContrasena = ( email, contrasenaActual, contrasenaNueva, cal
                     
                 }   
                 else if (callbackurl.url === '' && body.resultado.listadoSistemas.length === 1)
-                window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?token=${body.resultado.token}`;
+                window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
             else
-                window.location.href = `${ callbackurl.url }?token=${body.resultado.token}`;
+                window.location.href = `${ callbackurl.url }?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                   })
                 
             } else {
@@ -141,6 +141,18 @@ export const cambiarContrasena = ( email, contrasenaActual, contrasenaNueva, cal
         }   
     }
 }
+
+// export const recuperarContrasena = () => ({
+//     type: types.authRecuperarContrasena
+// })
+
+// export const volverInicio = () => ({
+//     type: types.authLoginConUno
+// })
+
+// export const restablecerContrasenaVentana = () => ({
+//     type: types.authCambiarContrasena
+// })
 
 const login = ( user ) => ({
     type: types.authLogin,
