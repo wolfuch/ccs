@@ -68,11 +68,11 @@ export const LoginFormInput = (url = '') => {
                                         autoComplete="off"
                                     />
                                 </div>
-                                <a href="#"><p className="textClave mt-4 mb-2" onClick={ handlePasswordRecovery }>¿Olvido su Clave?</p></a>
+                                {/* <a href="#"><p className="textClave mt-4 mb-2" onClick={ handlePasswordRecovery }>¿Olvido su Clave?</p></a> */}
 
-                                <a href="#"><p className="textClave mt-2 mb-4" onClick={ handleChangePassword }>Cambiar Clave</p></a>
+                                {/* <a href="#"><p className="textClave mt-2 mb-4" onClick={ handleChangePassword }>Cambiar Clave</p></a> */}
 
-                                <div className="form-group">
+                                <div className="form-group mt-3">
                                     <input 
                                         type="submit"
                                         className="btnSubmit btnLogin"
