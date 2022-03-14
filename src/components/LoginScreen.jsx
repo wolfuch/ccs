@@ -8,7 +8,7 @@ import queryString from 'query-string';
 import Footer from './footer/footer.component';
 import { LoginFormInput } from './LoginFormInput';
 import { Loading } from './loading/Loading';
-import CryptoJS from 'crypto-js';
+// import CryptoJS from 'crypto-js';
 import {  useSelector } from 'react-redux';
 import { LoginOpcionUsuario } from './LoginOpcionUsuario';
 import { LoginRecuperarContrasena } from './LoginRecuperarContrasena';
