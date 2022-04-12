@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { iniciarLogin } from '../actions/auth';
 import { showChangePassword, showRecoveryPassword } from '../actions/ui';
 import { useForm } from '../hooks/useForm';
+import FormPassword from '../components/form-password/form-password.component'
 
 export const LoginFormInput = (url = '') => {
     
@@ -34,7 +35,6 @@ export const LoginFormInput = (url = '') => {
     }
 
     return (
-        
         <div className="cardAzul p-5" >
         <div className="row d-flex text-center justify-content-center mb-md-0 mb-4">
             <div className="col-md-12 col-xs-12 col-12 login-form-1">
@@ -56,18 +56,8 @@ export const LoginFormInput = (url = '') => {
                                         autoComplete="off"
                                     />
                                 </div>
-                                <div className="form-group">
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        placeholder="Contraseña"
-                                        name="password"
-                                        value={ password }
-                                        onChange={ handleLoginInputChange }
-                                        required
-                                        autoComplete="off"
-                                    />
-                                </div>
+                                <FormPassword placeholder="Contraseña" name="password" value={ password }  handleChange={ handleLoginInputChange }/>
+                                
                                 {/* <a href="#"><p className="textClave mt-4 mb-2" onClick={ handlePasswordRecovery }>¿Olvido su Clave?</p></a> */}
 
                                 {/* <a href="#"><p className="textClave mt-2 mb-4" onClick={ handleChangePassword }>Cambiar Clave</p></a> */}
