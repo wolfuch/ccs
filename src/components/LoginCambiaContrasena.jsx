@@ -70,10 +70,12 @@ export const LoginCambiaContrasena = (url = '') => {
                                     />
                                 </div>
 
+                                    
+                                    <div className='mb-4'></div>
                                     <FormPassword placeholder="Contraseña Actual" name="contrasenaActual" value={ contrasenaActual }  handleChange={ handleLoginInputChange } autoComplete="off"/>
-
+                                    <div className='mb-4'></div>
                                     <FormPassword placeholder="Contraseña Nueva" name="contrasenaNueva" value={ contrasenaNueva }  handleChange={ handleLoginInputChange } autoComplete="off"/>
-
+                                    <div className='mb-4'></div>
                                     <FormPassword placeholder="Repetir Contraseña" name="contrasenaRepite" value={ contrasenaRepite }  handleChange={ handleLoginInputChange } autoComplete="off"/>
 
 

@@ -58,9 +58,9 @@ export const LoginFormInput = (url = '') => {
                                 </div>
                                 <FormPassword placeholder="Contraseña" name="password" value={ password }  handleChange={ handleLoginInputChange }/>
                                 
-                                {/* <a href="#"><p className="textClave mt-4 mb-2" onClick={ handlePasswordRecovery }>¿Olvido su Clave?</p></a> */}
+                                <a href="#"><p className="textClave mt-4 mb-2" onClick={ handlePasswordRecovery }>¿Olvido su Clave?</p></a>
 
-                                {/* <a href="#"><p className="textClave mt-2 mb-4" onClick={ handleChangePassword }>Cambiar Clave</p></a> */}
+                                <a href="#"><p className="textClave mt-2 mb-4" onClick={ handleChangePassword }>Cambiar Clave</p></a>
 
                                 <div className="form-group mt-3">
                                     <input 
