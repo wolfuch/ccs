@@ -4,6 +4,7 @@ import { cambiarContrasena } from '../actions/auth';
 import { useForm } from '../hooks/useForm';
 import { showLogin } from '../actions/ui';
 import { MostrarMensaje } from '../helpers/MostrarMensaje';
+import FormPassword from './form-password/form-password.component';
 
 export const LoginCambiaContrasena = (url = '') => {
     
@@ -69,44 +70,14 @@ export const LoginCambiaContrasena = (url = '') => {
                                     />
                                 </div>
 
-                                <div className="form-group mb-4">
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        placeholder="Contraseña Actual"
-                                        name="contrasenaActual"
-                                        value={ contrasenaActual }
-                                        onChange={ handleLoginInputChange }
-                                        required
-                                        autoComplete="off"
-                                    />
-                                </div>
+                                    
+                                    <div className='mb-4'></div>
+                                    <FormPassword placeholder="Contraseña Actual" name="contrasenaActual" value={ contrasenaActual }  handleChange={ handleLoginInputChange } autoComplete="off"/>
+                                    <div className='mb-4'></div>
+                                    <FormPassword placeholder="Contraseña Nueva" name="contrasenaNueva" value={ contrasenaNueva }  handleChange={ handleLoginInputChange } autoComplete="off"/>
+                                    <div className='mb-4'></div>
+                                    <FormPassword placeholder="Repetir Contraseña" name="contrasenaRepite" value={ contrasenaRepite }  handleChange={ handleLoginInputChange } autoComplete="off"/>
 
-                                <div className="form-group mb-4">
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        placeholder="Contraseña Nueva"
-                                        name="contrasenaNueva"
-                                        value={ contrasenaNueva }
-                                        onChange={ handleLoginInputChange }
-                                        required
-                                        autoComplete="off"
-                                    />
-                                </div>
-
-                                <div className="form-group mb-4">
-                                    <input
-                                        type="password"
-                                        className="form-control"
-                                        placeholder="Repetir Contraseña"
-                                        name="contrasenaRepite"
-                                        value={ contrasenaRepite }
-                                        onChange={ handleLoginInputChange }
-                                        required
-                                        autoComplete="off"
-                                    />
-                                </div>
 
                                 <a href="#"><p className="textClave mt-4 mb-4" onClick={ handleBack } >Regresar</p></a>
 

@@ -38,7 +38,7 @@ const Footer = () => {
                 
                 
                 {/*Copyright*/}
-                <div className="row d-flex text-center justify-content-center mb-md-0 mb-4">
+                <div className="row d-flex text-center justify-content-center mb-md-0">
                     <div className="col-md-8 col-xs-8 col-12 mt-3">
                         <p className=" spanFooter" >
                             &copy; 2021 - RED NEGOCIOS CCS
