@@ -33,7 +33,7 @@ export const LoginRecuperarContrasena = () => {
             <div className="col-md-12 col-xs-12 col-12 login-form-1">
                 <a><img src={process.env.PUBLIC_URL + '/img/logoFooter.svg'} className="img-fluid logo" alt="Responsive image" ></img></a>
                 <p style={{color:'white',fontSize:'25px',margin:'25px'}}>Ingreso<strong> Usuario</strong></p>
-                <p style ={{color:'white'}}>Ingrese el Usuario que se desea reestablecer.</p>
+                <p style ={{color:'white'}}>Ingrese el email del usuario que se desea solicitar cambio contraseña.</p>
             </div>
             <div className="col-md-8">
             <form onSubmit={ handleLogin }>
@@ -57,7 +57,7 @@ export const LoginRecuperarContrasena = () => {
                                     <input 
                                         type="submit"
                                         className="btnSubmit btnLogin"
-                                        value="REESTABLECER" 
+                                        value="SOLICITAR" 
                                     />
                                 </div>
                             </form> 
