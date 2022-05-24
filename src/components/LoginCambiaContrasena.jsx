@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { cambiarContrasena } from '../actions/auth';
 import { useForm } from '../hooks/useForm';
 import { showLogin } from '../actions/ui';
-import { MostrarMensaje } from '../helpers/MostrarMensaje';
+import { MostrarMensaje, MostrarMensajeHTML } from '../helpers/MostrarMensaje';
 import FormPassword from './form-password/form-password.component';
 
 export const LoginCambiaContrasena = (url = '') => {
@@ -24,13 +24,18 @@ export const LoginCambiaContrasena = (url = '') => {
         e.preventDefault();
 
         if (contrasenaNueva !== contrasenaRepite){
-            MostrarMensaje('Reestablecer Contraseña.', 'La contraseña que esta ingresando no es igual al repetir contraseña.', 'info')
+            MostrarMensaje('Cambiar Contraseña.', 'La contraseña que esta ingresando no es igual al repetir contraseña.', 'info')
             
             return
         }
 
-        if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(contrasenaNueva))) {
-            MostrarMensaje('Reestablecer Contraseña.', 'La contraseña ingresada no cumple los requisitos de seguridad.', 'info')
+        if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!¡%*¿?&#-/_^;:=<>{}"|`~])[A-Za-z\d@$!¡%*¿?&#-/_^;:=<>{}"|`~]{8,}$/.test(contrasenaNueva))) {
+            MostrarMensajeHTML('Cambiar Contraseña', `<p>La contraseña ingresada no cumple los requsitos de seguridad:</p> 
+                <li>Largo Mayor a 8 Caracteres</li>
+                <li>Mayusculas</li>
+                <li>Minusculas</li>
+                <li>Un caracter especial o simbolo.</li>
+            `,'info')
             
             return;
         }
@@ -52,7 +57,7 @@ export const LoginCambiaContrasena = (url = '') => {
             <div className="col-md-12 col-xs-12 col-12 login-form-1">
                 <a><img src={process.env.PUBLIC_URL + '/img/logoFooter.svg'} className="img-fluid logo" alt="Responsive image" ></img></a>
                 <p style={{color:'white',fontSize:'25px',margin:'25px'}}>Ingreso<strong> Usuario</strong></p>
-                <p style ={{color:'white'}}>Ingrese el Usuario que se desea reestablecer.</p>
+                <p style ={{color:'white'}}>Ingrese el email del usuairo que desea cambiar contraseña.</p>
             </div>
             <div className="col-md-8">
             <form onSubmit={ handleLogin }>

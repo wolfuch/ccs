@@ -80,19 +80,19 @@ export const restablecerContrasena = ( email ) => {
 
             if( body.success === 'OK') {
 
-                MostrarMensaje('Reestablecer Contraseña.', 'Se ha enviado un correo con la nueva contraseña.', 'success')
+                MostrarMensaje('Cambiar Contraseña.', 'Se ha enviado un correo con la nueva contraseña.', 'success')
                 
                 dispatch(showLogin());
                 
             } else {
 
-                MostrarMensaje('Reestablecer Contraseña.', body?.errores[0].descripcion, 'warning')
+                MostrarMensaje('Cambiar Contraseña.', body?.errores[0].descripcion, 'warning')
                 
             }
         } catch(e) {
             dispatch(finishLoading());
 
-            MostrarMensaje('Reestablecer Contraseña.', 'Se produjo un error vuelva a intentarlo.', 'error')
+            MostrarMensaje('Cambiar Contraseña.', 'Se produjo un error vuelva a intentarlo.', 'error')
 
         }   
     }
