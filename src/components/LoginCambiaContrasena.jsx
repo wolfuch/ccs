@@ -34,7 +34,7 @@ export const LoginCambiaContrasena = (url = '') => {
             <li>Largo Mayor a 8 Caracteres.</li>
             <li>Incluir mayusculas.</li>
             <li>Incluir minusculas.</li>
-            <li>Incluir Digitos.</li>
+            <li>Incluir digitos.</li>
             <li>Un caracter especial o simbolo.</li>
         `,'info')
             
