@@ -31,11 +31,12 @@ export const LoginCambiaContrasena = (url = '') => {
 
         if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!¡%*¿?&#-/_^;:=<>{}"|`~])[A-Za-z\d@$!¡%*¿?&#-/_^;:=<>{}"|`~]{8,}$/.test(contrasenaNueva))) {
             MostrarMensajeHTML('Cambiar Contraseña', `<p>La contraseña ingresada no cumple los requsitos de seguridad:</p> 
-                <li>Largo Mayor a 8 Caracteres</li>
-                <li>Mayusculas</li>
-                <li>Minusculas</li>
-                <li>Un caracter especial o simbolo.</li>
-            `,'info')
+            <li>Largo Mayor a 8 Caracteres.</li>
+            <li>Incluir mayusculas.</li>
+            <li>Incluir minusculas.</li>
+            <li>Incluir digitos.</li>
+            <li>Un caracter especial o simbolo.</li>
+        `,'info')
             
             return;
         }
