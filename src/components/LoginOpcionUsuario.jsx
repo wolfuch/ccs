@@ -34,6 +34,7 @@ export const LoginOpcionUsuario = () => {
             {
                 listadoSistemas && 
                 listadoSistemas.map(sistema =>(
+                    sistema.idSistema !== 4 ?
                     <div key={sistema.idSistema} className="form-group mt-2">
                         <button 
                         className="btnSubmit btnLogin"
@@ -43,6 +44,7 @@ export const LoginOpcionUsuario = () => {
                             {sistema.nombreSistema}
                         </button>
                     </div>
+                    : ""
                 ))
             }
 
