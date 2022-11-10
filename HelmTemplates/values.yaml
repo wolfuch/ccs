@@ -6,6 +6,7 @@ replicaCount: 2
 image:
   repository: VALUE_TO_BE_OVERRIDDEN
   tag: latest
+  pullPolicy: Always
 
 imagePullSecrets: []
   # Optionally specify an array of imagePullSecrets.
