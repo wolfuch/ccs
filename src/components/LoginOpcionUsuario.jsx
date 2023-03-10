@@ -1,6 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { showLogin } from '../actions/ui';
+import { RegistraIngreso } from '../helpers/auditoria';
 
 export const LoginOpcionUsuario = () => {
 
@@ -15,6 +16,12 @@ export const LoginOpcionUsuario = () => {
 
     const handleButtonSystem = (e, sistema) => {
         e.preventDefault();
+        //RegistraLog
+        let data = {
+            idUsuario: idUsuario ,
+            idSistema: sistema
+        } 
+        RegistraIngreso(data)
         window.location.href = `${sistema}?t=${token}&n=${nombre}&uid=${idUsuario}&email=${email}`;
     }
 
