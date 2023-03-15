@@ -14,15 +14,20 @@ export const LoginOpcionUsuario = () => {
         dispatch(showLogin());
     }
 
-    const handleButtonSystem = (e, sistema) => {
+    const handleButtonSystem = (e, sistema, idSistema) => {
         e.preventDefault();
         //RegistraLog
         let data = {
+            email: email,
+            password: 'nada',
             idUsuario: idUsuario ,
-            idSistema: sistema
+            idSistema: idSistema
         } 
-        RegistraIngreso(data)
-        window.location.href = `${sistema}?t=${token}&n=${nombre}&uid=${idUsuario}&email=${email}`;
+        
+        RegistraIngreso(data).then(() => {
+             window.location.href = `${sistema}?t=${token}&n=${nombre}&uid=${idUsuario}&email=${email}`;
+        })
+        // window.location.href = `${sistema}?t=${token}&n=${nombre}&uid=${idUsuario}&email=${email}`;
     }
 
     return (
@@ -41,7 +46,7 @@ export const LoginOpcionUsuario = () => {
                                 <button
                                     className="btnSubmit btnLogin"
                                     key={sistema.idSistema}
-                                    onClick={(e) => handleButtonSystem(e, sistema.urlSistema)}
+                                    onClick={(e) => handleButtonSystem(e, sistema.urlSistema, sistema.idSistema)}
                                 >
                                     {sistema.nombreSistema}
                                 </button>

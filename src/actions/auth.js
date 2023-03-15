@@ -52,11 +52,15 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                     {
                         //RegistraLog
                         let data = {
+                            email: body.resultado.email,
+                            password: 'nada',
                             idUsuario: body.resultado.idUsuario,
                             idSistema: body.resultado.listadoSistemas[0].idSistema
                         } 
-                        RegistraIngreso()
-                        window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
+                        RegistraIngreso(data).then(() => {
+                            window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
+                        })
+                        // window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                     }
 
                     else
