@@ -27,7 +27,6 @@ export const LoginOpcionUsuario = () => {
         RegistraIngreso(data).then(() => {
              window.location.href = `${sistema}?t=${token}&n=${nombre}&uid=${idUsuario}&email=${email}`;
         })
-        // window.location.href = `${sistema}?t=${token}&n=${nombre}&uid=${idUsuario}&email=${email}`;
     }
 
     return (

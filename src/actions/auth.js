@@ -31,8 +31,6 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                     dispatch(showChangePassword());
                 } else {
 
-                    console.log(`body.resultado.listadoSistemas`, body.resultado.listadoSistemas)
-                    console.log(`callbackurl.url`, callbackurl.url)
                     if (callbackurl.url === '' && body.resultado.listadoSistemas.length > 1) {
                         console.log(body)
                         dispatch(login({
@@ -43,28 +41,35 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                             listadoSistemas: body.resultado.listadoSistemas
                         }));
 
-
-
                         dispatch(showMultipleSystem());
 
                     }
-                    else if (callbackurl.url === '' && body.resultado.listadoSistemas.length === 1) 
-                    {
+                    else if (callbackurl.url === '' && body.resultado.listadoSistemas.length === 1) {
                         //RegistraLog
                         let data = {
                             email: body.resultado.email,
                             password: 'nada',
                             idUsuario: body.resultado.idUsuario,
                             idSistema: body.resultado.listadoSistemas[0].idSistema
-                        } 
+                        }
+
                         RegistraIngreso(data).then(() => {
                             window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                         })
-                        // window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                     }
+                    else {
+                        //RegistraLog
+                        let data = {
+                            email: body.resultado.email,
+                            password: 'nada',
+                            idUsuario: body.resultado.idUsuario,
+                            idSistema: body.resultado.listadoSistemas[0].idSistema
+                        }
 
-                    else
-                        window.location.href = `${callbackurl.url}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
+                        RegistraIngreso(data).then(() => {
+                            window.location.href = `${callbackurl.url}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
+                        })
+                    }
                 }
 
             } else {
