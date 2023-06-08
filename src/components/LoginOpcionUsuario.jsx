@@ -18,8 +18,6 @@ export const LoginOpcionUsuario = () => {
         e.preventDefault();
         //RegistraLog
         let data = {
-            email: email,
-            password: 'nada',
             idUsuario: idUsuario ,
             idSistema: idSistema
         } 

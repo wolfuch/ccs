@@ -32,7 +32,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                 } else {
 
                     if (callbackurl.url === '' && body.resultado.listadoSistemas.length > 1) {
-                        console.log(body)
+                        
                         dispatch(login({
                             token: body.resultado.token,
                             nombre: body.resultado.nombre,
@@ -46,13 +46,12 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                     }
                     else if (callbackurl.url === '' && body.resultado.listadoSistemas.length === 1) {
                         //RegistraLog
+                        
                         let data = {
-                            email: body.resultado.email,
-                            password: 'nada',
                             idUsuario: body.resultado.idUsuario,
                             idSistema: body.resultado.listadoSistemas[0].idSistema
                         }
-
+                        
                         RegistraIngreso(data).then(() => {
                             window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                         })
@@ -60,12 +59,10 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                     else {
                         //RegistraLog
                         let data = {
-                            email: body.resultado.email,
-                            password: 'nada',
                             idUsuario: body.resultado.idUsuario,
                             idSistema: body.resultado.listadoSistemas[0].idSistema
                         }
-
+                        
                         RegistraIngreso(data).then(() => {
                             window.location.href = `${callbackurl.url}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                         })
