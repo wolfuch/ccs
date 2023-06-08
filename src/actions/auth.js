@@ -32,7 +32,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                 } else {
 
                     if (callbackurl.url === '' && body.resultado.listadoSistemas.length > 1) {
-                        
+
                         dispatch(login({
                             token: body.resultado.token,
                             nombre: body.resultado.nombre,
@@ -46,23 +46,36 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                     }
                     else if (callbackurl.url === '' && body.resultado.listadoSistemas.length === 1) {
                         //RegistraLog
-                        
+
                         let data = {
                             idUsuario: body.resultado.idUsuario,
                             idSistema: body.resultado.listadoSistemas[0].idSistema
                         }
-                        
+                        // console.log('AA', body.resultado.listadoSistemas)
+                        // console.log('AA', body.resultado.listadoSistemas[0].idSistema)
                         RegistraIngreso(data).then(() => {
                             window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                         })
                     }
                     else {
+
+                        let idSistemaRetorno = 0
+
+                        if (callbackurl.url.includes('proveedor'))
+                            idSistemaRetorno = 1
+                        if (callbackurl.url.includes('mandante'))
+                            idSistemaRetorno = 2
+                        if (callbackurl.url.includes('backoffice'))
+                            idSistemaRetorno = 3
+
                         //RegistraLog
                         let data = {
                             idUsuario: body.resultado.idUsuario,
-                            idSistema: body.resultado.listadoSistemas[0].idSistema
+                            idSistema: idSistemaRetorno //body.resultado.listadoSistemas[0].idSistema
                         }
-                        
+                        // console.log('kk', callbackurl)
+                        // console.log('kk', body.resultado)
+                        // console.log('kk', data)
                         RegistraIngreso(data).then(() => {
                             window.location.href = `${callbackurl.url}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                         })
