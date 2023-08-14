@@ -18,6 +18,8 @@ imagePullSecrets: []
 service:
   port: 80
 
+environment: "dev"
+
 ingress:
   enabled: false
   annotations:
