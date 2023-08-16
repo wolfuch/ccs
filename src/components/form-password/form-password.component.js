@@ -2,20 +2,18 @@ import React, {useState} from "react";
 import './form-password.component.css'
 
 const FormPassword = ({ handleChange, ...otherProps }) => {
-    const [estadoPassword, setEstadoPassword] = useState('password')
-
-    const [counter, setCounter] = React.useState(100);
+  const [estadoPassword, setEstadoPassword] = useState('password')
   const intervalRef = React.useRef(null);
 
   React.useEffect(() => {
     return () => stopCounter(); // when App is unmounted we should stop counter
   }, []);
 
-    const showHide = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setEstadoPassword(estadoPassword === 'text' ? 'password' : 'text')
-    }
+    // const showHide = (e) => {
+    //     e.preventDefault();
+    //     e.stopPropagation();
+    //     setEstadoPassword(estadoPassword === 'text' ? 'password' : 'text')
+    // }
 
     const startCounter = () => {
         if (intervalRef.current) return;
@@ -41,7 +39,7 @@ return (
                 onMouseDown={startCounter}
                 onMouseUp={stopCounter}
                 onMouseLeave={stopCounter}>
-                <i className={estadoPassword == 'password' ? 'fa fa-eye' : 'fa fa-eye-slash'}></i>                
+                <i className={estadoPassword === 'password' ? 'fa fa-eye' : 'fa fa-eye-slash'}></i>                
             </span>
         </div>
     </div>

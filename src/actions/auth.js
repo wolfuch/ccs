@@ -51,8 +51,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                             idUsuario: body.resultado.idUsuario,
                             idSistema: body.resultado.listadoSistemas[0].idSistema
                         }
-                        // console.log('AA', body.resultado.listadoSistemas)
-                        // console.log('AA', body.resultado.listadoSistemas[0].idSistema)
+
                         RegistraIngreso(data).then(() => {
                             window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                         })
@@ -73,9 +72,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                             idUsuario: body.resultado.idUsuario,
                             idSistema: idSistemaRetorno //body.resultado.listadoSistemas[0].idSistema
                         }
-                        // console.log('kk', callbackurl)
-                        // console.log('kk', body.resultado)
-                        // console.log('kk', data)
+
                         RegistraIngreso(data).then(() => {
                             window.location.href = `${callbackurl.url}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                         })
