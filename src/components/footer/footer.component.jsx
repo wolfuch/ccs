@@ -12,7 +12,7 @@ const Footer = () => {
                 <div className="row d-flex text-center justify-content-center mb-md-0 mb-4">
 
                     <div className="col-md-8 col-xs-8 col-12 mt-5">
-                        <a href=""><img src={process.env.PUBLIC_URL + '/img/logoFooter.svg'} className="img-fluid logo" alt="Responsive image" ></img></a>
+                        <a href=""><img src={process.env.PUBLIC_URL + '/img/logoFooter.svg'} className="img-fluid logo" alt="Responsive" ></img></a>
                     </div>
                     
                 </div>
@@ -21,21 +21,18 @@ const Footer = () => {
                 {/* direccion, telefono, correo */}
                 <div className="row d-flex text-center justify-content-center mb-md-0 mb-4 mt-3">
                     <div className="col-md-3 col-xs-3 mx-auto">
-                        <img src={process.env.PUBLIC_URL + '/img/icon/map.svg'} /> 
+                        <img src={process.env.PUBLIC_URL + '/img/icon/map.svg'} alt="Responsive"/> 
                         <span className="spanFooter fuente" > Monjitas #392, Santiago - Chile</span>
                     </div>
                     <div className="col-md-3 col-xs-3 mx-auto">
-                        <img src={process.env.PUBLIC_URL + '/img/icon/telefono.svg'} /> 
+                        <img src={process.env.PUBLIC_URL + '/img/icon/telefono.svg'} alt="Responsive"/> 
                         <span className="spanFooter"> +56 2 2818 5706</span>
                     </div>
                     <div className="col-md-3 col-xs-3 mx-auto">
-                        <img src={process.env.PUBLIC_URL + '/img/icon/arroba.svg'} /> 
+                        <img src={process.env.PUBLIC_URL + '/img/icon/arroba.svg'} alt="Responsive"/> 
                         <span className="spanFooter"> rednegocios@ccs.cl</span>
                     </div>
                 </div>
-                
-                
-                
                 
                 {/*Copyright*/}
                 <div className="row d-flex text-center justify-content-center mb-md-0">
@@ -45,7 +42,7 @@ const Footer = () => {
                             <br/>
                             Todos los Derechos Reservados
                             <br/>
-                            <a className='ater' href="http://www.rednegocios.cl/terminos-condiciones/" target="_blank">Términos y condiciones</a>
+                            <a className='ater' href="http://www.rednegocios.cl/terminos-condiciones/" target="_blank" rel="noreferrer" >Términos y condiciones</a>
                         </p>
                     </div>
                 </div>

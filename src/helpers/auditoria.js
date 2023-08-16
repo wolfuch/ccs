@@ -5,10 +5,10 @@ export const RegistraIngreso = async (data) => {
         const consultaData = await fetchSinToken('RegistraIngreso', data, "POST")
         const body = await consultaData.json()
 
-        if (body.success == 'OK')
+        if (body.success === 'OK')
             return body
     }
     catch (err) {
-        console.log(err)
+        //console.log(err)
     }
 }  
