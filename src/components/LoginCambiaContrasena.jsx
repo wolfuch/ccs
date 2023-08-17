@@ -12,7 +12,7 @@ export const LoginCambiaContrasena = (url = '') => {
     const obtener = useSelector( state => state.auth );
 
     const [ formLoginValues, handleLoginInputChange ] = useForm({
-        email: obtener.email,
+        email: obtener.cuenta,
         contrasenaActual: '',
         contrasenaNueva: '',
         passwordRepite: ''       
