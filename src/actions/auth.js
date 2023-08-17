@@ -25,6 +25,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                         nombre: body.resultado.nombre,
                         idUsuario: body.resultado.idUsuario,
                         email: body.resultado.email,
+                        cuenta: body.resultado.cuenta,
                         listadoSistemas: body.resultado.listadoSistemas
                     }));
 
@@ -38,6 +39,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                             nombre: body.resultado.nombre,
                             idUsuario: body.resultado.idUsuario,
                             email: body.resultado.email,
+                            cuenta: body.resultado.cuenta,
                             listadoSistemas: body.resultado.listadoSistemas
                         }));
 
