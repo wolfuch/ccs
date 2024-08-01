@@ -56,7 +56,7 @@ export const LoginFormInput = (url = '') => {
                                         autoComplete="off"
                                     />
                                 </div>
-                                <FormPassword placeholder="Contraseña" name="password" value={ password }  handleChange={ handleLoginInputChange }/>
+                                <FormPassword placeholder="Contraseña" name="password" value={ password }  handleChange={ handleLoginInputChange } autoComplete="off"/>
                                 
                                 <a href="#"><p className="textClave mt-4 mb-2" onClick={ handlePasswordRecovery }>¿Olvido su Clave?</p></a>
 
