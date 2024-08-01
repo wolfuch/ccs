@@ -33,7 +33,7 @@ export const LoginOpcionUsuario = () => {
             <div className="row d-flex text-center justify-content-center mb-md-0 mb-4">
                 <div className="col-md-12 col-xs-12 col-12 login-form-1">
                     <a><img src={process.env.PUBLIC_URL + '/img/logoFooter.svg'} className="img-fluid logo" alt="Responsive" ></img></a>
-                    <p style={{ color: 'white', fontSize: '25px', margin: '25px' }}>Ingreso<strong> Usuario</strong></p>
+                    <p style={{ color: 'white', fontSize: '25px', margin: '25px' }}>Ingreso Usuario</p>
                 </div>
                 <div className="col-md-8">
                     {
@@ -50,7 +50,7 @@ export const LoginOpcionUsuario = () => {
                             </div>
                         ))
                     }
-                    <a href="#"><p className="textClave mt-4 mb-4" onClick={handleBack} >Regresar</p></a>
+                    <a href="#"><p className="textClave mt-4 mb-2" onClick={handleBack} >Regresar</p></a>
                 </div>
             </div>
         </div>
