@@ -53,7 +53,7 @@ export const LoginFormInput = (url = '') => {
                                         value={ email }
                                         onChange={ handleLoginInputChange }
                                         required
-                                        autoComplete="off"
+                                        autoComplete="on"
                                     />
                                 </div>
                                 <FormPassword placeholder="Contraseña" name="password" value={ password }  handleChange={ handleLoginInputChange } autoComplete="off"/>
