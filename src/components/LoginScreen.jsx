@@ -1,7 +1,7 @@
 import React from 'react';
 
 import "./LoginScreen.style.css";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 
 import queryString from 'query-string';
 
@@ -17,10 +17,18 @@ import { LoginCambiaContrasena } from './LoginCambiaContrasena';
 export const LoginScreen = () => {
     
     const location = useLocation();
+    const history = useHistory();
     const { loading, paso } = useSelector( state => state.ui );
     // const {  }  = useSelector( state => state.auth );
 
     const { q = '' } = queryString.parse(location.search);
+
+    if (q !== '') {
+        const validUrl = 'rednegocios.cl';
+        if (!q.toLowerCase().includes(validUrl.toLowerCase())) {
+            history.push("/");
+        }
+    }
     
     return (
         <>
