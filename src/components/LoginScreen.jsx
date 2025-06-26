@@ -24,7 +24,7 @@ export const LoginScreen = () => {
     const { q = '' } = queryString.parse(location.search);
 
     if (q !== '') {
-        const validUrl = 'rednegocios.cl';
+        const validUrl = 'rednegocios';
         if (!q.toLowerCase().includes(validUrl.toLowerCase())) {
             history.push("/");
         }
