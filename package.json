@@ -2,7 +2,7 @@
   "name": "frontlogin",
   "version": "0.1.0",
   "private": true,
-  "homepage": "/login",  
+  "homepage": ".",  
   "dependencies": {
     "crypto-js": "^4.1.1",
     "query-string": "^4.3.4",
