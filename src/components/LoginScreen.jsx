@@ -25,7 +25,7 @@ export const LoginScreen = () => {
 
     if (q !== '') {
         const validUrl = 'rednegocios';
-        if (!q.toLowerCase().includes(validUrl.toLowerCase())) {
+        if (!q.toLowerCase().includes(validUrl.toLowerCase()) && !q.toLowerCase().includes('localhost')) {
             history.push("/");
         }
     }
