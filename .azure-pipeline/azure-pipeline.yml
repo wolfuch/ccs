@@ -1,0 +1,166 @@
+trigger:
+  branches:
+    include:
+    - refs/heads/develop
+name: $(date:yyyyMMdd)$(rev:.r)
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: refs/heads/develop
+  
+variables:
+- group: config-secrets-dev
+- group: config-dns-dev
+- name: namespace
+  value: 'frontlogin'
+- name: nombreDNS
+  value: $(frontlogin)
+- name: version
+  value: 'v0.2.0'  
+
+stages:
+- stage: BuildImage
+  displayName: Build Image Stage
+  jobs:
+  - job: Build
+    displayName: Construccion Artefacto
+    timeoutInMinutes: 0
+    pool:
+      vmImage: ubuntu-latest        
+    steps:
+    - checkout: self
+    - task: Docker@1
+      displayName: 'Docker: Construir la Imagen'
+      inputs:
+        azureSubscriptionEndpoint: $(serviceConnection)
+        azureContainerRegistry: $(containerRegistry)
+        imageName: '$(containerRegistry)/$(namespace):$(Build.BuildId)'
+
+    - task: Docker@1
+      displayName: 'Docker: Subir Imagen a ACR CCS'
+      inputs:
+        azureSubscriptionEndpoint: $(serviceConnection)
+        azureContainerRegistry: $(containerRegistry)
+        command: Push an image
+        imageName: $(containerRegistry)/$(namespace):$(Build.BuildId)
+        
+    - task: HelmInstaller@1
+      displayName: 'Helm: Instalar Helm'
+      
+    - task: HelmDeploy@1
+      displayName: 'Helm: Empaquetamos'
+      inputs:
+        azureSubscriptionForACR: $(serviceConnection)
+        azureResourceGroupForACR: $(resourceGroupName)
+        azureContainerRegistry: $(containerRegistry)
+        command: package
+        chartType: FilePath
+        chartPath: '**/HelmTemplates'
+        upgradetiller: false
+        save: false
+        install: false
+        chartNameForACR: $(namespace)
+        chartPathForACR: HelmTemplates
+        
+    - task: CopyFiles@2
+      displayName: Copia Templates ARM
+      inputs:
+        SourceFolder: ArmTemplates
+        TargetFolder: $(build.artifactstagingdirectory)
+        
+    - task: CopyFiles@2
+      displayName: Copia Templates Values
+      inputs:
+        SourceFolder: HelmTemplates/config_values
+        TargetFolder: $(build.artifactstagingdirectory)
+        
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publicar Artefacto: salida'
+      inputs:
+        ArtifactName: salida
+        TargetPath:  '$(Build.ArtifactStagingDirectory)'
+    - task: CmdLine@2
+      displayName: "List Artifacts"
+      inputs:
+        script: dir $(build.artifactstagingdirectory)        
+        
+- stage: DeployImage
+  displayName: Deploy Image Stage
+  dependsOn:
+  - BuildImage
+  jobs:
+  - job: Deploy
+    displayName: Deploy
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        ArtifactName: 'salida'
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+    - task: CmdLine@2
+      displayName: "List Download Artifacts"
+      inputs:
+        script: dir '$(Build.ArtifactStagingDirectory)'
+    - task: AzureCLI@2
+      displayName: 'Login to Azure'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          # Install kubelogin
+          az aks install-cli
+          # Get AKS credentials and enable kubelogin
+          az aks get-credentials --resource-group $(resourceGroupName) --name $(clusterName) --admin
+          kubelogin convert-kubeconfig -l azurecli
+    - task: Kubernetes@1
+      displayName: 'K8S: kubectl create namespace'
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscriptionEndpoint: $(serviceConnection)
+        azureResourceGroup: $(resourceGroupName)
+        kubernetesCluster: $(clusterName)
+        namespace: '$(namespace)'
+        command: apply
+        useConfigurationFile: true
+        configurationType: inline
+        inline: |
+          kind: Namespace
+          apiVersion: v1
+          metadata:
+            name: $(namespace)
+          spec: {}
+          status: {}
+        azureSubscriptionEndpointForSecrets: $(serviceConnection)
+        azureContainerRegistry: $(containerRegistry)
+        versionSpec: $(versionSpec)
+    - task: Kubernetes@1
+      displayName: 'K8S: kubectl set imagePullSecrets'
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscriptionEndpoint: $(serviceConnection)
+        azureResourceGroup: $(resourceGroupName)
+        kubernetesCluster: $(clusterName)
+        namespace: '$(namespace)'
+        command: get
+        arguments: service
+        azureSubscriptionEndpointForSecrets: $(serviceConnection)
+        azureContainerRegistry: $(containerRegistry)
+        secretName: '$(dockerAuthSecretName)'
+        versionSpec: $(versionSpec)
+    - task: HelmInstaller@1
+      displayName: 'Helm: Instalamos Helm'
+    - task: HelmDeploy@1
+      displayName: 'Helm: Actualizacion de Helm'
+      inputs:
+        azureSubscription: $(serviceConnection)
+        azureResourceGroup: $(resourceGroupName)
+        kubernetesCluster: $(clusterName)
+        namespace: '$(namespace)'
+        command: upgrade
+        chartType: FilePath
+        chartPath: '$(Build.ArtifactStagingDirectory)/$(namespace)app-$(version).tgz'
+        releaseName: rednegocios
+        valueFile: '$(Build.ArtifactStagingDirectory)/$(config)'
+        force: true
+        arguments: '--set image.repository=$(containerRegistry)/$(namespace) --set image.tag=$(Build.BuildId)  --set applicationInsights.InstrumentationKey=$(aiKey) --set ingress.enabled=true --set ingress.path=$(nombreDNS) --set ingress.hostname=$(nombreDNS) --set ingress.tls[0].hosts={"$(nombreDNS)"} --set ingress.tls[0].secretName=$(namespace)-secret-tls --set imagePullSecrets={$(dockerAuthSecretName)} --timeout 900s'
