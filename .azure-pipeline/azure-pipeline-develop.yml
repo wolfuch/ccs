@@ -15,7 +15,7 @@ variables:
 - name: namespace
   value: 'frontlogin'
 - name: nombreDNS
-  value: $(frontlogin)
+  value: $(login)
 - name: version
   value: 'v0.2.0'  
 
