@@ -2,13 +2,6 @@ FROM node:lts-alpine3.13 as build-stage
 WORKDIR /app
 COPY package*.json ./
 
-RUN npm install
-COPY . .
-RUN npm run build
-
-FROM openresty/openresty:alpine
-EXPOSE 80
-
 ARG REACT_APP_URL_PROVEEDOR
 ENV REACT_APP_URL_PROVEEDOR_VALUE="REACT_APP_URL_PROVEEDOR=${REACT_APP_URL_PROVEEDOR}"
 
@@ -21,6 +14,13 @@ ENV REACT_APP_URL_BACKOFFICE_VALUE="REACT_APP_URL_BACKOFFICE=${REACT_APP_URL_BAC
 RUN echo "$REACT_APP_URL_PROVEEDOR_VALUE" >> .env.production
 RUN echo "$REACT_APP_URL_MANDANTE_VALUE" >> .env.production
 RUN echo "$REACT_APP_URL_BACKOFFICE_VALUE" >> .env.production
+
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM openresty/openresty:alpine
+EXPOSE 80
 
 #COPY --from=build-stage /app/build /usr/share/nginx/html
 COPY --from=build-stage /app/build /usr/local/openresty/nginx/html
