@@ -5,6 +5,22 @@ import { finishLoading, showChangePassword, showLogin, showMultipleSystem, start
 import { MostrarMensaje } from '../helpers/MostrarMensaje';
 import { RegistraIngreso } from '../helpers/auditoria';
 
+const urlPorSistema = {
+    Proveedor: process.env.REACT_APP_URL_PROVEEDOR,
+    Mandante: process.env.REACT_APP_URL_MANDANTE,
+    BackOffice: process.env.REACT_APP_URL_BACKOFFICE
+}
+
+const obtenerUrlSistema = (listadoSistemas) => {
+    const listadoFinal = listadoSistemas.map((sistema) => {
+        return {
+            ...sistema,
+            urlSistema: urlPorSistema[sistema.nombreSistema] ?? sistema.nombreSistema
+        }
+    })
+    return listadoFinal;
+}
+
 export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) => {
 
     return async (dispatch) => {
@@ -26,7 +42,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                         idUsuario: body.resultado.idUsuario,
                         email: body.resultado.email,
                         cuenta: body.resultado.cuenta,
-                        listadoSistemas: body.resultado.listadoSistemas
+                        listadoSistemas: obtenerUrlSistema(body.resultado.listadoSistemas)
                     }));
 
                     dispatch(showChangePassword());
@@ -40,7 +56,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                             idUsuario: body.resultado.idUsuario,
                             email: body.resultado.email,
                             cuenta: body.resultado.cuenta,
-                            listadoSistemas: body.resultado.listadoSistemas
+                            listadoSistemas: obtenerUrlSistema(body.resultado.listadoSistemas)
                         }));
 
                         dispatch(showMultipleSystem());
