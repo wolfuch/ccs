@@ -10,8 +10,9 @@ const urlPorSistema = {
     Mandante: process.env.REACT_APP_URL_MANDANTE,
     BackOffice: process.env.REACT_APP_URL_BACKOFFICE
 }
-
+console.log('urlPorSistema', urlPorSistema)
 const obtenerUrlSistema = (listadoSistemas) => {
+    console.log('urlPorSistema dentroooo', urlPorSistema)
     const listadoFinal = listadoSistemas.map((sistema) => {
         return {
             ...sistema,
@@ -32,7 +33,8 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
             const body = await resp.json();
 
             dispatch(finishLoading());
-
+            console.log('body', body.resultado.listadoSistemas)
+            console.log('callbackurl.url', callbackurl.url)
             if (body.success === 'OK') {
 
                 if (!body.resultado.contrasenaValidada) {
@@ -69,9 +71,17 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                             idUsuario: body.resultado.idUsuario,
                             idSistema: body.resultado.listadoSistemas[0].idSistema
                         }
-
+                        let url = ""
+                        if (body.resultado.listadoSistemas[0].idSistema === 1)
+                            url = urlPorSistema.Proveedor
+                        else if (body.resultado.listadoSistemas[0].idSistema === 2)
+                            url = urlPorSistema.Mandante
+                        else if (body.resultado.listadoSistemas[0].idSistema === 3)
+                            url = urlPorSistema.BackOffice
+                        
+                        console.log('urlurlurlurl',url)
                         RegistraIngreso(data).then(() => {
-                            window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
+                            window.location.href = ` ${url}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                         })
                     }
                     else {
