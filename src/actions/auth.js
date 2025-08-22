@@ -1,4 +1,4 @@
-import { fetchSinToken } from '../helpers/fetch-helpers';
+import { fetchSinToken, fetchConToken } from '../helpers/fetch-helpers';
 import { types } from '../types/types';
 import { finishLoading, showChangePassword, showLogin, showMultipleSystem, startLoading } from './ui';
 
@@ -10,6 +10,7 @@ const urlPorSistema = {
     Mandante: process.env.REACT_APP_URL_MANDANTE,
     BackOffice: process.env.REACT_APP_URL_BACKOFFICE
 }
+const urlObtenerTokenSistemaIngresado = "auth/ObtenerTokenSistemaIngresado"
 
 const obtenerUrlSistema = (listadoSistemas) => {
     const listadoFinal = listadoSistemas.map((sistema) => {
@@ -21,8 +22,19 @@ const obtenerUrlSistema = (listadoSistemas) => {
     return listadoFinal;
 }
 
-export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) => {
+const ObtenerNuevoToken = async (token, idSistema) => {
+     const respNuevoToken = await fetchConToken(urlObtenerTokenSistemaIngresado, {
+        OldToken: token,
+        IdSistemaIngresado: idSistema
+    }, token, 'POST');
 
+    const bodyNuevoToken = await respNuevoToken.json();
+    const nuevoToken = bodyNuevoToken.resultado;
+    return nuevoToken;
+}
+
+export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) => {
+    
     return async (dispatch) => {
 
         try {
@@ -30,11 +42,11 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
 
             const resp = await fetchSinToken('auth', { email, password, idSistema }, 'POST');
             const body = await resp.json();
+            const token = body.resultado.token;
 
-            dispatch(finishLoading());
+            //dispatch(finishLoading());
 
             if (body.success === 'OK') {
-
                 if (!body.resultado.contrasenaValidada) {
                     dispatch(login({
                         token: body.resultado.token,
@@ -44,27 +56,26 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                         cuenta: body.resultado.cuenta,
                         listadoSistemas: obtenerUrlSistema(body.resultado.listadoSistemas)
                     }));
-
+                    dispatch(finishLoading());
                     dispatch(showChangePassword());
                 } else {
 
                     if (callbackurl.url === '' && body.resultado.listadoSistemas.length > 1) {
-
+                        const nuevoToken = await ObtenerNuevoToken(token, body.resultado.listadoSistemas[0].idSistema);
                         dispatch(login({
-                            token: body.resultado.token,
+                            token: nuevoToken,
                             nombre: body.resultado.nombre,
                             idUsuario: body.resultado.idUsuario,
                             email: body.resultado.email,
                             cuenta: body.resultado.cuenta,
                             listadoSistemas: obtenerUrlSistema(body.resultado.listadoSistemas)
                         }));
-
+                        dispatch(finishLoading());
                         dispatch(showMultipleSystem());
 
                     }
                     else if (callbackurl.url === '' && body.resultado.listadoSistemas.length === 1) {
                         //RegistraLog
-
                         let data = {
                             idUsuario: body.resultado.idUsuario,
                             idSistema: body.resultado.listadoSistemas[0].idSistema
@@ -76,13 +87,16 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                             url = urlPorSistema.Mandante
                         else if (body.resultado.listadoSistemas[0].idSistema === 3)
                             url = urlPorSistema.BackOffice
+
+                        const nuevoToken = await ObtenerNuevoToken(token, body.resultado.listadoSistemas[0].idSistema);
+
+                        dispatch(finishLoading());
                         
                         RegistraIngreso(data).then(() => {
-                            window.location.href = ` ${url}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
+                            window.location.href = ` ${url}?t=${nuevoToken}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                         })
                     }
                     else {
-
                         let idSistemaRetorno = 0
 
                         if (callbackurl.url.includes('proveedor'))
@@ -92,6 +106,9 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                         if (callbackurl.url.includes('backoffice'))
                             idSistemaRetorno = 3
 
+                        const nuevoToken = await ObtenerNuevoToken(token, idSistemaRetorno);
+                        dispatch(finishLoading());
+
                         //RegistraLog
                         let data = {
                             idUsuario: body.resultado.idUsuario,
@@ -99,7 +116,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                         }
 
                         RegistraIngreso(data).then(() => {
-                            window.location.href = `${callbackurl.url}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
+                            window.location.href = `${callbackurl.url}?t=${nuevoToken}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
                         })
                     }
                 }
