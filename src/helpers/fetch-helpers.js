@@ -19,6 +19,30 @@ const fetchSinToken = ( endpoint, data, method = 'GET' ) => {
     }
 }
 
+const fetchConToken = ( endpoint, data, token, method = 'GET' ) => {
+
+    const url = `${ apiBaseUrl }/${ apiVersion }/${ endpoint }`;
+
+    if ( method === 'GET' ) {
+        return fetch( url, {
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${ token }`
+            }
+        });
+    } else {
+        return fetch( url, {
+            method,
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${ token }`
+            },
+            body: JSON.stringify( data )
+        });
+    }
+}
+
 export {
-    fetchSinToken
+    fetchSinToken,
+    fetchConToken
 }
