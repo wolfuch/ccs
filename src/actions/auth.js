@@ -22,7 +22,7 @@ const obtenerUrlSistema = (listadoSistemas) => {
     return listadoFinal;
 }
 
-const ObtenerNuevoToken = async (token, idSistema) => {
+export const ObtenerNuevoToken = async (token, idSistema) => {
      const respNuevoToken = await fetchConToken(urlObtenerTokenSistemaIngresado, {
         OldToken: token,
         IdSistemaIngresado: idSistema
@@ -47,6 +47,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
             //dispatch(finishLoading());
 
             if (body.success === 'OK') {
+                console.log("if 1");
                 if (!body.resultado.contrasenaValidada) {
                     dispatch(login({
                         token: body.resultado.token,
@@ -59,11 +60,11 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                     dispatch(finishLoading());
                     dispatch(showChangePassword());
                 } else {
-
+                    console.log("if 2", body.resultado.listadoSistemas[0].idSistema);
                     if (callbackurl.url === '' && body.resultado.listadoSistemas.length > 1) {
-                        const nuevoToken = await ObtenerNuevoToken(token, body.resultado.listadoSistemas[0].idSistema);
+                        //const nuevoToken = await ObtenerNuevoToken(token, body.resultado.listadoSistemas[0].idSistema);
                         dispatch(login({
-                            token: nuevoToken,
+                            token: token,
                             nombre: body.resultado.nombre,
                             idUsuario: body.resultado.idUsuario,
                             email: body.resultado.email,
@@ -75,6 +76,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
 
                     }
                     else if (callbackurl.url === '' && body.resultado.listadoSistemas.length === 1) {
+                        console.log("if 3");
                         //RegistraLog
                         let data = {
                             idUsuario: body.resultado.idUsuario,
@@ -97,6 +99,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                         })
                     }
                     else {
+                        console.log("if 4");
                         let idSistemaRetorno = 0
 
                         if (callbackurl.url.includes('proveedor'))
@@ -105,6 +108,8 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                             idSistemaRetorno = 2
                         if (callbackurl.url.includes('backoffice'))
                             idSistemaRetorno = 3
+
+                        console.log("idSistemaRetorno", idSistemaRetorno);
 
                         const nuevoToken = await ObtenerNuevoToken(token, idSistemaRetorno);
                         dispatch(finishLoading());
