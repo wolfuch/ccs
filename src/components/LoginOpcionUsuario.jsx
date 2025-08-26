@@ -17,7 +17,6 @@ export const LoginOpcionUsuario = () => {
     }
 
     const  handleButtonSystem = async (e, sistema, idSistema) => {
-        console.log("handleButtonSystem");
         console.log("handleButtonSystem idSistema", idSistema);
         e.preventDefault();
         //RegistraLog
@@ -31,6 +30,7 @@ export const LoginOpcionUsuario = () => {
             console.log("handleButtonSystem nuevoToken", nuevoToken);
 
             RegistraIngreso(data).then(() => {
+                console.log("redireccion");
                 window.location.href = `${sistema}?t=${nuevoToken}&n=${nombre}&uid=${idUsuario}&email=${email}`;
             })
         } catch (error) {

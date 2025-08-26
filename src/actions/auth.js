@@ -99,7 +99,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                         })
                     }
                     else {
-                        console.log("if 4");
+                        console.log("if 4 callbackurl", callbackurl);
                         let idSistemaRetorno = 0
 
                         if (callbackurl.url.includes('proveedor'))
@@ -109,7 +109,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
                         if (callbackurl.url.includes('backoffice'))
                             idSistemaRetorno = 3
 
-                        console.log("idSistemaRetorno", idSistemaRetorno);
+                        console.log("idSistemaRetorno if 4", idSistemaRetorno);
 
                         const nuevoToken = await ObtenerNuevoToken(token, idSistemaRetorno);
                         dispatch(finishLoading());
