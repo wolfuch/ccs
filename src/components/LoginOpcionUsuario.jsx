@@ -2,6 +2,8 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { showLogin } from '../actions/ui';
 import { RegistraIngreso } from '../helpers/auditoria';
+import { ObtenerNuevoToken } from '../actions/auth';
+import { MostrarMensaje } from '../helpers/MostrarMensaje';
 
 export const LoginOpcionUsuario = () => {
 
@@ -14,17 +16,26 @@ export const LoginOpcionUsuario = () => {
         dispatch(showLogin());
     }
 
-    const handleButtonSystem = (e, sistema, idSistema) => {
+    const  handleButtonSystem = async (e, sistema, idSistema) => {
+        console.log("handleButtonSystem idSistema", idSistema);
         e.preventDefault();
         //RegistraLog
         let data = {
             idUsuario: idUsuario ,
             idSistema: idSistema
         } 
-        
-        RegistraIngreso(data).then(() => {
-             window.location.href = `${sistema}?t=${token}&n=${nombre}&uid=${idUsuario}&email=${email}`;
-        })
+
+        try {
+            const nuevoToken = await ObtenerNuevoToken(token, idSistema);
+            console.log("handleButtonSystem nuevoToken", nuevoToken);
+
+            RegistraIngreso(data).then(() => {
+                console.log("redireccion");
+                window.location.href = `${sistema}?t=${nuevoToken}&n=${nombre}&uid=${idUsuario}&email=${email}`;
+            })
+        } catch (error) {
+            MostrarMensaje('Iniciar Sesión.', 'Se produjo un error vuelva a intentarlo.', 'error')
+        }
     }
 
     return (
@@ -43,7 +54,7 @@ export const LoginOpcionUsuario = () => {
                                 <button
                                     className="btnSubmit btnLogin"
                                     key={sistema.idSistema}
-                                    onClick={(e) => handleButtonSystem(e, sistema.urlSistema, sistema.idSistema)}
+                                    onClick={async (e) => await handleButtonSystem(e, sistema.urlSistema, sistema.idSistema)}
                                 >
                                     {sistema.nombreSistema}
                                 </button>
