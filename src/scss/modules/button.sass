@@ -1,0 +1,26 @@
+@use '../core/vars.sass' as *
+.button
+	position: relative
+	display: inline-block
+	background-color: $color_primary
+	border-radius: 5px
+	padding: 10px 10px
+	width: 100%
+	min-width: 120px
+	color: white
+	border: 1px solid $color_primary
+	transition: .3s
+	cursor: pointer
+	font-size: 16px
+	line-height: 22px
+	text-align: center
+
+	&:hover
+		background-color: white
+		color: $color_primary
+	
+	&.button--white
+		background-color: white
+		color: $color_primary
+		&:hover
+			background-color: $light

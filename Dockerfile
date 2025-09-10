@@ -1,24 +1,36 @@
-FROM node:lts-alpine3.13 as build-stage
+FROM node:20 AS build
 WORKDIR /app
 COPY package*.json ./
 
-ARG REACT_APP_URL_PROVEEDOR
-ENV REACT_APP_URL_PROVEEDOR_VALUE="REACT_APP_URL_PROVEEDOR=${REACT_APP_URL_PROVEEDOR}"
+ARG VITE_APP_URL_MANDANTE
+ENV VITE_APP_URL_MANDANTE_VALUE="VITE_APP_URL_MANDANTE=${VITE_APP_URL_MANDANTE}"
 
-ARG REACT_APP_URL_MANDANTE
-ENV REACT_APP_URL_MANDANTE_VALUE="REACT_APP_URL_MANDANTE=${REACT_APP_URL_MANDANTE}"
+ARG VITE_APP_URL_PROVEEDOR
+ENV VITE_APP_URL_PROVEEDOR_VALUE="VITE_APP_URL_PROVEEDOR=${VITE_APP_URL_PROVEEDOR}"
 
-ARG REACT_APP_URL_BACKOFFICE
-ENV REACT_APP_URL_BACKOFFICE_VALUE="REACT_APP_URL_BACKOFFICE=${REACT_APP_URL_BACKOFFICE}"
+ARG VITE_APP_URL_BACKOFFICE
+ENV VITE_APP_URL_BACKOFFICE_VALUE="VITE_APP_URL_BACKOFFICE=${VITE_APP_URL_BACKOFFICE}"
 
-RUN echo "$REACT_APP_URL_PROVEEDOR_VALUE" >> .env.production
-RUN echo "$REACT_APP_URL_MANDANTE_VALUE" >> .env.production
-RUN echo "$REACT_APP_URL_BACKOFFICE_VALUE" >> .env.production
+RUN echo "$VITE_APP_URL_MANDANTE" >> .env.production
+RUN echo "$VITE_APP_URL_PROVEEDOR_VALUE" >> .env.production
+RUN echo "$VITE_APP_URL_BACKOFFICE_VALUE" >> .env.production
 
-RUN npm install
+# Install dependencies
+RUN yarn install
+
+# Copy the rest of your application code
 COPY . .
-RUN npm run build
 
+# Build the application
+RUN yarn build
+
+# The build output directory
+#VOLUME ["/app/build"]
+
+# Command to run
+#CMD ["sh", "-c", "cp -R /app/dist/* /dist"]
+
+# Stage 2: Serve the build with nginx
 FROM openresty/openresty:alpine
 EXPOSE 80
 
