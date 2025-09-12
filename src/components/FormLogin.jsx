@@ -12,6 +12,7 @@ import {validateEmail} from '../utils/email';
 export function FormLogin({ onLogin }) {
   const APP_URL_PROVEEDOR = import.meta.env.VITE_APP_URL_PROVEEDOR;
   const APP_URL_MANDANTE = import.meta.env.VITE_APP_URL_MANDANTE;
+  const APP_URL_BACKOFFICE = import.meta.env.VITE_APP_URL_BACKOFFICE
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -117,9 +118,11 @@ export function FormLogin({ onLogin }) {
       setShowDialog(true);
       return;
     }
-
+    // console.log('sistema.nombreSistema', sistema.nombreSistema)
     if (sistema.nombreSistema === 'Mandante')
       window.location.href = `${APP_URL_MANDANTE}/usuario/login?t=${token}`;
+    else if (sistema.nombreSistema === 'BackOffice')
+      window.location.href = `${APP_URL_BACKOFFICE}/usuario/login?t=${token}`;
     else
       window.location.href = `${APP_URL_PROVEEDOR}/usuario/login?t=${token}`;
   };
