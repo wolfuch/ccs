@@ -1,9 +1,9 @@
-const API_URL = import.meta.env.VITE_APP_URL_PROVEEDOR;
+const API_URL = import.meta.env.VITE_API_URL_API;
 
 // Función para realizar el login
 export const login = async (email, password) => {
   try {
-    const response = await fetch(`${API_URL}/api/v1/auth`, {
+    const response = await fetch(`${API_URL}/v1/auth`, {
       method: 'POST',
       headers: {
         'Connection': 'keep-alive',
@@ -24,7 +24,7 @@ export const login = async (email, password) => {
 // Función para registrar el ingreso al sistema
 export const registraIngreso = async (idSistema, idUsuario) => {
   try {
-    const response = await fetch(`${API_URL}/api/v1/RegistraIngreso`, {
+    const response = await fetch(`${API_URL}/v1/RegistraIngreso`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export const registraIngreso = async (idSistema, idUsuario) => {
 
 export const renew = async (token) => {
   try {
-    const response = await fetch(`${API_URL}/api/v1/auth/renew`, {
+    const response = await fetch(`${API_URL}/v1/auth/renew`, {
       method: 'GET',
       headers: {
         'Connection': 'keep-alive',
@@ -66,6 +66,37 @@ export const renew = async (token) => {
     return await response.json();
   } catch (error) {
     console.error('Error during login:', error);
+    throw error;
+  }
+};
+
+export const ObtenerNuevoToken = async (token,idSistema) => {
+  try {
+    const response = await fetch(`${API_URL}/v1/auth/ObtenerTokenSistemaIngresado`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`, // Agrega el token de autenticación
+      },
+      body: JSON.stringify({
+        "OldToken": token,
+        "IdSistemaIngresado": idSistema,
+      }),
+    });
+    // console.log('response',response)
+
+    if (!response.ok) {
+      throw new Error('Failed to register system access');
+    }
+    const data = await response.json();
+    // console.log('data',data)
+    if (data.success === 'OK') {
+      return data.resultado;
+    } else {
+      throw new Error('Registration failed');
+    }
+  } catch (error) {
+    console.error('Error during system access registration:', error);
     throw error;
   }
 };

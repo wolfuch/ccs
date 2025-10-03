@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { login, registraIngreso, renew } from '../services/authService';
+import { login, registraIngreso, renew, ObtenerNuevoToken } from '../services/authService';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Dialog } from 'primereact/dialog';
@@ -28,7 +28,7 @@ export function FormLogin({ onLogin }) {
   const [sistemas, setSistemas] = useState([]);
   const [tokenLogin, setTokenLogin] = useState('');
   const [idUsuarioLogeado, setIdUsuarioLogeado] = useState(0);
-
+const [tokenPaso, setTokenPaso] = useState()
   const clearFieldError = (fieldName) => {
     if (fieldErrors[fieldName]) {
       setFieldErrors(prev => ({ ...prev, [fieldName]: false }));
@@ -74,16 +74,18 @@ export function FormLogin({ onLogin }) {
         window.location.href = '/change-password';
         return;
       }
-
       const { token, idUsuario, listadoSistemas } = resultado;
-      onLogin(token);
+      setTokenPaso(token)
+      
       if (listadoSistemas.length === 1) {
-        await registrarIngresoYRedirigir(listadoSistemas[0], token, idUsuario);
+        const valor = await newToken(token, listadoSistemas[0].idSistema)
+        await registrarIngresoYRedirigir(listadoSistemas[0], valor, idUsuario);
+        onLogin(valor);
         return;
       }
       if (listadoSistemas.length > 1) {
         setSistemas(listadoSistemas);
-        setTokenLogin(token);
+        // setTokenLogin(token);
         setIdUsuarioLogeado(idUsuario);
         return;
       }
@@ -97,19 +99,27 @@ export function FormLogin({ onLogin }) {
     }
   };
 
-  const handleSistemaSelect = async (sistema) => {
-    console.log('Selected system:', sistema);
-    await registrarIngresoYRedirigir(sistema, tokenLogin, idUsuarioLogeado);
+  const newToken = async(token,sistema)=> {  
+    const resp = await ObtenerNuevoToken(token,sistema)
+      return resp
+    
+  }
+
+  const handleSistemaSelect = async (token,sistema) => {
+    const valor = await newToken(token, sistema.idSistema)
+    await registrarIngresoYRedirigir(sistema, valor, idUsuarioLogeado);
+    onLogin(valor);
   };
 
   const handleBack = () => {
     setSistemas([]);
     setIdUsuarioLogeado(0);
-    setTokenLogin('');
+    setTokenPaso('');
+    // setTokenLogin('');
     setEmail('');
     setPassword('');
   };
-
+  
   const registrarIngresoYRedirigir = async (sistema, token, idUsuario) => {
     await registraIngreso(sistema.idSistema, idUsuario);
     const result = await renew(token);
@@ -142,7 +152,7 @@ export function FormLogin({ onLogin }) {
               <button
                 key={sistema.idSistema}
                 className="button button--white"
-                onClick={() => handleSistemaSelect(sistema)}
+                onClick={() => handleSistemaSelect(tokenPaso, sistema)}
               >
                 {sistema.nombreSistema}
                 <span className="pi pi-arrow-right"></span>

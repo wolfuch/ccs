@@ -5,7 +5,7 @@ import { ItemFooter } from '../components/ItemFooter';
 
 const Login = () => {
   const handleLogin = (token) => {
-    console.log('Login successful, token:', token);
+    // console.log('Login successful, token:', token);
     // Aquí puedes manejar el token, por ejemplo guardarlo en el estado global, sessionStorage, etc.
   };
 
