@@ -179,7 +179,7 @@ export const cambiarContrasena = (email, contrasenaActual, contrasenaNueva, call
 
             if (body.success === 'OK') {
 
-                MostrarMensaje('Cambiar Contraseña.', 'Se ha cambiado la contraseña correctamente.', 'success', () => {
+                MostrarMensaje('Cambiar Contraseña.', 'Se ha cambiado la contraseña correctamente.', 'success', async () => {
                     if (callbackurl.url === '' && body.resultado.listadoSistemas.length > 1) {
                         dispatch(login({
                             token: body.resultado.token,
@@ -192,10 +192,15 @@ export const cambiarContrasena = (email, contrasenaActual, contrasenaNueva, call
                         dispatch(showMultipleSystem());
 
                     }
-                    else if (callbackurl.url === '' && body.resultado.listadoSistemas.length === 1)
-                        window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
+                    else if (callbackurl.url === '' && body.resultado.listadoSistemas.length === 1){
+                        const nuevoToken = await ObtenerNuevoToken(body.resultado.token, body.resultado.listadoSistemas[0].idSistema);
+                        window.location.href = ` ${body.resultado.listadoSistemas[0].urlSistema}?t=${nuevoToken}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
+                    }
                     else
-                        window.location.href = `${callbackurl.url}?t=${body.resultado.token}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
+                    {
+                        const nuevoToken = await ObtenerNuevoToken(body.resultado.token, body.resultado.listadoSistemas[0].idSistema);
+                        window.location.href = `${callbackurl.url}?t=${nuevoToken}&n=${body.resultado.nombre}&uid=${body.resultado.idUsuario}&email=${body.resultado.email}`;
+                    }     
                 })
 
             } else {
