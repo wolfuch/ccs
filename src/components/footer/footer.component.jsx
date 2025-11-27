@@ -27,8 +27,8 @@ const Footer = () => {
                     </div>
                     <div className="col-md-3 col-xs-3 mx-auto">
                         <img src={process.env.PUBLIC_URL + '/img/icon/telefono.svg'} alt="telefono"/> 
-                        <a className="ater" href="tel:+56228185706">
-                            <span className="spanFooter"> +56 2 2818 5706</span>
+                        <a className="ater" href="tel:+56227120257">
+                            <span className="spanFooter"> +56 2 2712 0257</span>
                         </a>
                     </div>
                     <div className="col-md-3 col-xs-3 mx-auto">
