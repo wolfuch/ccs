@@ -42,7 +42,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
 
             const resp = await fetchSinToken('auth', { email, password, idSistema }, 'POST');
             const body = await resp.json();
-            const token = body.resultado.token;
+            const token = body.resultado?.token;
 
             //dispatch(finishLoading());
 
@@ -123,6 +123,7 @@ export const iniciarLogin = (email, password, callbackurl = '', idSistema = 0) =
             } else {
 
                 MostrarMensaje('Iniciar Sesión.', body?.errores[0].descripcion, 'warning')
+                dispatch(finishLoading());
 
             }
         } catch (e) {
