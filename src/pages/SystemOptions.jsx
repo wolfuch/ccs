@@ -36,7 +36,7 @@ const SystemOptions = () => {
           </div>
         </div>
       </section>
-      <ItemFooter />
+       {/*<ItemFooter />*/}
     </>
   );
 };

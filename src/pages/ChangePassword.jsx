@@ -21,7 +21,7 @@ const ChangePassword = () => {
           </div>
         </div>
       </section>
-      <ItemFooter />
+       {/*<ItemFooter />*/}
     </>
   );
 };

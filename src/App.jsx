@@ -4,9 +4,12 @@ import Login from './pages/Login';
 import ResetPassword from './pages/ResetPassword';
 import ChangePassword from './pages/ChangePassword';
 import ProtectedRoute from './components/ProtectedRoute';
+import { ItemFooter } from './components/ItemFooter';
 
 function App() {
   return (
+    <>
+    <main>
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -23,6 +26,11 @@ function App() {
         <Route path="/" element={<Login />} /> {/* Ruta por defecto */}
       </Routes>
     </Router>
+    
+    </main>
+
+    <ItemFooter />
+    </>
   );
 }
 

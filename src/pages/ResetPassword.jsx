@@ -21,7 +21,7 @@ const ResetPassword = () => {
           </div>
         </div>
       </section>
-      <ItemFooter />
+       {/*<ItemFooter />*/}
     </>
   );
 };
