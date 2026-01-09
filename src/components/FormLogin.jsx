@@ -8,6 +8,7 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import {validateEmail} from '../utils/email';
+import { useTranslation } from "react-i18next"; 
 
 export function FormLogin({ onLogin }) {
   const APP_URL_PROVEEDOR = import.meta.env.VITE_APP_URL_PROVEEDOR;
@@ -28,7 +29,9 @@ export function FormLogin({ onLogin }) {
   const [sistemas, setSistemas] = useState([]);
   const [tokenLogin, setTokenLogin] = useState('');
   const [idUsuarioLogeado, setIdUsuarioLogeado] = useState(0);
-const [tokenPaso, setTokenPaso] = useState()
+  const [tokenPaso, setTokenPaso] = useState()
+  const { t } = useTranslation();
+
   const clearFieldError = (fieldName) => {
     if (fieldErrors[fieldName]) {
       setFieldErrors(prev => ({ ...prev, [fieldName]: false }));
@@ -89,10 +92,10 @@ const [tokenPaso, setTokenPaso] = useState()
         setIdUsuarioLogeado(idUsuario);
         return;
       }
-      setDialogMessage('No tienes sistemas disponibles.');
+      setDialogMessage(t("sinSistemasDisponibles"));
       setShowDialog(true);
     } catch (err) {
-      setDialogMessage('Error al iniciar sesión. Verifique sus credenciales y vuelva a intentarlo.');
+      setDialogMessage(t("errorIniciarSesion"));
       setShowDialog(true);
     } finally {
       setLoading(false);
@@ -124,7 +127,7 @@ const [tokenPaso, setTokenPaso] = useState()
     await registraIngreso(sistema.idSistema, idUsuario);
     const result = await renew(token);
     if (result.success !== 'OK') {
-      setDialogMessage(result?.errores?.[0]?.descripcion || 'Error al renovar el token de sesión.');
+      setDialogMessage(result?.errores?.[0]?.descripcion || t("errorRenovarToken"));
       setShowDialog(true);
       return;
     }
@@ -146,7 +149,7 @@ const [tokenPaso, setTokenPaso] = useState()
 
       {sistemas.length > 1 ? (
         <div className="sistema-selector">
-          <h3>Seleccione un sistema:</h3>
+          <h3>{t("seleccioneSistema")}:</h3>
           <div className="form__buttons">
             {sistemas.map((sistema) => (
               <button
@@ -161,15 +164,15 @@ const [tokenPaso, setTokenPaso] = useState()
           </div>
           <div className="form__buttons">
             <button className="button" onClick={handleBack}>
-              Volver atrás
+              {t("volverAtras")}
             </button>
           </div>
         </div>
       ) : (
         <form className="form" onSubmit={handleSubmit} autoComplete='off'>
           <div className='form__header'>
-            <h2>Iniciar sesión</h2>
-            <p>Ingrese su Email y Contraseña para ingresar a la plataforma de RedNegocios</p>
+            <h2>{t("iniciarSesion")}</h2>
+            <p>{t("ingreseEmailPassword")}</p>
           </div>
           <div className='form__body'>
             <div className="form__element">
@@ -178,7 +181,7 @@ const [tokenPaso, setTokenPaso] = useState()
                 <input
                   type="text"
                   value={email}
-                  placeholder="Ingrese su Email"
+                  placeholder={t("ingreseEmail")}
                   onChange={e => {
                     setEmail(e.target.value);
                     clearFieldError('email');
@@ -190,23 +193,23 @@ const [tokenPaso, setTokenPaso] = useState()
               {fieldErrors.email && (
                 <div className="form__field-error">
                   <span className="pi pi-times"></span>
-                  El campo es requerido
+                  {t("campoRequerido")}
                 </div>
               )}
               {emailFormatError && (
                 <div className="form__field-error">
                   <span className="pi pi-times"></span>
-                  Ingrese un email válido
+                  {t("ingreseEmailValido")}
                 </div>
               )}
             </div>
             <div className="form__element">
-              <div className="form__title">Contraseña</div>
+              <div className="form__title">{t("password")}</div>
               <div className="form__input">
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
-                  placeholder="Ingrese su Contraseña"
+                  placeholder={t("ingresePassword")}
                   onChange={e => {
                     setPassword(e.target.value);
                     clearFieldError('password');
@@ -221,7 +224,7 @@ const [tokenPaso, setTokenPaso] = useState()
               {fieldErrors.password && (
                 <div className="form__field-error">
                   <span className="pi pi-times"></span>
-                  El campo es requerido
+                  {t("campoRequerido")}
                 </div>
               )}
               <div className="form__resetpass">
@@ -229,7 +232,7 @@ const [tokenPaso, setTokenPaso] = useState()
                   to="/reset-password"
                   onClick={() => sessionStorage.setItem('internalNavigation', 'true')}
                 >
-                  ¿Olvidó su contraseña?
+                  {t("olvidoPassword")}
                 </Link>
               </div>
             </div>
@@ -243,7 +246,7 @@ const [tokenPaso, setTokenPaso] = useState()
                 disabled={loading}
                 onClick={() => sessionStorage.setItem('internalNavigation', 'true')}
               >
-                Cambiar Clave
+                {t("cambiarClave")}
               </Link>
             </div>
           </div>

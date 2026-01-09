@@ -1,3 +1,17 @@
 {
-    "saludo": "Hola"
+    "saludo": "Hola",
+    "iniciarSesion": "Iniciar sesión",
+    "seleccioneSistema": "Seleccione un sistema",
+    "volverAtras": "Volver atrás",
+    "ingreseEmailPassword": "Ingrese su Email y Contraseña para ingresar a la plataforma de RedNegocios",
+    "ingreseEmail": "Ingrese su email",
+    "campoRequerido": "El campo es requerido",
+    "ingreseEmailValido": "Ingrese un email válido",
+    "password": "Contraseña",
+    "ingresePassword": "Ingrese su Contraseña",
+    "olvidoPassword": "¿Olvidó su contraseña?",
+    "cambiarClave": "Cambiar Clave",
+    "errorRenovarToken": "Error al renovar el token de sesión",
+    "sinSistemasDisponibles": "No tienes sistemas disponibles",
+    "errorIniciarSesion": "Error al iniciar sesión. Verifique sus credenciales y vuelva a intentarlo"
 }

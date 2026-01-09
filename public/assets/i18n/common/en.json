@@ -1,3 +1,17 @@
 {
-    "saludo": "Hello"
+    "saludo": "Hello",
+    "iniciarSesion": "Login",
+    "seleccioneSistema": "Select any system",
+    "volverAtras": "Go back",
+    "ingreseEmailPassword": "Enter your email and password to access the RedNegocios platform",
+    "ingreseEmail": "Enter your email",
+    "campoRequerido": "Field is required",
+    "ingreseEmailValido": "Enter a valid email",
+    "password": "Password",
+    "ingresePassword": "Enter your password",
+    "olvidoPassword": "Do you forget your password?",
+    "cambiarClave": "Change password",
+    "errorRenovarToken": "Error when you refresh your session token",
+    "sinSistemasDisponibles": "You don't have any available systems",
+     "errorIniciarSesion": "Error logging in. Please verify your credentials and try again."
 }
