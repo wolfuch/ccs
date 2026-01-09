@@ -38,5 +38,6 @@
     "restaurarPassword": "Restaurar Contraseña",
     "ingreseEmailCambiarPassword": "Ingrese el email del usuario que desea solicitar cambio de contraseña",
     "errorCambioPassword": "Error al tratar de solicitar el cambio de contraseña",
-    "reseteoPasswordOk": "La solicitud se realizó correctamente. Revise su email y siga los pasos"
+    "reseteoPasswordOk": "La solicitud se realizó correctamente. Revise su email y siga los pasos",
+    "solicitar": "Solicitar"
 }

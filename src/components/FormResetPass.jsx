@@ -104,7 +104,7 @@ export function FormResetPass() {
           </div>
           <div className="form__buttons">
             <button type="submit" className="button" disabled={loading}>
-              {loading ? <ProgressSpinner style={{ width: '20px', height: '20px' }} strokeWidth="4" /> : 'Solicitar'}
+              {loading ? <ProgressSpinner style={{ width: '20px', height: '20px' }} strokeWidth="4" /> : t("solicitar")}
             </button>
             <Link to="/login" className="button button--white" disabled={loading}>{t("irInicioSesion")}</Link>
           </div>
