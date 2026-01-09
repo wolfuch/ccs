@@ -7,6 +7,7 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import {validateEmail} from '../utils/email';
+import { useTranslation } from "react-i18next"; 
 
 export function FormResetPass() {
   const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ export function FormResetPass() {
   const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);  // Estado de carga
   const [showDialog, setShowDialog] = useState(false);
+  const { t } = useTranslation();
 
   const clearFieldError = (fieldName) => {
     if (fieldErrors[fieldName]) {
@@ -46,13 +48,13 @@ export function FormResetPass() {
     try {
       const response = await requestPasswordReset(email);
       if (response.success !== 'OK')
-        setMessage(response?.errores?.[0]?.descripcion || 'Error al tratar de solicitar el cambio de contraseña. Por favor, intente nuevamente.');
+        setMessage(response?.errores?.[0]?.descripcion || `${t("errorCambioPassword")}. ${t("intenteMasTarde")}`);
       else {
-        setMessage('La solicitud se realizó correctamente. Revise su email y siga los pasos.');
+        setMessage(t("reseteoPasswordOk"));
       };
       setShowDialog(true);
     } catch (err) {
-      setMessage('Error al tratar de solicitar el cambio de contraseña. Por favor, intente nuevamente.');
+      setMessage(`${t("errorCambioPassword")}. ${t("intenteMasTarde")}`);
       setShowDialog(true);
     } finally {
       setLoading(false);  // Desactivar estado de carga
@@ -61,14 +63,14 @@ export function FormResetPass() {
 
   return (
     <>
-      <Dialog visible={showDialog} footer={<button className='button' onClick={() => setShowDialog(false)}>Entendido</button>} onHide={() => setShowDialog(false)}>
+      <Dialog visible={showDialog} footer={<button className='button' onClick={() => setShowDialog(false)}>{t("entendido")}</button>} onHide={() => setShowDialog(false)}>
         <p>{message}</p>
       </Dialog>
       {loading && <div className="loading-overlay"><ProgressSpinner /></div>}
       <form className="form" autoComplete='off' onSubmit={handleSubmit}>
         <div className="form__header">
-          <h3>Restaurar Contraseña</h3>
-          <p>Ingrese el email del usuario que desea solicitar cambio de contraseña:</p>
+          <h3>{t("restaurarPassword")}</h3>
+          <p>{t("ingreseEmailCambiarPassword")}:</p>
         </div>
         <div className="form__body">
           <div className="form__element">
@@ -77,7 +79,7 @@ export function FormResetPass() {
               <input
                 type="text"
                 value={email}
-                placeholder="Ingrese su Email"
+                placeholder={t("ingreseEmail")}
                 autoComplete='off'
                 onChange={e => {
                   setEmail(e.target.value);
@@ -90,13 +92,13 @@ export function FormResetPass() {
             {fieldErrors.email && (
               <div className="form__field-error">
                 <span className="pi pi-times"></span>
-                El campo es requerido
+                {t("campoRequerido")}
               </div>
             )}
             {emailFormatError && (
               <div className="form__field-error">
                 <span className="pi pi-times"></span>
-                Ingrese un email válido
+                {t("ingreseEmailValido")}
               </div>
             )}
           </div>
@@ -104,7 +106,7 @@ export function FormResetPass() {
             <button type="submit" className="button" disabled={loading}>
               {loading ? <ProgressSpinner style={{ width: '20px', height: '20px' }} strokeWidth="4" /> : 'Solicitar'}
             </button>
-            <Link to="/login" className="button button--white" disabled={loading}>Ir a Inicio de sesión</Link>
+            <Link to="/login" className="button button--white" disabled={loading}>{t("irInicioSesion")}</Link>
           </div>
         </div>
       </form>

@@ -34,5 +34,9 @@
     "passwordsNoCoinciden2": "Passwords don't match",
     "irInicioSesion": "Go to log in",
     "derechosReservados": "All rights reserved",
-    "terminosCondiciones": "Terms and conditions"
+    "terminosCondiciones": "Terms and conditions",
+    "restaurarPassword": "Reset password",
+    "ingreseEmailCambiarPassword": "Enter the email of the user who wishes to request a password change",
+    "errorCambioPassword": "Error trying to request a password change",
+    "reseteoPasswordOk": "The request was successful. Please check your email and follow the steps"
 }
