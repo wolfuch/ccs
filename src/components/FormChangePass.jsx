@@ -7,6 +7,7 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import { validateEmail } from '../utils/email';
+import { useTranslation } from "react-i18next"; 
 
 export function FormChangePass() {
   const [email, setEmail] = useState(sessionStorage.getItem('email') || "");
@@ -36,6 +37,7 @@ export function FormChangePass() {
   const [loading, setLoading] = useState(false);  // Estado de carga
   const [showDialog, setShowDialog] = useState(false);
   const [returnToLogin, setReturnToLogin] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     sessionStorage.removeItem('email'); // Limpiar email al cargar el componente
@@ -94,7 +96,7 @@ export function FormChangePass() {
     console.log('Submitting form with:', contrasenaNueva, contrasenaNuevaRepeat);
     if (contrasenaNueva !== contrasenaNuevaRepeat) {
       console.log('Passwords do not match');
-      setMessage('Las contraseñas nuevas no coinciden.');
+      setMessage(t("passwordsNoCoinciden"));
       setShowDialog(true);
       return;
     }
@@ -102,14 +104,14 @@ export function FormChangePass() {
     try {
       const response = await changePassword(email, contrasenaActual, contrasenaNueva);
       if (response.success !== 'OK')
-        setMessage(response?.errores?.[0]?.descripcion || 'Error al cambiar la contraseña.');
+        setMessage(response?.errores?.[0]?.descripcion || t("errorCambiarPassword"));
       else {
-        setMessage('Contraseña actualizada con éxito.');
+        setMessage(t("passwordActualizada"));
         setReturnToLogin(true);
       }
       setShowDialog(true);
     } catch (err) {
-      setMessage('Error al tratar de cambiar la contraseña, intente más tarde.');
+      setMessage(`${t("errorCambiarPassword")}. ${t("intenteMasTarde")}`);
       setShowDialog(true);
     } finally {
       setLoading(false);  // Desactivar estado de carga
@@ -124,14 +126,14 @@ export function FormChangePass() {
           // Redirigir al login
           window.location.href = '/login';
         }
-      }}>Entendido</button>} onHide={() => setShowDialog(false)}>
+      }}>{t("entendido")}</button>} onHide={() => setShowDialog(false)}>
         <p>{message}</p>
       </Dialog>
       {loading && <div className="loading-overlay"><ProgressSpinner /></div>}
       <form className="form" onSubmit={handleSubmit}>
         <div className='form__header'>
-          <h2>Cambiar Contraseña</h2>
-          <p>Complete los campos para cambiar su contraseña</p>
+          <h2>{t("cambiarPassword")}</h2>
+          <p>{t("completeCambiarPassword")}</p>
         </div>
         <div className='form__body'>
           <div className="form__element">
@@ -140,7 +142,7 @@ export function FormChangePass() {
               <input
                 type="text"
                 value={email}
-                placeholder="Ingrese su Email"
+                placeholder={t("ingreseEmail")}
                 onChange={e => {
                   setEmail(e.target.value);
                   clearFieldError('email');
@@ -152,23 +154,23 @@ export function FormChangePass() {
             {fieldErrors.email && (
               <div className="form__field-error">
                 <span className="pi pi-times"></span>
-                El campo es requerido
+                {t("campoRequerido")}
               </div>
             )}
             {emailFormatError && (
               <div className="form__field-error">
                 <span className="pi pi-times"></span>
-                Ingrese un email válido
+                {t("ingreseEmailValido")}
               </div>
             )}
           </div>
           <div className="form__element">
-            <div className="form__title">Contraseña Actual</div>
+            <div className="form__title">{t("passwordActual")}</div>
             <div className="form__input">
               <input
                 type={showCurrentPassword ? "text" : "password"}
                 value={contrasenaActual}
-                placeholder="Ingrese su Contraseña Actual"
+                placeholder={t("ingresePasswordActual")}
                 onChange={e => {
                   setContrasenaActual(e.target.value);
                   clearFieldError('contrasenaActual');
@@ -183,17 +185,17 @@ export function FormChangePass() {
             {fieldErrors.contrasenaActual && (
               <div className="form__field-error">
                 <span className="pi pi-times"></span>
-                El campo es requerido
+                {t("campoRequerido")}
               </div>
             )}
           </div>
           <div className="form__element">
-            <div className="form__title">Contraseña Nueva</div>
+            <div className="form__title">{t("passwordNueva")}</div>
             <div className="form__input">
               <input
                 type={showNewPassword ? "text" : "password"}
                 value={contrasenaNueva}
-                placeholder="Ingrese su Contraseña Nueva"
+                placeholder={t("ingresePasswordNueva")}
                 onChange={e => {
                   setContrasenaNueva(e.target.value);
                   validatePassword(e.target.value);
@@ -210,28 +212,28 @@ export function FormChangePass() {
             <div className="form__password-validation">
               <div className={`validation-item ${passwordValidation.minLength ? 'valid' : 'invalid'}`}>
                 <span className={`pi ${passwordValidation.minLength ? 'pi-check' : 'pi-times'}`}></span>
-                La contraseña debe tener al menos 8 caracteres.
+                {t("passwordMinimoCaracteres")}
               </div>
               <div className={`validation-item ${passwordValidation.hasLowercase ? 'valid' : 'invalid'}`}>
                 <span className={`pi ${passwordValidation.hasLowercase ? 'pi-check' : 'pi-times'}`}></span>
-                Debe contener al menos una letra minúscula.
+                {t("passwordMinimoMinusculas")}
               </div>
               <div className={`validation-item ${passwordValidation.hasUppercase ? 'valid' : 'invalid'}`}>
                 <span className={`pi ${passwordValidation.hasUppercase ? 'pi-check' : 'pi-times'}`}></span>
-                Debe contener al menos una letra mayúscula.
+               {t("passwordMinimoMayusculas")}
               </div>
               <div className={`validation-item ${passwordValidation.hasNumbers ? 'valid' : 'invalid'}`}>
                 <span className={`pi ${passwordValidation.hasNumbers ? 'pi-check' : 'pi-times'}`}></span>
-                Debe contener al menos un número.
+                {t("passwordMinimoNumeros")}
               </div>
               <div className={`validation-item ${passwordValidation.hasSpecialChar && passwordValidation.noSpaces ? 'valid' : 'invalid'}`}>
                 <span className={`pi ${passwordValidation.hasSpecialChar && passwordValidation.noSpaces ? 'pi-check' : 'pi-times'}`}></span>
-                Debe incluir al menos un carácter especial y no contener espacios
+                {t("passwordMinimoCaracteresEspeciales")}
               </div>
             </div>
           </div>
           <div className="form__element">
-            <div className="form__title">Repetir Contraseña Nueva</div>
+            <div className="form__title">{t("repetirNuevaPassword")}</div>
             <div className="form__input">
               <input
                 type={showRepeatPassword ? "text" : "password"}
@@ -252,13 +254,13 @@ export function FormChangePass() {
             {fieldErrors.contrasenaNuevaRepeat && (
               <div className="form__field-error">
                 <span className="pi pi-times"></span>
-                El campo es requerido
+                {t("campoRequerido")}
               </div>
             )}
             {!passwordsMatch && contrasenaNuevaRepeat.length > 0 && (
               <div className="form__password-error">
                 <span className="pi pi-times"></span>
-                Las contraseñas no coinciden
+                {t("passwordsNoCoinciden2")}
               </div>
             )}
           </div>
@@ -267,7 +269,7 @@ export function FormChangePass() {
             <button type="submit" className="button" disabled={loading}>
               {loading ? <ProgressSpinner style={{ width: '20px', height: '20px' }} strokeWidth="4" /> : 'Cambiar'}
             </button>
-            <Link to="/login" className="button button--white" disabled={loading}>Ir a Inicio de sesión</Link>
+            <Link to="/login" className="button button--white" disabled={loading}>{t("irInicioSesion")}</Link>
           </div>
         </div>
       </form>
