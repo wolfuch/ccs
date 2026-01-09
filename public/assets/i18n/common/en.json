@@ -32,5 +32,7 @@
     "passwordMinimoCaracteresEspeciales": "It must include at least one special character and cannot contain any empty character",
     "repetirNuevaPassword": "Repeat new password",
     "passwordsNoCoinciden2": "Passwords don't match",
-    "irInicioSesion": "Go to log in"
+    "irInicioSesion": "Go to log in",
+    "derechosReservados": "All rights reserved",
+    "terminosCondiciones": "Terms and conditions"
 }

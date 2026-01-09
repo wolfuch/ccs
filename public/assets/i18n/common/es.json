@@ -32,5 +32,7 @@
     "passwordMinimoCaracteresEspeciales": "Debe incluir al menos un carácter especial y no contener espacios",
     "repetirNuevaPassword": "Repetir Contraseña Nueva",
     "passwordsNoCoinciden2": "Las contraseñas no coinciden",
-    "irInicioSesion": "Ir a Inicio de sesión"
+    "irInicioSesion": "Ir a Inicio de sesión",
+    "derechosReservados": "Todos los derechos reservados",
+    "terminosCondiciones": "Términos y condiciones"
 }

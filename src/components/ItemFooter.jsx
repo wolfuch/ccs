@@ -1,8 +1,11 @@
 import React from 'react';
 import logoRednegocios from '../assets/icons/logo-rednegocios-white.svg';
 import { FaMapMarkerAlt, FaEnvelope, FaPhone } from 'react-icons/fa';
+import { useTranslation } from "react-i18next"; 
 
 export function ItemFooter() {
+    const { t } = useTranslation();
+
     return (
         <footer className="footer">
             <div className="footer__primary">
@@ -34,8 +37,8 @@ export function ItemFooter() {
             <div className="footer__secondary">
                 <div className="footer__wrap footer__wrap--xs">
                     <div className="footer__copyright">
-                        <p>© 2021 - RED NEGOCIOS CCS Todos los Derechos Reservados</p>
-                        <a href="https://www.rednegocios.cl/terminos-condiciones/" target="_blank" rel="noopener noreferrer">Términos y condiciones</a>
+                        <p>© 2021 - RED NEGOCIOS CCS {t("derechosReservados")}</p>
+                        <a href="https://www.rednegocios.cl/terminos-condiciones/" target="_blank" rel="noopener noreferrer">{t("terminosCondiciones")}</a>
                     </div>
                 </div>
             </div>
