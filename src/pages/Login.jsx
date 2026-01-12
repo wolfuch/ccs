@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logoRednegocios from '../assets/icons/logo-rednegocios.png';
 import { FormLogin } from '../components/FormLogin';
 import { ItemFooter } from '../components/ItemFooter';
@@ -8,6 +8,10 @@ const Login = () => {
     // console.log('Login successful, token:', token);
     // Aquí puedes manejar el token, por ejemplo guardarlo en el estado global, sessionStorage, etc.
   };
+
+  useEffect(() => {
+    sessionStorage.removeItem('t');
+  }, []);
 
   return (
     <>
