@@ -27,7 +27,7 @@ const LanguageList = ({ closeComboChangeLang, selectedLanguage, setSelectedLangu
     setSelectedLanguage(selected);
     closeComboChangeLang(false);
     setChangingLang(false);
-    window.location.reload();
+    //window.location.reload();
   }
 
   return (
