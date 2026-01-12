@@ -238,7 +238,7 @@ export function FormLogin({ onLogin }) {
             </div>
             <div className="form__buttons">
               <button type="submit" className="button" disabled={loading}>
-                {loading ? <ProgressSpinner style={{ width: '20px', height: '20px' }} strokeWidth="4" /> : 'Ingresar'}
+                {loading ? <ProgressSpinner style={{ width: '20px', height: '20px' }} strokeWidth="4" /> : t("ingresar")}
               </button>
               <Link 
                 to="/change-password" 
