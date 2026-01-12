@@ -103,9 +103,9 @@ export function FormLogin({ onLogin }) {
   };
 
   const newToken = async(token,sistema)=> {  
-    const resp = await ObtenerNuevoToken(token,sistema)
-      return resp
-    
+    const resp = await ObtenerNuevoToken(token,sistema);
+    sessionStorage.setItem('t', resp);
+    return resp;
   }
 
   const handleSistemaSelect = async (token,sistema) => {
