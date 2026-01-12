@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL_API;
+const API_URL = import.meta.env.VITE_API_URL;
 
 // Función para realizar el login
 export const login = async (email, password) => {
