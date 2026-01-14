@@ -1,4 +1,4 @@
-FROM node:20 AS build
+FROM node:20 AS build-stage
 WORKDIR /app
 COPY package*.json ./
 
