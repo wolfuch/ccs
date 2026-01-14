@@ -27,7 +27,7 @@ export function ItemFooter() {
                             </div>
                             <div className="footer__info">
                                 <a href="tel:+56228185706">
-                                    +56 2 2818 5706 <FaPhone />
+                                    +56 2 2712 0257 <FaPhone />
                                 </a>
                             </div>
                         </div>
@@ -37,7 +37,7 @@ export function ItemFooter() {
             <div className="footer__secondary">
                 <div className="footer__wrap footer__wrap--xs">
                     <div className="footer__copyright">
-                        <p>© 2021 - RED NEGOCIOS CCS {t("derechosReservados")}</p>
+                        <p>© 2025 - RED NEGOCIOS CCS {t("derechosReservados")}</p>
                         <a href="https://www.rednegocios.cl/terminos-condiciones/" target="_blank" rel="noopener noreferrer">{t("terminosCondiciones")}</a>
                     </div>
                 </div>
