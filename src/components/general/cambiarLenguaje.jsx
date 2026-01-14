@@ -11,7 +11,7 @@ const languages = [
 const LanguageTemplate = (option) => {
     return (
         <div>
-            <img alt={option.language} src={option.pathFlagImg} style={{ width: '1rem', marginTop: '0.5rem' }}/>
+            <img alt={option.language} src={option.pathFlagImg} id="image-language"/>
             <div>{option.language}</div>
         </div>
     );
@@ -57,7 +57,8 @@ const CambiarLenguaje = () => {;
         onClick={() => setOpen((prev) => !prev)} 
         image={selectedLanguage.pathFlagImg} 
         shape="circle"   // forma circular
-        size="normal"    // tamaño          
+        size="normal"    // tamaño
+        className="avatar-custom"          
         />
    
       {open && 
