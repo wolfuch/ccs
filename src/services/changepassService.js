@@ -1,6 +1,8 @@
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const changePassword = async (email, contrasenaActual, contrasenaNueva) => {
     try {
-      const response = await fetch('https://desaapi.rednegocios.cl/api/v1/auth/recovery', {
+      const response = await fetch(`${API_URL}/v1/auth/recovery`, {
         method: 'POST',
         headers: {
           'Connection': 'keep-alive',
