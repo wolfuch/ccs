@@ -1,0 +1,49 @@
+@use '../core/vars.sass' as *
+footer
+    background-color: $color_secondary
+    color: white
+    border-top: 1px solid rgba(255,255,255,.15)
+    .footer__wrap
+        max-width: 800px
+        padding: 40px 20px
+        width: 100%
+        margin: 0 auto
+        &.footer__wrap--xs
+            padding: 20px 20px
+
+    .footer__logo
+        margin-bottom: 40px
+        @media (min-width:720px)
+            margin-bottom: 0
+        img
+            width: 300px
+    
+    .footer__flex
+        display: flex
+        flex-direction: column
+        align-items: center
+        justify-content: space-between
+        width: 100%
+        @media (min-width:720px)
+            flex-direction: row
+    
+    .footer__infos
+        text-align: center
+        @media (min-width:720px)
+            text-align: left
+        .footer__info
+            padding-bottom: 20px
+            color: white
+            &:last-child
+                padding-bottom: 0
+            a
+                color: white
+    
+    .footer__secondary
+        background-color: $dark
+        text-align: center
+        p
+            margin-bottom: 10px
+        a
+            color: white
+            text-decoration: underline
