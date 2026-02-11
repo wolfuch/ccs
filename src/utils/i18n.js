@@ -12,13 +12,14 @@ i18next
       loadPath: "/assets/i18n/{{ns}}/{{lng}}.json",
     },
     defaultNS: "common",
-    supportedLngs: ["es", "en"],
+    // supportedLngs: ["es", "en"],
+    selectedLanguage: ["es"],
     fallbackLng: "es",
     debug: false,
-    detection: {
-      order: ["localStorage", "cookie", "htmlTag"],
-      caches: ["localStorage"],
-    },
+    // detection: {
+    //   order: ["sessionStorage", "cookie", "htmlTag"],
+    //   caches: ["sessionStorage"],
+    // },
     ns: ["common"],
   });
 

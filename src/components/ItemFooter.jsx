@@ -37,7 +37,7 @@ export function ItemFooter() {
             <div className="footer__secondary">
                 <div className="footer__wrap footer__wrap--xs">
                     <div className="footer__copyright">
-                        <p>© 2025 - RED NEGOCIOS CCS {t("derechosReservados")}</p>
+                        <p>© 2026 - RED NEGOCIOS CCS {t("derechosReservados")}</p>
                         <a href="https://www.rednegocios.cl/terminos-condiciones/" target="_blank" rel="noopener noreferrer">{t("terminosCondiciones")}</a>
                     </div>
                 </div>
