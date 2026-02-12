@@ -5,9 +5,10 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 i18next
   .use(HttpApi)
-  .use(LanguageDetector)
+  // .use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    lng: "es",
     backend: {
       loadPath: "/assets/i18n/{{ns}}/{{lng}}.json",
     },
@@ -16,10 +17,10 @@ i18next
     selectedLanguage: ["es"],
     fallbackLng: "es",
     debug: false,
-    // detection: {
-    //   order: ["sessionStorage", "cookie", "htmlTag"],
-    //   caches: ["sessionStorage"],
-    // },
+    detection: {
+      order: ["sessionStorage", "cookie", "htmlTag"],
+      caches: ["sessionStorage"],
+    },
     ns: ["common"],
   });
 

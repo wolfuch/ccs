@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: 'localhost', // obliga a usar localhost
-    port: 3000,        // puerto preferido
+    port: 3002,        // puerto preferido
     strictPort: false, // si está ocupado, busca el siguiente libre
     open: true         // abre el navegador automáticamente
   }
