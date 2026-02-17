@@ -57,10 +57,10 @@ spec:
             {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
-      volumes:
-        - name: config-volume
-          configMap:
-            name: {{ .Release.Name }}-config
+      # volumes:
+      #   - name: config-volume
+      #     configMap:
+      #       name: {{ .Release.Name }}-config
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
       {{- range .Values.imagePullSecrets }}
