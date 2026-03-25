@@ -40,5 +40,6 @@
     "errorCambioPassword": "Error al tratar de solicitar el cambio de contraseña",
     "reseteoPasswordOk": "La solicitud se realizó correctamente. Revise su email y siga los pasos",
     "solicitar": "Solicitar",
-    "ingresar": "Ingresar"
+    "ingresar": "Ingresar",
+    "errorRecaptcha": "Error al verificar reCAPTCHA. Intente nuevamente"
 }

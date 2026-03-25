@@ -40,5 +40,6 @@
     "errorCambioPassword": "Error trying to request a password change",
     "reseteoPasswordOk": "The request was successful. Please check your email and follow the steps",
     "solicitar": "Request",
-    "ingresar": "Sign in"
+    "ingresar": "Sign in",
+    "errorRecaptcha": "Error verifying reCAPTCHA. Please try again"
 }

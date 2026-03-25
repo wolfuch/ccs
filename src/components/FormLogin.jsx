@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { login, registraIngreso, renew, ObtenerNuevoToken } from '../services/authService';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -31,6 +32,7 @@ export function FormLogin({ onLogin }) {
   const [idUsuarioLogeado, setIdUsuarioLogeado] = useState(0);
   const [tokenPaso, setTokenPaso] = useState()
   const { t } = useTranslation();
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const clearFieldError = (fieldName) => {
     if (fieldErrors[fieldName]) {
@@ -57,9 +59,17 @@ export function FormLogin({ onLogin }) {
       return;
     }
     
+    if (!executeRecaptcha) {
+      setDialogMessage(t("errorRecaptcha"));
+      setShowDialog(true);
+      return;
+    }
+
+    const recaptchaToken = await executeRecaptcha('login');
+
     setLoading(true);
     try {
-      const authResponse = await login(email, password);
+      const authResponse = await login(email, password, recaptchaToken);
       const { success, resultado, errores } = authResponse;
       if (success !== 'OK') {
         if (!!errores && errores.length > 0 && !!errores[0].descripcion) {
