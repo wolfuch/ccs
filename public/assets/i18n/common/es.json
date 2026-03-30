@@ -41,7 +41,7 @@
     "reseteoPasswordOk": "La solicitud se realizó correctamente. Revise su email y siga los pasos",
     "solicitar": "Solicitar",
     "ingresar": "Ingresar",
-    "errorRecaptcha": "Error al verificar reCAPTCHA. Intente nuevamente",
-    "errorCaptchaV2": "Error captcha v2",
-    "requiereCaptcha": "Requiere captcha"
+    "errorRecaptcha": "Error al verificar captcha. Intente nuevamente",
+    "errorCaptchaV2": "Error al validar captcha",
+    "requiereCaptcha": "Requiere validación captcha"
 }
