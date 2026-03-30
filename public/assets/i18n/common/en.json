@@ -41,5 +41,7 @@
     "reseteoPasswordOk": "The request was successful. Please check your email and follow the steps",
     "solicitar": "Request",
     "ingresar": "Sign in",
-    "errorRecaptcha": "Error verifying reCAPTCHA. Please try again"
+    "errorRecaptcha": "Error verifying reCAPTCHA. Please try again",
+    "errorCaptchaV2": "Error captcha v2",
+    "requiereCaptcha": "Require captcha"
 }

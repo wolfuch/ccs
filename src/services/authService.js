@@ -101,3 +101,22 @@ export const ObtenerNuevoToken = async (token,idSistema) => {
     throw error;
   }
 };
+
+export const LoginCaptchaV2 = async (tokenV2) => {
+  try {
+    const response = await fetch(`${API_URL}/v1/auth-captcha-v2`, {
+      method: 'POST',
+      headers: {
+        'Connection': 'keep-alive',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "tokenV2": tokenV2
+      }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error during login captcha v2:', error);
+    throw error;
+  }
+};
