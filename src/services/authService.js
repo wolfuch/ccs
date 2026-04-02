@@ -1,7 +1,7 @@
 const API_URL = import.meta.env.VITE_API_WEBAPI;
 
 // Función para realizar el login
-export const login = async (email, password) => {
+export const login = async (email, password, recaptchaToken) => {
   try {
     const response = await fetch(`${API_URL}/v1/auth`, {
       method: 'POST',
@@ -11,7 +11,8 @@ export const login = async (email, password) => {
       },
       body: JSON.stringify({
         "email": email,
-        "password": password
+        "password": password,
+        "recaptchaToken": recaptchaToken
       }),
     });
     return await response.json();
@@ -97,6 +98,25 @@ export const ObtenerNuevoToken = async (token,idSistema) => {
     }
   } catch (error) {
     console.error('Error during system access registration:', error);
+    throw error;
+  }
+};
+
+export const LoginCaptchaV2 = async (tokenV2) => {
+  try {
+    const response = await fetch(`${API_URL}/v1/auth-captcha-v2`, {
+      method: 'POST',
+      headers: {
+        'Connection': 'keep-alive',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "tokenV2": tokenV2
+      }),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error during login captcha v2:', error);
     throw error;
   }
 };

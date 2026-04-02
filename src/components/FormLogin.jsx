@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { login, registraIngreso, renew, ObtenerNuevoToken } from '../services/authService';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import { login, registraIngreso, renew, ObtenerNuevoToken, LoginCaptchaV2 } from '../services/authService';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Dialog } from 'primereact/dialog';
@@ -9,6 +10,7 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import {validateEmail} from '../utils/email';
 import { useTranslation } from "react-i18next"; 
+import CaptchaChallenges from "./../components/general/captchaChallenges"
 
 export function FormLogin({ onLogin }) {
   const APP_URL_PROVEEDOR = import.meta.env.VITE_APP_URL_PROVEEDOR;
@@ -31,6 +33,8 @@ export function FormLogin({ onLogin }) {
   const [idUsuarioLogeado, setIdUsuarioLogeado] = useState(0);
   const [tokenPaso, setTokenPaso] = useState()
   const { t } = useTranslation();
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const [showV2, setShowV2] = useState(false);
 
   const clearFieldError = (fieldName) => {
     if (fieldErrors[fieldName]) {
@@ -57,9 +61,17 @@ export function FormLogin({ onLogin }) {
       return;
     }
     
+    if (!executeRecaptcha) {
+      setDialogMessage(t("errorRecaptcha"));
+      setShowDialog(true);
+      return;
+    }
+
+    const recaptchaToken = await executeRecaptcha('login');
+
     setLoading(true);
     try {
-      const authResponse = await login(email, password);
+      const authResponse = await login(email, password, recaptchaToken);
       const { success, resultado, errores } = authResponse;
       if (success !== 'OK') {
         if (!!errores && errores.length > 0 && !!errores[0].descripcion) {
@@ -68,6 +80,13 @@ export function FormLogin({ onLogin }) {
           return;
         }
         throw new Error('Login failed');
+      }
+
+      if (resultado?.requireCaptcha === true) {
+          setDialogMessage(t("requiereCaptcha"));
+          setShowDialog(true);
+          setShowV2(true);
+          return;
       }
 
       // Obligar cambio contraseña si es necesario
@@ -140,6 +159,20 @@ export function FormLogin({ onLogin }) {
       window.location.href = `${APP_URL_PROVEEDOR}/usuario/login?t=${token}`;
   };
 
+  const handleV2Success = async (tokenV2) => {
+    setLoading(true);
+
+    try {
+      await LoginCaptchaV2(tokenV2);
+      setShowV2(false);
+    } catch (error) {
+      setDialogMessage(t("errorCaptchaV2"));
+      setShowDialog(true);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <>
       <Dialog visible={showDialog} footer={<a className='button' onClick={() => setShowDialog(false)}>Entendido</a>} onHide={() => setShowDialog(false)}>
@@ -169,88 +202,92 @@ export function FormLogin({ onLogin }) {
           </div>
         </div>
       ) : (
-        <form className="form" onSubmit={handleSubmit} autoComplete='off'>
-          <div className='form__header'>
-            <h2>{t("iniciarSesion")}</h2>
-            <p>{t("ingreseEmailPassword")}</p>
-          </div>
-          <div className='form__body'>
-            <div className="form__element">
-              <div className="form__title">Email</div>
-              <div className="form__input">
-                <input
-                  type="text"
-                  value={email}
-                  placeholder={t("ingreseEmail")}
-                  onChange={e => {
-                    setEmail(e.target.value);
-                    clearFieldError('email');
-                    validateEmail(e.target.value, setEmailFormatError);
-                  }}
-                  disabled={loading}
-                />
-              </div>
-              {fieldErrors.email && (
-                <div className="form__field-error">
-                  <span className="pi pi-times"></span>
-                  {t("campoRequerido")}
-                </div>
-              )}
-              {emailFormatError && (
-                <div className="form__field-error">
-                  <span className="pi pi-times"></span>
-                  {t("ingreseEmailValido")}
-                </div>
-              )}
+        <>
+          <form className="form" onSubmit={handleSubmit} autoComplete='off'>
+            <div className='form__header'>
+              <h2>{t("iniciarSesion")}</h2>
+              <p>{t("ingreseEmailPassword")}</p>
             </div>
-            <div className="form__element">
-              <div className="form__title">{t("password")}</div>
-              <div className="form__input">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  placeholder={t("ingresePassword")}
-                  onChange={e => {
-                    setPassword(e.target.value);
-                    clearFieldError('password');
-                  }}
-                  disabled={loading}
-                />
-                <span 
-                  className={`form__toggle-password pi ${showPassword ? 'pi-eye-slash' : 'pi-eye'}`}
-                  onClick={() => setShowPassword(!showPassword)}
-                ></span>
-              </div>
-              {fieldErrors.password && (
-                <div className="form__field-error">
-                  <span className="pi pi-times"></span>
-                  {t("campoRequerido")}
+            <div className='form__body'>
+              <div className="form__element">
+                <div className="form__title">Email</div>
+                <div className="form__input">
+                  <input
+                    type="text"
+                    value={email}
+                    placeholder={t("ingreseEmail")}
+                    onChange={e => {
+                      setEmail(e.target.value);
+                      clearFieldError('email');
+                      validateEmail(e.target.value, setEmailFormatError);
+                    }}
+                    disabled={loading}
+                  />
                 </div>
-              )}
-              <div className="form__resetpass">
+                {fieldErrors.email && (
+                  <div className="form__field-error">
+                    <span className="pi pi-times"></span>
+                    {t("campoRequerido")}
+                  </div>
+                )}
+                {emailFormatError && (
+                  <div className="form__field-error">
+                    <span className="pi pi-times"></span>
+                    {t("ingreseEmailValido")}
+                  </div>
+                )}
+              </div>
+              <div className="form__element">
+                <div className="form__title">{t("password")}</div>
+                <div className="form__input">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    placeholder={t("ingresePassword")}
+                    onChange={e => {
+                      setPassword(e.target.value);
+                      clearFieldError('password');
+                    }}
+                    disabled={loading}
+                  />
+                  <span 
+                    className={`form__toggle-password pi ${showPassword ? 'pi-eye-slash' : 'pi-eye'}`}
+                    onClick={() => setShowPassword(!showPassword)}
+                  ></span>
+                </div>
+                {fieldErrors.password && (
+                  <div className="form__field-error">
+                    <span className="pi pi-times"></span>
+                    {t("campoRequerido")}
+                  </div>
+                )}
+                <div className="form__resetpass">
+                  <Link 
+                    to="/reset-password"
+                    onClick={() => sessionStorage.setItem('internalNavigation', 'true')}
+                  >
+                    {t("olvidoPassword")}
+                  </Link>
+                </div>
+              </div>
+              <div className="form__buttons">
+                <button type="submit" className="button" disabled={loading}>
+                  {loading ? <ProgressSpinner style={{ width: '20px', height: '20px' }} strokeWidth="4" /> : t("ingresar")}
+                </button>
                 <Link 
-                  to="/reset-password"
+                  to="/change-password" 
+                  className="button button--white" 
+                  disabled={loading}
                   onClick={() => sessionStorage.setItem('internalNavigation', 'true')}
                 >
-                  {t("olvidoPassword")}
+                  {t("cambiarClave")}
                 </Link>
               </div>
             </div>
-            <div className="form__buttons">
-              <button type="submit" className="button" disabled={loading}>
-                {loading ? <ProgressSpinner style={{ width: '20px', height: '20px' }} strokeWidth="4" /> : t("ingresar")}
-              </button>
-              <Link 
-                to="/change-password" 
-                className="button button--white" 
-                disabled={loading}
-                onClick={() => sessionStorage.setItem('internalNavigation', 'true')}
-              >
-                {t("cambiarClave")}
-              </Link>
-            </div>
-          </div>
-        </form>
+          </form>
+
+          <CaptchaChallenges show={showV2} handleSuccess={handleV2Success} />
+        </>
       )}
     </>
   );
