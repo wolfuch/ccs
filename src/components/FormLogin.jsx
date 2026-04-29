@@ -42,17 +42,61 @@ export function FormLogin({ onLogin }) {
     }
   };
 
+  const processLoginResponse = async (authResponse) => {
+    const { success, resultado, errores } = authResponse;
+    if (success !== 'OK') {
+      if (!!errores && errores.length > 0 && !!errores[0].descripcion) {
+        setDialogMessage(errores[0].descripcion);
+        setShowDialog(true);
+        return;
+      }
+      throw new Error('Login failed');
+    }
+
+    if (resultado?.requireCaptcha === true) {
+      setDialogMessage(t("requiereCaptcha"));
+      setShowDialog(true);
+      setShowV2(true);
+      return;
+    }
+
+    // Obligar cambio contraseña si es necesario
+    if (resultado?.contrasenaValidada === false) {
+      sessionStorage.setItem('email', email);
+      sessionStorage.setItem('internalNavigation', 'true');
+      window.location.href = '/change-password';
+      return;
+    }
+
+    const { token, idUsuario, listadoSistemas } = resultado;
+    setTokenPaso(token);
+
+    if (listadoSistemas.length === 1) {
+      const valor = await newToken(token, listadoSistemas[0].idSistema);
+      await registrarIngresoYRedirigir(listadoSistemas[0], valor, idUsuario);
+      onLogin(valor);
+      return;
+    }
+    if (listadoSistemas.length > 1) {
+      setSistemas(listadoSistemas);
+      setIdUsuarioLogeado(idUsuario);
+      return;
+    }
+    setDialogMessage(t("sinSistemasDisponibles"));
+    setShowDialog(true);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validar campos requeridos
     const errors = {
       email: email.trim() === '',
       password: password.trim() === ''
     };
-    
+
     setFieldErrors(errors);
-    
+
     // Validar formato de email
     const isEmailValid = validateEmail(email, setEmailFormatError);
 
@@ -60,7 +104,7 @@ export function FormLogin({ onLogin }) {
     if (errors.email || errors.password || !isEmailValid) {
       return;
     }
-    
+
     if (!executeRecaptcha) {
       setDialogMessage(t("errorRecaptcha"));
       setShowDialog(true);
@@ -72,47 +116,7 @@ export function FormLogin({ onLogin }) {
     setLoading(true);
     try {
       const authResponse = await login(email, password, recaptchaToken);
-      const { success, resultado, errores } = authResponse;
-      if (success !== 'OK') {
-        if (!!errores && errores.length > 0 && !!errores[0].descripcion) {
-          setDialogMessage(errores[0].descripcion);
-          setShowDialog(true);
-          return;
-        }
-        throw new Error('Login failed');
-      }
-
-      if (resultado?.requireCaptcha === true) {
-          setDialogMessage(t("requiereCaptcha"));
-          setShowDialog(true);
-          setShowV2(true);
-          return;
-      }
-
-      // Obligar cambio contraseña si es necesario
-      if(resultado?.contrasenaValidada === false) {
-        sessionStorage.setItem('email', email);
-        sessionStorage.setItem('internalNavigation', 'true');
-        window.location.href = '/change-password';
-        return;
-      }
-      const { token, idUsuario, listadoSistemas } = resultado;
-      setTokenPaso(token)
-      
-      if (listadoSistemas.length === 1) {
-        const valor = await newToken(token, listadoSistemas[0].idSistema)
-        await registrarIngresoYRedirigir(listadoSistemas[0], valor, idUsuario);
-        onLogin(valor);
-        return;
-      }
-      if (listadoSistemas.length > 1) {
-        setSistemas(listadoSistemas);
-        // setTokenLogin(token);
-        setIdUsuarioLogeado(idUsuario);
-        return;
-      }
-      setDialogMessage(t("sinSistemasDisponibles"));
-      setShowDialog(true);
+      await processLoginResponse(authResponse);
     } catch (err) {
       setDialogMessage(t("errorIniciarSesion"));
       setShowDialog(true);
@@ -161,17 +165,18 @@ export function FormLogin({ onLogin }) {
 
   const handleV2Success = async (tokenV2) => {
     setLoading(true);
-
+    setShowV2(false);
     try {
-      await LoginCaptchaV2(tokenV2);
-      setShowV2(false);
+      const recaptchaToken = executeRecaptcha ? await executeRecaptcha('login') : '';
+      const authResponse = await login(email, password, recaptchaToken, tokenV2);
+      await processLoginResponse(authResponse);
     } catch (error) {
       setDialogMessage(t("errorCaptchaV2"));
       setShowDialog(true);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <>

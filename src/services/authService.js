@@ -1,19 +1,21 @@
 const API_URL = import.meta.env.VITE_API_WEBAPI;
 
 // Función para realizar el login
-export const login = async (email, password, recaptchaToken) => {
+export const login = async (email, password, recaptchaToken, recaptchaTokenV2 = null) => {
   try {
+    const body = { email, password, recaptchaToken };
+    
+    if (recaptchaTokenV2) {
+      body.recaptchaTokenV2 = recaptchaTokenV2;
+    }
+
     const response = await fetch(`${API_URL}/v1/auth`, {
       method: 'POST',
       headers: {
         'Connection': 'keep-alive',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        "email": email,
-        "password": password,
-        "recaptchaToken": recaptchaToken
-      }),
+      body: JSON.stringify(body),
     });
     return await response.json();
   } catch (error) {
