@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 import { login, registraIngreso, renew, ObtenerNuevoToken, LoginCaptchaV2 } from '../services/authService';
 import PropTypes from 'prop-types';
@@ -35,6 +35,7 @@ export function FormLogin({ onLogin }) {
   const { t } = useTranslation();
   const { executeRecaptcha } = useGoogleReCaptcha();
   const [showV2, setShowV2] = useState(false);
+  const captchaV2Ref = useRef(null);
 
   const clearFieldError = (fieldName) => {
     if (fieldErrors[fieldName]) {
@@ -56,6 +57,7 @@ export function FormLogin({ onLogin }) {
     if (resultado?.requireCaptcha === true) {
       setDialogMessage(t("requiereCaptcha"));
       setShowDialog(true);
+      captchaV2Ref.current?.reset();
       setShowV2(true);
       return;
     }
@@ -167,8 +169,7 @@ export function FormLogin({ onLogin }) {
     setLoading(true);
     setShowV2(false);
     try {
-      const recaptchaToken = executeRecaptcha ? await executeRecaptcha('login') : '';
-      const authResponse = await login(email, password, recaptchaToken, tokenV2);
+      const authResponse = await login(email, password, '', tokenV2);
       await processLoginResponse(authResponse);
     } catch (error) {
       setDialogMessage(t("errorCaptchaV2"));
@@ -226,7 +227,7 @@ export function FormLogin({ onLogin }) {
                       clearFieldError('email');
                       validateEmail(e.target.value, setEmailFormatError);
                     }}
-                    disabled={loading}
+                    disabled={loading || showV2}
                   />
                 </div>
                 {fieldErrors.email && (
@@ -253,7 +254,7 @@ export function FormLogin({ onLogin }) {
                       setPassword(e.target.value);
                       clearFieldError('password');
                     }}
-                    disabled={loading}
+                    disabled={loading || showV2}
                   />
                   <span 
                     className={`form__toggle-password pi ${showPassword ? 'pi-eye-slash' : 'pi-eye'}`}
@@ -276,7 +277,7 @@ export function FormLogin({ onLogin }) {
                 </div>
               </div>
               <div className="form__buttons">
-                <button type="submit" className="button" disabled={loading}>
+                <button type="submit" className="button" disabled={loading || showV2}>
                   {loading ? <ProgressSpinner style={{ width: '20px', height: '20px' }} strokeWidth="4" /> : t("ingresar")}
                 </button>
                 <Link 
@@ -291,7 +292,7 @@ export function FormLogin({ onLogin }) {
             </div>
           </form>
 
-          <CaptchaChallenges show={showV2} handleSuccess={handleV2Success} />
+          <CaptchaChallenges ref={captchaV2Ref} show={showV2} handleSuccess={handleV2Success} />
         </>
       )}
     </>
