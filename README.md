@@ -120,7 +120,7 @@ yarn preview
 
 ### Variables de Entorno
 ```env
-VITE_API_URL=https://desaapi.rednegocios.cl
+VITE_API_WEBAPI=https://desaapi.rednegocios.cl
 VITE_MANDANTE_URL=https://desaapi.rednegocios.cl
 DOCKER_PORT=80
 ```

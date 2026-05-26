@@ -19,6 +19,9 @@ spec:
         app: {{ template "frontloginapp.name" . }}
         release: {{ .Release.Name }}
     spec:
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -27,11 +30,11 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          volumeMounts:
-            - name:  config-volume
-              mountPath: /usr/local/openresty/nginx/html/config.js
-              subPath: config.js
-              readOnly: true
+          # volumeMounts:
+          #   - name:  config-volume
+          #     mountPath: /usr/local/openresty/nginx/html/config.js
+          #     subPath: config.js
+          #     readOnly: true
           livenessProbe:
             httpGet:
               path: /
@@ -57,10 +60,10 @@ spec:
             {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
-      volumes:
-        - name: config-volume
-          configMap:
-            name: {{ .Release.Name }}-config
+      # volumes:
+      #   - name: config-volume
+      #     configMap:
+      #       name: {{ .Release.Name }}-config
     {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
       {{- range .Values.imagePullSecrets }}

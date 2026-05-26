@@ -1,4 +1,4 @@
-configValues: |
-  REACT_APP_API_URL='/api'
-  REACT_APP_API_VERSION='v1'
-  REACT_APP_API_DECRYPTPASSPHRASE='prueba'
+# configValues: |
+#   REACT_APP_API_URL='/api'
+#   REACT_APP_API_VERSION='v1'
+#   REACT_APP_API_DECRYPTPASSPHRASE='prueba'
