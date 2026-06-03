@@ -43,5 +43,5 @@
     "ingresar": "Sign in",
     "errorRecaptcha": "Error verifying captcha. Please try again",
     "errorCaptchaV2": "Error valitating captcha",
-    "requiereCaptcha": "Require captcha validation"
+    "requiereCaptcha": "Debe Marcar No Soy un Robot"
 }

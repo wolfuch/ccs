@@ -283,7 +283,7 @@ export function FormLogin({ onLogin }) {
                 <Link 
                   to="/change-password" 
                   className="button button--white" 
-                  disabled={loading}
+                  disabled={loading  || showV2}
                   onClick={() => sessionStorage.setItem('internalNavigation', 'true')}
                 >
                   {t("cambiarClave")}
