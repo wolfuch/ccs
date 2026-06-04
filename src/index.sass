@@ -10,3 +10,13 @@
 @use './scss/modules/footer.sass'
 @use './scss/modules/_dialog.sass'
 @use './scss/modules/_loader.sass'
+
+.grecaptcha-badge
+    transform: scale(0.8)
+    width: 70px !important          // Forzamos el ancho exacto del cuadro blanco
+    height: 60px !important         // El alto exacto del cuadro blanco
+    overflow: hidden !important     // Corta todo lo que sobresalga (el fondo azul y el texto)
+    transition: none !important     // Evita que Google lo vuelva a estirar al pasar el mouse
+
+    iframe
+        width: 70px !important

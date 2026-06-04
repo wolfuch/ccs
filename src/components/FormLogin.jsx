@@ -267,10 +267,17 @@ export function FormLogin({ onLogin }) {
                     {t("campoRequerido")}
                   </div>
                 )}
-                <div className="form__resetpass">
+                <div className="form__resetpass" >
                   <Link 
                     to="/reset-password"
-                    onClick={() => sessionStorage.setItem('internalNavigation', 'true')}
+                    className={loading || showV2 ? "link-disabled" : ""}
+                    onClick={(e) => {
+                      if (loading || showV2) {
+                        e.preventDefault(); // Evita la navegación
+                        return;
+                      }
+                      sessionStorage.setItem('internalNavigation', 'true');
+                    }}
                   >
                     {t("olvidoPassword")}
                   </Link>
@@ -281,13 +288,18 @@ export function FormLogin({ onLogin }) {
                   {loading ? <ProgressSpinner style={{ width: '20px', height: '20px' }} strokeWidth="4" /> : t("ingresar")}
                 </button>
                 <Link 
-                  to="/change-password" 
-                  className="button button--white" 
-                  disabled={loading  || showV2}
-                  onClick={() => sessionStorage.setItem('internalNavigation', 'true')}
+                  to="/change-password"
+                  className={loading || showV2 ? "button button--white link-disabled" : "button button--white"}
+                  onClick={(e) => {
+                    if (loading || showV2) {
+                      e.preventDefault(); // Evita la navegación
+                      return;
+                    }
+                    sessionStorage.setItem('internalNavigation', 'true');
+                  }}
                 >
                   {t("cambiarClave")}
-                </Link>
+                </Link>                
               </div>
             </div>
           </form>
