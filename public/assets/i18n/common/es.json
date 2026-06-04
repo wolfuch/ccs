@@ -43,5 +43,5 @@
     "ingresar": "Ingresar",
     "errorRecaptcha": "Error al verificar captcha. Intente nuevamente",
     "errorCaptchaV2": "Error al validar captcha",
-    "requiereCaptcha": "Debe Marcar No Soy un Robot"
+    "requiereCaptcha": "Debe Marcar 'No soy un robot'"
 }
