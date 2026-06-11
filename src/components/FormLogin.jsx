@@ -70,6 +70,14 @@ export function FormLogin({ onLogin }) {
       return;
     }
 
+    // Si llegamos aquí sin resultado (p. ej. un error de captcha que no setea
+    // requireCaptcha), evitamos el TypeError al desestructurar y avisamos.
+    if (!resultado) {
+      setDialogMessage(t("errorIniciarSesion"));
+      setShowDialog(true);
+      return;
+    }
+
     const { token, idUsuario, listadoSistemas } = resultado;
     setTokenPaso(token);
 
