@@ -1,0 +1,12 @@
+trigger:
+- leytonmedia/develop
+
+resources:
+  repositories:
+  - repository: templates
+    type: git
+    name: Pipelines
+    ref: refs/heads/newDevelop
+
+extends:
+  template: auto-frontlogin-pipeline-newdev.yml@templates
