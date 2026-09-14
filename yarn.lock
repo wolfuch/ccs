@@ -1961,21 +1961,6 @@ react-async-script@^1.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.2"
 
-react-google-recaptcha-v3@^1.11.0:
-  version "1.11.0"
-  resolved "https://registry.npmjs.org/react-google-recaptcha-v3/-/react-google-recaptcha-v3-1.11.0.tgz"
-  integrity sha512-kLQqpz/77m8+trpBwzqcxNtvWZYoZ/YO6Vm2cVTHW8hs80BWUfDpC7RDwuAvpswwtSYApWfaSpIDFWAIBNIYxQ==
-  dependencies:
-    hoist-non-react-statics "^3.3.2"
-
-react-google-recaptcha@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.npmjs.org/react-google-recaptcha/-/react-google-recaptcha-3.1.0.tgz"
-  integrity sha512-cYW2/DWas8nEKZGD7SCu9BSuVz8iOcOLHChHyi7upUuVhkpkhYG/6N3KDiTQ3XAiZ2UAZkfvYKMfAHOzBOcGEg==
-  dependencies:
-    prop-types "^15.5.0"
-    react-async-script "^1.2.0"
-
 react-i18next@^16.5.1:
   version "16.5.1"
   resolved "https://registry.npmjs.org/react-i18next/-/react-i18next-16.5.1.tgz"

@@ -1,6 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
-import { login, registraIngreso, renew, ObtenerNuevoToken, LoginCaptchaV2 } from '../services/authService';
+import React, { useState } from 'react';
+import { login, registraIngreso, renew, ObtenerNuevoToken } from '../services/authService';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Dialog } from 'primereact/dialog';
@@ -9,8 +8,8 @@ import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import {validateEmail} from '../utils/email';
+import { resolveAuthenticationOutcome } from '../helpers/authenticationOutcome';
 import { useTranslation } from "react-i18next"; 
-import CaptchaChallenges from "./../components/general/captchaChallenges"
 
 export function FormLogin({ onLogin }) {
   const APP_URL_PROVEEDOR = import.meta.env.VITE_APP_URL_PROVEEDOR;
@@ -33,9 +32,6 @@ export function FormLogin({ onLogin }) {
   const [idUsuarioLogeado, setIdUsuarioLogeado] = useState(0);
   const [tokenPaso, setTokenPaso] = useState()
   const { t } = useTranslation();
-  const { executeRecaptcha } = useGoogleReCaptcha();
-  const [showV2, setShowV2] = useState(false);
-  const captchaV2Ref = useRef(null);
 
   const clearFieldError = (fieldName) => {
     if (fieldErrors[fieldName]) {
@@ -54,52 +50,46 @@ export function FormLogin({ onLogin }) {
       throw new Error('Login failed');
     }
 
-    if (resultado?.requireCaptcha === true) {
-      setDialogMessage(t("requiereCaptcha"));
-      setShowDialog(true);
-      captchaV2Ref.current?.reset();
-      setShowV2(true);
-      return;
-    }
+    const outcome = resolveAuthenticationOutcome(resultado);
 
-    // Obligar cambio contraseña si es necesario
-    if (resultado?.contrasenaValidada === false) {
-      sessionStorage.setItem('email', email);
-      sessionStorage.setItem('internalNavigation', 'true');
-      window.location.href = '/change-password';
-      return;
-    }
+    switch (outcome.kind) {
+      case 'authenticated': {
+        const { token, userIdentifier, listadoSistemas } = outcome;
+        setTokenPaso(token);
 
-    // Si llegamos aquí sin resultado (p. ej. un error de captcha que no setea
-    // requireCaptcha), evitamos el TypeError al desestructurar y avisamos.
-    if (!resultado) {
-      setDialogMessage(t("errorIniciarSesion"));
-      setShowDialog(true);
-      return;
-    }
+        if (listadoSistemas.length === 1) {
+          const valor = await newToken(token, listadoSistemas[0].idSistema);
+          await registrarIngresoYRedirigir(listadoSistemas[0], valor, userIdentifier);
+          onLogin(valor);
+          return;
+        }
 
-    const { token, idUsuario, listadoSistemas } = resultado;
-    setTokenPaso(token);
-
-    if (listadoSistemas.length === 1) {
-      const valor = await newToken(token, listadoSistemas[0].idSistema);
-      await registrarIngresoYRedirigir(listadoSistemas[0], valor, idUsuario);
-      onLogin(valor);
-      return;
+        setSistemas(listadoSistemas);
+        setIdUsuarioLogeado(userIdentifier);
+        return;
+      }
+      case 'passwordChangeRequired': {
+        sessionStorage.setItem('email', email);
+        sessionStorage.setItem('internalNavigation', 'true');
+        window.location.href = '/change-password';
+        return;
+      }
+      case 'noSystemsAvailable': {
+        setDialogMessage(t("sinSistemasDisponibles"));
+        setShowDialog(true);
+        return;
+      }
+      case 'invalidCredentials': {
+        setDialogMessage(t("errorIniciarSesion"));
+        setShowDialog(true);
+        return;
+      }
     }
-    if (listadoSistemas.length > 1) {
-      setSistemas(listadoSistemas);
-      setIdUsuarioLogeado(idUsuario);
-      return;
-    }
-    setDialogMessage(t("sinSistemasDisponibles"));
-    setShowDialog(true);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validar campos requeridos
     const errors = {
       email: email.trim() === '',
       password: password.trim() === ''
@@ -107,25 +97,15 @@ export function FormLogin({ onLogin }) {
 
     setFieldErrors(errors);
 
-    // Validar formato de email
     const isEmailValid = validateEmail(email, setEmailFormatError);
 
-    // Si hay errores, no continuar
     if (errors.email || errors.password || !isEmailValid) {
       return;
     }
 
-    if (!executeRecaptcha) {
-      setDialogMessage(t("errorRecaptcha"));
-      setShowDialog(true);
-      return;
-    }
-
-    const recaptchaToken = await executeRecaptcha('login');
-
     setLoading(true);
     try {
-      const authResponse = await login(email, password, recaptchaToken);
+      const authResponse = await login(email, password);
       await processLoginResponse(authResponse);
     } catch (err) {
       setDialogMessage(t("errorIniciarSesion"));
@@ -151,7 +131,6 @@ export function FormLogin({ onLogin }) {
     setSistemas([]);
     setIdUsuarioLogeado(0);
     setTokenPaso('');
-    // setTokenLogin('');
     setEmail('');
     setPassword('');
   };
@@ -164,27 +143,12 @@ export function FormLogin({ onLogin }) {
       setShowDialog(true);
       return;
     }
-    // console.log('sistema.nombreSistema', sistema.nombreSistema)
     if (sistema.nombreSistema === 'Mandante')
       window.location.href = `${APP_URL_MANDANTE}/usuario/login?t=${token}`;
     else if (sistema.nombreSistema === 'BackOffice')
       window.location.href = `${APP_URL_BACKOFFICE}/usuario/login?t=${token}`;
     else
       window.location.href = `${APP_URL_PROVEEDOR}/usuario/login?t=${token}`;
-  };
-
-  const handleV2Success = async (tokenV2) => {
-    setLoading(true);
-    setShowV2(false);
-    try {
-      const authResponse = await login(email, password, '', tokenV2);
-      await processLoginResponse(authResponse);
-    } catch (error) {
-      setDialogMessage(t("errorCaptchaV2"));
-      setShowDialog(true);
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -235,7 +199,7 @@ export function FormLogin({ onLogin }) {
                       clearFieldError('email');
                       validateEmail(e.target.value, setEmailFormatError);
                     }}
-                    disabled={loading || showV2}
+                    disabled={loading}
                   />
                 </div>
                 {fieldErrors.email && (
@@ -262,7 +226,7 @@ export function FormLogin({ onLogin }) {
                       setPassword(e.target.value);
                       clearFieldError('password');
                     }}
-                    disabled={loading || showV2}
+                    disabled={loading}
                   />
                   <span 
                     className={`form__toggle-password pi ${showPassword ? 'pi-eye-slash' : 'pi-eye'}`}
@@ -278,10 +242,10 @@ export function FormLogin({ onLogin }) {
                 <div className="form__resetpass" >
                   <Link 
                     to="/reset-password"
-                    className={loading || showV2 ? "link-disabled" : ""}
+                    className={loading ? "link-disabled" : ""}
                     onClick={(e) => {
-                      if (loading || showV2) {
-                        e.preventDefault(); // Evita la navegación
+                      if (loading) {
+                        e.preventDefault();
                         return;
                       }
                       sessionStorage.setItem('internalNavigation', 'true');
@@ -292,15 +256,15 @@ export function FormLogin({ onLogin }) {
                 </div>
               </div>
               <div className="form__buttons">
-                <button type="submit" className="button" disabled={loading || showV2}>
+                <button type="submit" className="button" disabled={loading}>
                   {loading ? <ProgressSpinner style={{ width: '20px', height: '20px' }} strokeWidth="4" /> : t("ingresar")}
                 </button>
                 <Link 
                   to="/change-password"
-                  className={loading || showV2 ? "button button--white link-disabled" : "button button--white"}
+                  className={loading ? "button button--white link-disabled" : "button button--white"}
                   onClick={(e) => {
-                    if (loading || showV2) {
-                      e.preventDefault(); // Evita la navegación
+                    if (loading) {
+                      e.preventDefault();
                       return;
                     }
                     sessionStorage.setItem('internalNavigation', 'true');
@@ -311,8 +275,6 @@ export function FormLogin({ onLogin }) {
               </div>
             </div>
           </form>
-
-          <CaptchaChallenges ref={captchaV2Ref} show={showV2} handleSuccess={handleV2Success} />
         </>
       )}
     </>
