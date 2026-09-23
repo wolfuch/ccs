@@ -31,7 +31,7 @@ export default defineConfig({
 
     video:{
       mode: 'retain-on-failure',
-      size: {width:640, height:480}
+      size: {width: 1600, height: 900}
     },
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
