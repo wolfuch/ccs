@@ -50,6 +50,7 @@ Aplicación web SPA (Single Page Application) que proporciona un sistema complet
 ### Development Tools
 - **ESLint 9.28.0** - Linting de código
 - **Vite Plugin React 4.3.1** - Integración React-Vite
+- **Playwright 1.40+** - Testing E2E automatizado
 
 ### Deployment
 - **Docker** - Containerización
@@ -83,6 +84,8 @@ src/
 │       ├── button.sass       # Estilos de botones
 │       ├── section.sass      # Secciones y layout
 │       └── footer.sass       # Footer
+├── tests/              # Tests automatizados E2E
+│   └── login.spec.ts       # Test de autenticación
 └── assets/             # Recursos estáticos
     ├── icons/             # Logos e iconos
     └── uploads/           # Imágenes de fondo
@@ -94,6 +97,7 @@ src/
 - Node.js 20+ 
 - Yarn o npm
 - Docker (para deployment)
+- Playwright (para testing)
 
 ### Instalación Local
 ```bash
@@ -172,6 +176,231 @@ Formulario → Validaciones → Confirmación → Éxito
 
 ### 4. Recuperación Contraseña  
 Email → Validación → Solicitud → Confirmación email
+
+## 🧪 Testing Automatizado E2E con Playwright
+
+### Descripción General
+
+El proyecto incluye tests automatizados E2E (End-to-End) implementados con **Playwright** que validan los flujos principales de autenticación de la aplicación. Los tests se encuentran en la carpeta `src/tests/` con el archivo principal `login.spec.ts`.
+
+### Variables de Entorno para Testing
+
+#### Configuración del Archivo `.env`
+
+El archivo `.env` en la raíz del proyecto contiene las variables necesarias para ejecutar los tests:
+
+```dotenv
+# URL base de la aplicación a testear
+BASE_URL=https://devlogin.rednegocios.cl/
+
+# Credenciales de usuario de prueba (debe ser un usuario válido en el ambiente de testing)
+USER_NAME=61704000-K@ccs.cl
+
+# Contraseña del usuario de prueba
+USER_PASS='Rnccs2026@#'
+```
+
+#### Descripción de Variables
+
+| Variable | Descripción | Ejemplo |
+|----------|-------------|---------|
+| `BASE_URL` | URL raíz de la aplicación que se va a testear. Debe apuntar al ambiente correcto (desarrollo, staging, producción) | `https://devlogin.rednegocios.cl/` |
+| `USER_NAME` | Email o identificador del usuario de prueba. Debe corresponder a un usuario válido en la base de datos del ambiente | `61704000-K@ccs.cl` |
+| `USER_PASS` | Contraseña del usuario de prueba en texto plano. **Nota:** Solo para ambientes de desarrollo/staging | `Rnccs2026@#` |
+
+### Carga de Variables de Entorno
+
+El archivo `login.spec.ts` carga las variables de entorno automáticamente al inicio:
+
+```typescript
+import dotenv from 'dotenv'
+dotenv.config();
+```
+
+Esta línea lee el archivo `.env` de la raíz del proyecto y carga todas las variables en `process.env`, haciéndolas disponibles para todos los tests:
+
+```typescript
+process.env.BASE_URL    // URL de la aplicación
+process.env.USER_NAME   // Credenciales del usuario
+process.env.USER_PASS   // Contraseña del usuario
+```
+
+### Casos de Test Implementados
+
+#### 1. **Login Correct Credentials** ✅
+**Objetivo:** Validar que un usuario puede autenticarse exitosamente con credenciales válidas.
+
+**Proceso:**
+1. Navega a `BASE_URL` (la URL definida en variables de entorno)
+2. Completa el campo de email con `USER_NAME` desde variables de entorno
+3. Completa el campo de contraseña con `USER_PASS` desde variables de entorno
+4. Hace clic en el botón "Ingresar"
+5. Espera a que la página cargue completamente
+6. Verifica que el "Menú de perfil" sea visible (indicando login exitoso)
+
+**Variables de Entorno Utilizadas:**
+- `BASE_URL` - Destino inicial de navegación
+- `USER_NAME` - Email del usuario válido
+- `USER_PASS` - Contraseña del usuario válido
+
+**Resultado Esperado:** El usuario es redirigido a la página principal después del login exitoso.
+
+#### 2. **Login Invalid User** ❌
+**Objetivo:** Validar que el sistema rechaza emails inválidos con un mensaje de error apropiado.
+
+**Proceso:**
+1. Navega a `BASE_URL`
+2. Ingresa un email inválido: `badUser`
+3. Verifica que aparezca el mensaje de error: "Ingrese un email válido"
+
+**Variables de Entorno Utilizadas:**
+- `BASE_URL` - Destino inicial de navegación
+
+**Resultado Esperado:** El sistema muestra un error de validación sin permitir el envío del formulario.
+
+**Nota:** Este test NO utiliza variables de `USER_NAME` o `USER_PASS` porque está probando un caso de error de validación de entrada.
+
+#### 3. **Login Incorrect Password** 🔒
+**Objetivo:** Validar que el sistema rechaza credenciales incorrectas (contraseña inválida) con un mensaje de error del servidor.
+
+**Proceso:**
+1. Navega a `BASE_URL`
+2. Completa el email con `USER_NAME` válido desde variables de entorno
+3. Completa la contraseña con un valor inválido: `badPass`
+4. Hace clic en el botón "Ingresar"
+5. Espera la respuesta del servidor
+6. Verifica que aparezca el error: "Parámetros no válidos"
+7. Cierra el diálogo de error haciendo clic en "Entendido"
+
+**Variables de Entorno Utilizadas:**
+- `BASE_URL` - Destino inicial de navegación
+- `USER_NAME` - Email válido (probando con contraseña incorrecta)
+
+**Resultado Esperado:** El servidor rechaza la autenticación y muestra un mensaje de error modal que el usuario puede cerrar.
+
+### Ejecución de Tests
+
+#### Prerequisitos
+```bash
+# Asegurate de tener las dependencias instaladas
+yarn install
+
+# Playwright se instala automáticamente
+npx playwright install
+```
+
+#### Comandos para Ejecutar Tests
+
+```bash
+# Ejecutar todos los tests en modo headless (sin interfaz gráfica)
+yarn test
+
+# Ejecutar tests con interfaz gráfica visible (modo headed)
+yarn test --headed
+
+# Ejecutar un test específico
+yarn test login.spec.ts
+
+# Ejecutar tests con modo debug (paso a paso)
+yarn test --debug
+
+# Ejecutar tests en modo watch (se reejecutan al modificar archivos)
+yarn test --watch
+
+# Generar reporte HTML de los resultados
+yarn test --reporter=html
+
+# Ver reporte HTML generado
+yarn show-report
+```
+
+### Mejores Prácticas y Consideraciones
+
+#### 📋 Configuración de Credenciales
+
+1. **Ambiente de Testing vs Producción**
+   - Las credenciales en `.env` deben apuntar a un usuario de prueba válido
+   - **Nunca usar credenciales reales de usuarios en producción**
+   - Para ambientes diferentes (dev, staging, prod), ajustar `BASE_URL` en el `.env`
+
+2. **Seguridad**
+   - El archivo `.env` contiene credenciales sensibles
+   - **NUNCA hacer commit del `.env` a control de versiones**
+   - Añadir `.env` al `.gitignore`
+   - En CI/CD (Azure DevOps), usar variables secretas del pipeline
+
+#### 🔐 Variables de Entorno en Azure DevOps
+
+Para CI/CD en Azure DevOps, las variables se definen en el pipeline y NO en el `.env`:
+
+```yaml
+# Ejemplo de variables en pipeline de Azure DevOps
+variables:
+  BASE_URL: 'https://staging.rednegocios.cl/'
+  USER_NAME: 'testuser@ccs.cl'
+  USER_PASS: '$(TestUserPassword)'  # Variable secreta
+```
+
+Durante la ejecución del test, estas variables se cargan automáticamente en el entorno antes de que `dotenv` intente leer el `.env`.
+
+#### ⏱️ Timeouts y Waits
+
+Los tests utilizan:
+- `page.waitForLoadState()` - Espera a que la página cargue completamente
+- `expect()` con timeouts implícitos para verificaciones
+- Para tests lentos, ajustar timeout en `playwright.config.js`:
+
+```typescript
+use: {
+  timeout: 30000,  // 30 segundos por acción
+  navigationTimeout: 30000,
+}
+```
+
+#### 📊 Debugging
+
+Si un test falla:
+
+1. **Ejecutar con modo debug:**
+   ```bash
+   yarn test --debug
+   ```
+
+2. **Capturar screenshots:**
+   ```typescript
+   await page.screenshot({ path: 'debug-screenshot.png' });
+   ```
+
+3. **Ver traces de Playwright:**
+   ```bash
+   npx playwright show-trace trace.zip
+   ```
+
+4. **Revisar logs:**
+   - Los mensajes de error aparecen en la consola durante ejecución
+   - Buscar discrepancias entre variables de entorno esperadas vs reales
+
+### Troubleshooting Común
+
+| Problema | Causa | Solución |
+|----------|-------|----------|
+| `process.env.BASE_URL is undefined` | El `.env` no existe o no se carga | Crear `.env` en raíz con `BASE_URL=...` |
+| Test timeout en login | La aplicación es lenta o URL inaccesible | Verificar `BASE_URL` en `.env`, aumentar timeout |
+| "Parámetros no válidos" en test login correcto | Credenciales expiradas o inválidas | Actualizar `USER_NAME` y `USER_PASS` con usuario válido |
+| Tests pasan localmente pero fallan en CI/CD | Variables de entorno no se cargan en pipeline | Configurar variables secretas en Azure DevOps |
+
+### Próximos Pasos
+
+Para ampliar la cobertura de tests, considera añadir:
+
+- ✅ Tests para cambio de contraseña (`FormChangePass.jsx`)
+- ✅ Tests para recuperación de contraseña (`FormResetPass.jsx`)  
+- ✅ Tests para selección de múltiples sistemas (`SystemOptions.jsx`)
+- ✅ Tests de validaciones en tiempo real (email inválido, contraseña débil)
+- ✅ Tests de manejo de errores API (timeouts, errores 500, etc.)
+- ✅ Tests visuales para validar UI consistency
+
+---
 
 ## 🎥 QA - Videos de Demostración
 
