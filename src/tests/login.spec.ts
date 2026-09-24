@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config();
-//las credenciales están en un archivo raiz llamado ".env". No tengo información de cómo se están llamando en el ambiente de AzureDevops, por lo que no las puedo definir de esa forma.
+dotenv.config({ path: path.resolve('.env_playwright') });
+
 test('Login Correct Credentials', async ({ page }) => {
 //Login con contraseña correcta
 await page.goto(process.env.BASE_URL);
