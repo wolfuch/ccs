@@ -4,6 +4,8 @@
   "version": "1.0.3",
   "type": "module",
   "scripts": {
+    "loginTest": "npx playwright test login.spec.ts",
+    "smoke": "npx playwright test --grep @smoke",
     "dev": "vite --open",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",

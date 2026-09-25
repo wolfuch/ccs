@@ -6,13 +6,13 @@ import { defineConfig, devices } from '@playwright/test';
  */
 // import dotenv from 'dotenv';
 // import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+// dotenv.config({ path: path.resolve(__dirname, '.playwright.env') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  testDir: './src/tests',
+  testDir: './src/pom',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -22,17 +22,17 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  //reporter: 'html',
-  reporter: [['list'], ['html', { open: 'never' }]], // salida por consola + reporte HTML sin abrir navegador
+  reporter: 'html',
+  //reporter: [['list'], ['html', { open: 'never' }]], // salida por consola + reporte HTML sin abrir navegador
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
 
-    video:{
-      mode: 'retain-on-failure',
-      size: {width: 1600, height: 900}
-    },
+    // video:{
+    //   mode: 'retain-on-failure',
+    //   size: {width: 1600, height: 900}
+    // },
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
