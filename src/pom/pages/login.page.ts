@@ -6,14 +6,16 @@ export class LoginPage {
   readonly user: Locator;
   readonly pass: Locator;
   readonly loginButton: Locator;
+  readonly cambiaContraseña: Locator;
 
 
   constructor(page: Page) {
     this.page = page;
     this.getStartedLink = page.locator('a', { hasText: 'Get started' });
-    this.user = page.getByRole('textbox', { name: 'Ingrese su email' });
-    this.pass = page.getByRole('textbox', { name: 'Ingrese su Contraseña' });
-    this.loginButton = page.getByRole('button', { name: 'Ingresar' });
+    this.user = page.getByTestId('form-login-email');
+    this.pass = page.getByTestId('form-login-password-input');
+    this.loginButton = page.getByTestId('form-login-submit');
+    this.cambiaContraseña = page.getByTestId('form-login-change-password');
     
 }
 
