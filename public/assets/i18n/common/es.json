@@ -40,5 +40,9 @@
     "errorCambioPassword": "Error al tratar de solicitar el cambio de contraseña",
     "reseteoPasswordOk": "La solicitud se realizó correctamente. Revise su email y siga los pasos",
     "solicitar": "Solicitar",
-    "ingresar": "Ingresar"
+    "ingresar": "Ingresar",
+    "repitaPasswordNueva": "Repita la nueva contraseña",
+    "cambiar": "Cambiar",
+    "mostrarPassword": "Mostrar contraseña",
+    "ocultarPassword": "Ocultar contraseña"
 }

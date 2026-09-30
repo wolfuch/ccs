@@ -1,0 +1,57 @@
+@use '../abstracts/tokens' as *
+
+.language-switcher
+	position: relative
+
+.language-switcher__trigger
+	display: inline-flex
+	align-items: center
+	gap: 8px
+	height: 34px
+	padding: 0 10px
+	font-family: $font
+	font-size: 13px
+	font-weight: 600
+	color: $color-text
+	background-color: $color-white
+	border: 1px solid $color-border
+	border-radius: 999px
+	cursor: pointer
+	transition: border-color .2s, box-shadow .2s
+	&:hover
+		border-color: $color-primary
+	&:focus-visible
+		box-shadow: 0 0 0 3px $color-primary-soft
+	.pi
+		font-size: 10px
+		color: $color-muted
+
+.language-switcher__flag
+	display: block
+	width: 22px
+	height: 15px
+	object-fit: cover
+	border-radius: 3px
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, .08)
+
+.language-switcher__menu
+	position: absolute
+	top: calc(100% + 8px)
+	right: 0
+	min-width: 150px
+	.p-listbox
+		padding: 4px
+		border: 1px solid $color-border
+		border-radius: $radius
+		box-shadow: 0 8px 24px rgba(0, 0, 0, .12)
+	.p-listbox-list
+		padding: 0
+	.p-listbox-item
+		padding: 8px 10px
+		border-radius: 6px
+
+.language-switcher__option
+	display: flex
+	align-items: center
+	gap: 10px
+	font-size: 14px

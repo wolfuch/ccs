@@ -1,0 +1,47 @@
+@use '../abstracts/tokens' as *
+@use '../abstracts/mixins' as *
+
+$zoom-scale: 1.08
+
+.carousel
+	@include cover
+
+.carousel__slide
+	@include cover
+	object-fit: cover
+	will-change: opacity, transform
+
+	// La imagen entrante aparece sobre la saliente y hace un zoom lento (Ken Burns)
+	&.is-active
+		z-index: 2
+		animation: carousel-fade-in $carousel-fade ease forwards, carousel-zoom ($carousel-interval + $carousel-fade) linear forwards
+
+	// La saliente queda opaca debajo, congelada en el zoom final, hasta que termina el fundido
+	&.is-leaving
+		z-index: 1
+		transform: scale($zoom-scale)
+
+@keyframes carousel-fade-in
+	from
+		opacity: 0
+	to
+		opacity: 1
+
+@keyframes carousel-zoom
+	from
+		transform: scale(1)
+	to
+		transform: scale($zoom-scale)
+
+@media (prefers-reduced-motion: reduce)
+	.carousel__slide
+		animation: none !important
+		transform: none !important
+
+// Degradado de la foto al blanco del panel. Las paradas intermedias siguen una curva
+// suave: un degradado lineal de dos paradas deja un corte visible donde empieza.
+.carousel__fade
+	@include cover
+	z-index: 3
+	pointer-events: none
+	background: linear-gradient(to right, rgba($color-white, 0) 0%, rgba($color-white, 0) 52%, rgba($color-white, .08) 60%, rgba($color-white, .25) 68%, rgba($color-white, .5) 76%, rgba($color-white, .75) 84%, rgba($color-white, .93) 92%, $color-white 100%)

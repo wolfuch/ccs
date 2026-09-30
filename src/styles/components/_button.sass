@@ -1,0 +1,44 @@
+@use '../abstracts/tokens' as *
+
+.button
+	display: inline-flex
+	align-items: center
+	justify-content: center
+	gap: 8px
+	width: 100%
+	height: $input-height
+	padding: 0 12px
+	font-family: $font
+	font-size: 15px
+	font-weight: 600
+	color: $color-white
+	text-decoration: none
+	background-color: $color-primary
+	border: 1px solid $color-primary
+	border-radius: $radius
+	cursor: pointer
+	transition: background-color .2s, color .2s, box-shadow .2s
+	&:hover
+		background-color: $color-primary-hover
+		border-color: $color-primary-hover
+		text-decoration: none
+	&:focus-visible
+		box-shadow: 0 0 0 3px $color-primary-soft
+	&:disabled
+		opacity: .6
+		cursor: not-allowed
+
+	&.button--outline
+		font-size: 14px
+		font-weight: 500
+		color: $color-primary
+		background-color: $color-white
+		&:hover
+			color: $color-primary
+			background-color: rgba(0, 61, 166, .06)
+			border-color: $color-primary
+
+.link-disabled
+	cursor: not-allowed !important
+	opacity: .5
+	pointer-events: none
