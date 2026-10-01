@@ -31,31 +31,31 @@ export class MiCarteraPage {
 
 
   async buscaProveedor(proveedor: string) {
-    this.buscador.fill(proveedor);
-    this.botonBuscador.click();
+    await this.buscador.fill(proveedor);
+    await this.botonBuscador.click();
     
   }
   async tabEnProceso(){
-    this.tabEnProcesos.click();
+    await this.tabEnProcesos.click();
 
   }
 
   async tabRechazado(){
-    this.tabRechazados.click();
+    await this.tabRechazados.click();
 
   }
   
   async tabPendiente(){
-    this.tabPendientes.click();
+    await this.tabPendientes.click();
 
   }
 
   async tabCreadoSAP(){
-    this.tabCreadosSap.click();
+    await this.tabCreadosSap.click();
 
   }
   async crearProveedor(){
-    this.creaProveedor.click();
+    await this.creaProveedor.click();
   }
 
 }

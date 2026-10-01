@@ -11,7 +11,7 @@ dotenv.config({ path: path.resolve('.env_playwright') });
 const user = process.env.USER_NAME;
 const pass = process.env.USER_PASS;
 
-test.describe('Evaluación de Desempeño', () => {
+test.describe('Registro Proveedores', () => {
 
     test.beforeEach(async ({ page }) => {
         //Login con contraseña correcta, previo a cada test de esta suite

@@ -85,9 +85,17 @@ src/
 │       ├── section.sass      # Secciones y layout
 │       └── footer.sass       # Footer
 ├── pom/                 # Tests automatizados E2E (Page Object Model)
-│   ├── pages/             # Clases Page Object (login, navbar, dashboard, evaluación)
+│   ├── pages/             # Clases Page Object
+│   │   ├── login.page.ts
+│   │   ├── navbar_mandante_black.page.ts
+│   │   ├── evaluacion_desempeno.page.ts
+│   │   ├── mi_cartera.page.ts
+│   │   ├── registro.page.ts
+│   │   └── mandante_metricas.page.ts   # pendiente de implementación
 │   └── tests/             # Casos de prueba (*.spec.ts)
-│       └── login.spec.ts     # Test de autenticación
+│       ├── login.spec.ts
+│       ├── evaluacion_desempeno.spec.ts
+│       └── registro_proveedor.spec.ts
 └── assets/             # Recursos estáticos
     ├── icons/             # Logos e iconos
     └── uploads/           # Imágenes de fondo
@@ -188,12 +196,16 @@ El proyecto incluye tests automatizados E2E (End-to-End) implementados con **Pla
 ```
 src/pom/
 ├── pages/
-│   ├── login.page.ts                    # Formulario de login (implementado)
-│   ├── navbar_mandante_black.page.ts     # Navegación del portal Mandante (implementado)
-│   ├── evaluacion_desempeno.page.ts      # Pendiente de implementación
-│   └── mandante_dashboard.page.ts        # Pendiente de implementación
+│   ├── login.page.ts                    # Formulario de login
+│   ├── navbar_mandante_black.page.ts     # Navegación del portal Mandante
+│   ├── evaluacion_desempeno.page.ts      # Filtros y búsqueda de Evaluación de Desempeño
+│   ├── mi_cartera.page.ts                # Tabs y búsqueda de Mi Cartera
+│   ├── registro.page.ts                  # Formulario de registro de proveedor
+│   └── mandante_metricas.page.ts         # Pendiente de implementación (`//to do`)
 └── tests/
-    └── login.spec.ts                     # Casos de prueba de autenticación
+    ├── login.spec.ts                      # Autenticación
+    ├── evaluacion_desempeno.spec.ts        # Filtros y búsqueda de contratos
+    └── registro_proveedor.spec.ts          # Alta de proveedor (licitación / misceláneo)
 ```
 
 Documentación ampliada, lista para publicar en la wiki de Azure DevOps: [`docs/wiki/Pruebas-Automatizadas-E2E.md`](docs/wiki/Pruebas-Automatizadas-E2E.md).
@@ -244,7 +256,15 @@ process.env.USER_PASS   // Contraseña del usuario
 
 ### Casos de Test Implementados
 
-Todos los casos están etiquetados con `@smoke` y `@login`.
+Detalle completo de los 3 archivos de prueba (locators, métodos y casos) en [`docs/wiki/Pruebas-Automatizadas-E2E.md`](docs/wiki/Pruebas-Automatizadas-E2E.md). Resumen:
+
+| Archivo | Tags | Casos |
+|---|---|---|
+| `login.spec.ts` | `@smoke @login` | 4 (detallados abajo) |
+| `evaluacion_desempeno.spec.ts` | `@smoke @evaluacion @botonesEvaluador` | 6 — búsqueda por RUT/N° contrato/administrador y filtros de vencimiento |
+| `registro_proveedor.spec.ts` | `@smoke @proveedor @proveedores @licitacion @miscelaneo` | 3 — alta de proveedor (Licitación / Misceláneo) |
+
+#### `login.spec.ts` — todos los casos están etiquetados con `@smoke` y `@login`.
 
 #### 1. **Login Correct Credentials** ✅
 **Objetivo:** Validar que un usuario puede autenticarse exitosamente con credenciales válidas.
@@ -396,9 +416,9 @@ Si un test falla:
 
 ### Próximos Pasos
 
-- 🚧 Completar `EvaluacionDesempenoPage` y `MandanteDashboarPage` (actualmente son `//to do`)
+- 🚧 Completar `MandanteMetricasPage` (actualmente es `//to do`)
 - 🚧 Habilitar `goToRankingProveedores()` en `NavBar_Mandante_BlackPage` cuando el módulo de Ranking esté disponible para pruebas
-- ✅ Tests que ejerciten `NavBar_Mandante_BlackPage` (navegación del portal Mandante)
+- ⚠️ Revisar deuda técnica conocida (ver sección de Pendientes en la [wiki](docs/wiki/Pruebas-Automatizadas-E2E.md)): `await` faltante en los métodos de `MiCarteraPage`, y el `test.describe` de `registro_proveedor.spec.ts` que quedó con el título copiado de `evaluacion_desempeno.spec.ts`
 - ✅ Tests para cambio de contraseña (`FormChangePass.jsx`)
 - ✅ Tests para recuperación de contraseña (`FormResetPass.jsx`)
 - ✅ Tests para selección de múltiples sistemas (`SystemOptions.jsx`)
