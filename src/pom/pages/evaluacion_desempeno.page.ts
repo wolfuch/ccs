@@ -1,8 +1,8 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
 export class EvaluacionDesempenoPage{
-    readonly page: Page;
-    readonly getStartedLink: Locator;
+    private readonly page: Page;
+    private readonly getStartedLink: Locator;
     readonly rutProveedor: Locator;
     readonly buscadorProveedor: Locator;
     readonly contrato: Locator;

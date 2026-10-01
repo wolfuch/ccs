@@ -1,8 +1,8 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
 export class LoginPage {
-  readonly page: Page;
-  readonly getStartedLink: Locator;
+  private readonly page: Page;
+  private readonly getStartedLink: Locator;
   readonly user: Locator;
   readonly pass: Locator;
   readonly loginButton: Locator;

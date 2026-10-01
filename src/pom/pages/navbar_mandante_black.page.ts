@@ -3,8 +3,8 @@ import { expect, type Locator, type Page } from '@playwright/test';
 
 
 export class NavBar_Mandante_BlackPage{
-    readonly page: Page;
-    readonly getStartedLink: Locator;
+    private readonly page: Page;
+    private readonly getStartedLink: Locator;
     readonly buscaProveedores: Locator;
     readonly proveedores: Locator;
     readonly cartera: Locator;

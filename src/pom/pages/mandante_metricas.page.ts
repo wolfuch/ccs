@@ -3,8 +3,8 @@ import { expect, type Locator, type Page } from '@playwright/test';
 
 
 export class MandanteMetricasPage{
-    readonly page: Page;
-    readonly getStartedLink: Locator;
+    private readonly page: Page;
+    private readonly getStartedLink: Locator;
 
 
     constructor(page: Page) {
