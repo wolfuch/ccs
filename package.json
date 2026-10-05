@@ -4,8 +4,10 @@
   "version": "1.0.3",
   "type": "module",
   "scripts": {
+    "restroTest": "npx playwright test",
     "loginTest": "npx playwright test login.spec.ts",
     "smoke": "npx playwright test --grep @smoke",
+    "testReport": "npx playwright show-report",
     "dev": "vite --open",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
