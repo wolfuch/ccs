@@ -91,11 +91,12 @@ src/
 │   │   ├── evaluacion_desempeno.page.ts
 │   │   ├── mi_cartera.page.ts
 │   │   ├── registro.page.ts
-│   │   └── mandante_metricas.page.ts   # pendiente de implementación
+│   │   └── mandante_metricas.page.ts   # implementación parcial
 │   └── tests/             # Casos de prueba (*.spec.ts)
 │       ├── login.spec.ts
 │       ├── evaluacion_desempeno.spec.ts
-│       └── registro_proveedor.spec.ts
+│       ├── registro_proveedor.spec.ts
+│       └── mandante_metricas.spec.ts
 └── assets/             # Recursos estáticos
     ├── icons/             # Logos e iconos
     └── uploads/           # Imágenes de fondo
@@ -191,7 +192,7 @@ Email → Validación → Solicitud → Confirmación email
 
 ### Descripción General
 
-El proyecto incluye tests automatizados E2E (End-to-End) implementados con **Playwright** y **TypeScript**, siguiendo el patrón **Page Object Model (POM)**. Los tests validan los flujos principales de autenticación y viven en `src/pom/`:
+El proyecto incluye tests automatizados E2E (End-to-End) implementados con **Playwright** y **TypeScript**, siguiendo el patrón **Page Object Model (POM)**. Los tests validan autenticación, navegación del portal Mandante, dashboard de métricas, evaluación de desempeño y alta de proveedores. Viven en `src/pom/` (`testDir` en `playwright.config.ts`); los navegadores activos son Chromium y WebKit (Firefox está comentado en la config):
 
 ```
 src/pom/
@@ -201,11 +202,12 @@ src/pom/
 │   ├── evaluacion_desempeno.page.ts      # Filtros y búsqueda de Evaluación de Desempeño
 │   ├── mi_cartera.page.ts                # Tabs y búsqueda de Mi Cartera
 │   ├── registro.page.ts                  # Formulario de registro de proveedor
-│   └── mandante_metricas.page.ts         # Pendiente de implementación (`//to do`)
+│   └── mandante_metricas.page.ts         # Resumen Riesgo / Dashboard 360 (parcial)
 └── tests/
     ├── login.spec.ts                      # Autenticación
     ├── evaluacion_desempeno.spec.ts        # Filtros y búsqueda de contratos
-    └── registro_proveedor.spec.ts          # Alta de proveedor (licitación / misceláneo)
+    ├── registro_proveedor.spec.ts          # Alta de proveedor (licitación / misceláneo)
+    └── mandante_metricas.spec.ts           # Dashboard de métricas del Mandante
 ```
 
 Documentación ampliada, lista para publicar en la wiki de Azure DevOps: [`docs/wiki/Pruebas-Automatizadas-E2E.md`](docs/wiki/Pruebas-Automatizadas-E2E.md).
@@ -217,27 +219,22 @@ Documentación ampliada, lista para publicar en la wiki de Azure DevOps: [`docs/
 El archivo `.env_playwright` en la raíz del proyecto (no versionado) contiene las variables necesarias para ejecutar los tests. Usar [`.env_example`](.env_example) como plantilla:
 
 ```dotenv
-# URL base de la aplicación a testear
-BASE_URL=https://devlogin.rednegocios.cl/
-
-# Credenciales de usuario de prueba (debe ser un usuario válido en el ambiente de testing)
-USER_NAME=usuario.prueba@ccs.cl
-
-# Contraseña del usuario de prueba
-USER_PASS='<password-de-prueba>'
+BASE_URL=
+USER_NAME=
+USER_PASS=
 ```
 
 #### Descripción de Variables
 
-| Variable | Descripción | Ejemplo |
-|----------|-------------|---------|
-| `BASE_URL` | URL raíz de la aplicación que se va a testear. Debe apuntar al ambiente correcto (desarrollo, staging, producción) | `https://devlogin.rednegocios.cl/` |
-| `USER_NAME` | Email o identificador del usuario de prueba. Debe corresponder a un usuario válido en la base de datos del ambiente | `usuario.prueba@ccs.cl` |
-| `USER_PASS` | Contraseña del usuario de prueba en texto plano. **Nota:** Solo para ambientes de desarrollo/staging | `<password-de-prueba>` |
+| Variable | Descripción |
+|----------|-------------|
+| `BASE_URL` | URL a la que accede cada test al inicio (login). Debe apuntar al ambiente de testing correcto |
+| `USER_NAME` | Email del usuario de prueba. Debe ser un usuario válido en el ambiente |
+| `USER_PASS` | Contraseña del usuario de prueba. **Nota:** solo para ambientes de desarrollo/staging |
 
 ### Carga de Variables de Entorno
 
-`login.spec.ts` carga las variables de entorno explícitamente desde `.env_playwright` al inicio:
+Cada archivo `*.spec.ts` carga las variables de entorno explícitamente desde `.env_playwright` al inicio (ejemplo de `login.spec.ts`):
 
 ```typescript
 import dotenv from 'dotenv';
@@ -256,13 +253,14 @@ process.env.USER_PASS   // Contraseña del usuario
 
 ### Casos de Test Implementados
 
-Detalle completo de los 3 archivos de prueba (locators, métodos y casos) en [`docs/wiki/Pruebas-Automatizadas-E2E.md`](docs/wiki/Pruebas-Automatizadas-E2E.md). Resumen:
+Detalle completo de los 4 archivos de prueba (locators, métodos y casos) en [`docs/wiki/Pruebas-Automatizadas-E2E.md`](docs/wiki/Pruebas-Automatizadas-E2E.md). Resumen:
 
 | Archivo | Tags | Casos |
 |---|---|---|
-| `login.spec.ts` | `@smoke @login` | 4 (detallados abajo) |
-| `evaluacion_desempeno.spec.ts` | `@smoke @evaluacion @botonesEvaluador` | 6 — búsqueda por RUT/N° contrato/administrador y filtros de vencimiento |
-| `registro_proveedor.spec.ts` | `@smoke @proveedor @proveedores @licitacion @miscelaneo` | 3 — alta de proveedor (Licitación / Misceláneo) |
+| `login.spec.ts` | `@smoke @login` | 4 (1 en `test.skip`; detallados abajo) |
+| `evaluacion_desempeno.spec.ts` | `@smoke @evaluacion @botonesEvaluador` | 6 — búsqueda por RUT y por N° de contrato, selección de contrato y filtros de vencimiento / sin evaluaciones |
+| `registro_proveedor.spec.ts` | `@smoke @proveedor @proveedores @licitacion @micelaneo` | 3 — alta de proveedor (Licitación / Misceláneo) |
+| `mandante_metricas.spec.ts` | `@smoke @dashboard` | 2 — 1 activo (columnas de Resumen Riesgo) y 1 en `test.skip` (botón Dashboard 360, pendiente) |
 
 #### `login.spec.ts` — todos los casos están etiquetados con `@smoke` y `@login`.
 
@@ -332,23 +330,30 @@ npx playwright install
 #### Comandos para Ejecutar Tests
 
 ```bash
+# Ejecutar toda la suite (chromium y webkit)
+npm run restroTest
+
 # Ejecutar únicamente la suite de login
 npm run loginTest
 
 # Ejecutar todos los tests marcados con @smoke
 npm run smoke
 
-# Ejecutar toda la suite (chromium, firefox y webkit)
-npx playwright test
+# Ver el último reporte HTML generado
+npm run testReport
+
+# Ejecutar por tag o por archivo (sin script dedicado)
+npx playwright test --grep @evaluacion
+npx playwright test mandante_metricas.spec.ts
+
+# Ejecutar en un solo navegador
+npx playwright test --project=chromium
 
 # Ejecutar tests con interfaz gráfica visible (modo headed)
 npx playwright test --headed
 
 # Ejecutar tests con modo debug (paso a paso)
 npx playwright test --debug
-
-# Ver el último reporte HTML generado
-npx playwright show-report
 ```
 
 ### Mejores Prácticas y Consideraciones
@@ -367,7 +372,7 @@ npx playwright show-report
 
 #### 🔐 Variables de Entorno en CI/CD
 
-El pipeline actual de este repositorio es **GitHub Actions** ([`.github/workflows/playwright.yml`](.github/workflows/playwright.yml)), que se ejecuta en cada `push`/`pull request` a `main`/`master`, instala dependencias y navegadores, corre `npx playwright test` y publica `playwright-report/` como artefacto (30 días de retención).
+El pipeline actual de este repositorio es **GitHub Actions** ([`.github/workflows/playwright.yml`](.github/workflows/playwright.yml)), que se ejecuta en cada `push`/`pull request` a `main`/`master`, instala dependencias y navegadores, corre `npx playwright test` y publica `playwright-report/` como artefacto (30 días de retención). El workflow no define `BASE_URL`, `USER_NAME` ni `USER_PASS` (ni secrets); hoy esas variables no llegan a los tests en CI.
 
 Si el proyecto se integra además con **Azure DevOps** (por ejemplo, para publicar esta documentación en la wiki o correr pipelines adicionales), las variables sensibles deben definirse como *variables secretas* del pipeline y no en un archivo `.env_playwright` versionado:
 
@@ -416,9 +421,11 @@ Si un test falla:
 
 ### Próximos Pasos
 
-- 🚧 Completar `MandanteMetricasPage` (actualmente es `//to do`)
+- 🚧 Completar `MandanteMetricasPage`: `segmentacionPiramide` comentado, bloque grabado sin migrar, y test "Botón Dashboard 360" en `test.skip` (`//TODO`)
 - 🚧 Habilitar `goToRankingProveedores()` en `NavBar_Mandante_BlackPage` cuando el módulo de Ranking esté disponible para pruebas
-- ⚠️ Revisar deuda técnica conocida (ver sección de Pendientes en la [wiki](docs/wiki/Pruebas-Automatizadas-E2E.md)): `await` faltante en los métodos de `MiCarteraPage`, y el `test.describe` de `registro_proveedor.spec.ts` que quedó con el título copiado de `evaluacion_desempeno.spec.ts`
+- 🚧 Reactivar el proyecto firefox en `playwright.config.ts` (comentado porque falla) y pasar `BASE_URL`/`USER_NAME`/`USER_PASS` al workflow de CI
+- 🚧 Cubrir `buscarPorAdmin()`, `filtroVencido()` y `nextPage()` de `EvaluacionDesempenoPage`, hoy sin test
+- ⚠️ Revisar deuda técnica conocida (ver sección de Pendientes en la [wiki](docs/wiki/Pruebas-Automatizadas-E2E.md))
 - ✅ Tests para cambio de contraseña (`FormChangePass.jsx`)
 - ✅ Tests para recuperación de contraseña (`FormResetPass.jsx`)
 - ✅ Tests para selección de múltiples sistemas (`SystemOptions.jsx`)
