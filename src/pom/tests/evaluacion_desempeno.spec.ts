@@ -8,20 +8,21 @@ import path from 'path';
 dotenv.config({ path: path.resolve('.env_playwright') });
 const user = process.env.USER_NAME;
 const pass = process.env.USER_PASS;
+const url = process.env.VITE_APP_URL_EVALUACION;
 
 test.describe('Evaluación de Desempeño', () => {
 
     test.beforeEach(async ({ page }) => {
         //Login con contraseña correcta, previo a cada test de esta suite
         const loginPage = new LoginPage(page);
-        const navBar = new NavBar_Mandante_BlackPage(page)
+        const navBar = new NavBar_Mandante_BlackPage(page);
 
-        await page.goto(process.env.BASE_URL);
+        await page.goto(process.env.VITE_APP_URL_EVALUACION);
         await loginPage.submitLogin(user, pass);
         await page.waitForLoadState();
         await expect(page).toHaveURL("https://devmandante.rednegocios.cl/dashboard");
         await navBar.goToEvaluacionDesempeno()
-        await expect(page).toHaveURL("https://devev.rednegocios.cl/EvaluacionDesempeno");
+        await expect(page).toHaveURL(`${url}EvaluacionDesempeno`);
     });
 
     test('Selecciona primer contrato por Rut Proveedor', { tag: ['@smoke', '@evaluacion'] }, async ({ page }) => {

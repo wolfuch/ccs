@@ -7,9 +7,11 @@ export class CargaDatosEvaluacionPage {
   readonly descargarEvaluadoresExcel: Locator;
   readonly descargarEvaluadoresCsv: Locator;
   readonly botonSeleccionarArchivo: Locator;
-  // readonly inputArchivo: Locator;
-  readonly tituloValidacion: Locator;
+  readonly planillaContratosOK: Locator;
+  readonly planillaEvaluadoresOK: Locator;
+  readonly planillaBad: Locator
   readonly botonContinuarEvaluadores: Locator;
+  readonly enviaCarga: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -18,12 +20,14 @@ export class CargaDatosEvaluacionPage {
     this.descargarEvaluadoresExcel = page.getByRole('button', { name: 'Descargar plantilla de Evaluadores en Excel' });
     this.descargarEvaluadoresCsv = page.getByRole('button', { name: 'Descargar plantilla de Evaluadores en CSV' });
     this.botonSeleccionarArchivo = page.getByRole('button', { name: 'Seleccionar archivo' });
-   // this.inputArchivo = page.locator('input[type="file"]');
-    this.tituloValidacion = page.getByRole('heading', { name: 'Validación documental' });
+    this.planillaContratosOK = page.getByRole('heading', { name: 'La plantilla de Contratos est' });
+    this.planillaEvaluadoresOK = page.getByRole('heading', { name: 'Ambas plantillas están' });
+    this.planillaBad = page.getByRole('heading', { name: 'Corrige 1 error para continuar' });
     this.botonContinuarEvaluadores = page.getByRole('button', { name: 'Continuar a Evaluadores' });
+    this.enviaCarga = page.getByRole('button', { name: 'Enviar carga' });
   }
 
-  async descargarPlantillaContratos(): Promise<Download> {
+  async descargarPlantillaContratosExcel(): Promise<Download> {
     //Es necesario dejar la "promesa" de la descarga. Si no el método falla
     const [download] = await Promise.all([
       this.page.waitForEvent('download'),
@@ -41,6 +45,24 @@ export class CargaDatosEvaluacionPage {
     return download;
   }
 
+    async descargarPlantillaEvaluadoresExcel(): Promise<Download> {
+    //Es necesario dejar la "promesa" de la descarga. Si no el método falla
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      this.descargarEvaluadoresExcel.click(),
+    ]);
+    return download;
+  }
+
+  async descargarPlantillaEvaluadoresCsv(): Promise<Download> {
+    //Es necesario dejar la "promesa" de la descarga. Si no el método falla
+    const [download] = await Promise.all([
+      this.page.waitForEvent('download'),
+      this.descargarEvaluadoresCsv.click(),
+    ]);
+    return download;
+  }
+
   async cargarArchivo(ruta: string) {
     const [fileChooser] = await Promise.all([
       this.page.waitForEvent('filechooser'),
@@ -48,4 +70,11 @@ export class CargaDatosEvaluacionPage {
     ]);
     await fileChooser.setFiles(ruta);
   }
+
+  /*
+  await page.getByRole('heading', { name: 'La plantilla de Contratos est' }).click();
+  await page.getByRole('heading', { name: 'Corrige 1 error para continuar' }).click();
+  await page.getByRole('heading', { name: 'Ambas plantillas están' }).click();
+  
+  */
 }

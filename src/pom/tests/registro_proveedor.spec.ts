@@ -18,7 +18,7 @@ test.describe('Registro Proveedores', () => {
         const loginPage = new LoginPage(page);
         const navBar = new NavBar_Mandante_BlackPage(page)
 
-        await page.goto(process.env.BASE_URL);
+        await page.goto(process.env.VITE_APP_URL_EVALUACION);
         await loginPage.submitLogin(user, pass);
         await page.waitForLoadState();
         await expect(page).toHaveURL("https://devmandante.rednegocios.cl/dashboard");
