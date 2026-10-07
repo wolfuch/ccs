@@ -3,6 +3,7 @@ import { LoginPage } from './../pages/login.page';
 import { NavBar_Mandante_BlackPage } from './../pages/navbar_mandante_black.page';
 import { CargaDatosEvaluacionPage } from './../pages/carga_datos_evaluacion.page';
 import dotenv from 'dotenv';
+import ExcelJS from 'exceljs';
 import path from 'path';
 
 dotenv.config({ path: path.resolve('.env_playwright') });
@@ -70,6 +71,67 @@ test.describe('Evaluación de Desempeño', () => {
         //El test no carga la data. Solo valida hasta antes de enviarla.
         await expect(carga.enviaCarga).toBeVisible();
     });
+
+    test('Plantilla contratos sin 1 valor muestra error', 
+        { tag: ['@cargaContratos'] }, async ({ page }, testInfo) => {
+        const carga = new CargaDatosEvaluacionPage(page);
+
+        const download = await carga.descargarPlantillaContratosExcel();
+        const ruta = testInfo.outputPath(download.suggestedFilename());
+        await download.saveAs(ruta);
+
+        // edit: clear one cell
+        const wb = new ExcelJS.Workbook();
+        await wb.xlsx.readFile(ruta);
+        //Lee la primera hoja
+        const ws = wb.worksheets[0];
+        //Borra el parametro en B2
+        ws.getCell('B2').value = null;
+        const rutaEditada = testInfo.outputPath('plantilla-contratos-editada.xlsx');
+        await wb.xlsx.writeFile(rutaEditada);
+
+        await carga.cargarArchivo(rutaEditada);
+        await expect(carga.planillaBad).toBeVisible();
+    });
+
+
+    test('Plantilla evaluadores sin 1 valor muestra error', 
+            {tag: ['@smoke','@cargaEvaluadores' ]}, async ({ page }, testInfo) => {
+        const carga = new CargaDatosEvaluacionPage(page);
+
+        //Descarga de archivo contratos
+        const downloadCon = await carga.descargarPlantillaContratosExcel();
+        expect(downloadCon.suggestedFilename()).toBe('plantilla-contratos.xlsx');
+
+        //Carga de archivo recién descargado. Se elimina después de la ejecución
+        const rutaCon = testInfo.outputPath(downloadCon.suggestedFilename());
+        await downloadCon.saveAs(rutaCon);
+        await carga.cargarArchivo(rutaCon);
+        await expect(carga.planillaContratosOK).toBeVisible();
+
+        await carga.botonContinuarEvaluadores.click();
+        
+        //Descarga de archivo evaluadores
+        const downloadEvua = await carga.descargarPlantillaEvaluadoresExcel();
+        expect(downloadEvua.suggestedFilename()).toBe('plantilla-evaluadores.xlsx');
+
+        const rutaEva = testInfo.outputPath(downloadEvua.suggestedFilename());
+        await downloadEvua.saveAs(rutaEva);
+
+        // Editará una celda
+        const wb = new ExcelJS.Workbook();
+        await wb.xlsx.readFile(rutaEva);
+        //Lee la primera hoja
+        const ws = wb.worksheets[0];
+        //Borra el parametro en B2
+        ws.getCell('B2').value = null;
+        const rutaEditada = testInfo.outputPath('plantilla-evaluadores-editada.xlsx');
+        await wb.xlsx.writeFile(rutaEditada);
+
+        await carga.cargarArchivo(rutaEditada);
+        await expect(carga.planillaBad).toBeVisible();
+    });
+
 
 
 });
