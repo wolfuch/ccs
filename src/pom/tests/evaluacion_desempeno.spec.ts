@@ -25,6 +25,11 @@ test.describe('Evaluación de Desempeño', () => {
         await expect(page).toHaveURL(`${url}EvaluacionDesempeno`);
     });
 
+        test('Valida encabezados de la tabla', { tag: ['@smoke', '@evaluacion'] }, async ({ page }) => {
+            const evaPage = new EvaluacionDesempenoPage(page);
+            await evaPage.validaEncabezadosTabla();
+        });
+
     test('Selecciona primer contrato por Rut Proveedor', { tag: ['@smoke', '@evaluacion'] }, async ({ page }) => {
         const evaPage = new EvaluacionDesempenoPage(page);
         await evaPage.buscarPorRut("0987");

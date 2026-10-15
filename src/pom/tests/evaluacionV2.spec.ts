@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/login.page';
 import { NavBar_Mandante_BlackPage } from '../pages/navbar_mandante_black.page';
-import { EvaluacionDesempenoPage } from '../pages/evaluacionV2.page';
+import { EvaluacionV2Page } from '../pages/evaluacionV2.page';
 import dotenv from 'dotenv';
 import path from 'path';
 
@@ -10,7 +10,11 @@ const user = process.env.USER_NAME;
 const pass = process.env.USER_PASS;
 const url = process.env.VITE_APP_URL_EVALUACION;
 
-test.describe('Evaluación de Desempeño', () => {
+const RUT_CON_DATOS = '91489000';
+const RUT_SIN_DATOS = '09876';
+const CONTRATO_CON_DATOS = 'TestEva2';
+
+test.describe('Evaluación de Desempeño V2', () => {
 
     test.beforeEach(async ({ page }) => {
         //Login con contraseña correcta, previo a cada test de esta suite
@@ -21,61 +25,56 @@ test.describe('Evaluación de Desempeño', () => {
         await loginPage.submitLogin(user, pass);
         await page.waitForLoadState();
         await expect(page).toHaveURL("https://devmandante.rednegocios.cl/dashboard");
-        await navBar.goToEvaluacionDesempeno()
-        await expect(page).toHaveURL(`${url}EvaluacionDesempeno`);
+        await navBar.goToConfigurarEvaluacionV2()
+        await expect(page).toHaveURL(`${url}EvaluacionV2`);
     });
 
-    test('Selecciona primer contrato por Rut Proveedor', { tag: ['@smoke', '@evaluacion'] }, async ({ page }) => {
-        const evaPage = new EvaluacionDesempenoPage(page);
-        await evaPage.buscarPorRut("0987");
-        await evaPage.seleccionarContrato("1");
-        await expect(page).toHaveURL("https://devev.rednegocios.cl/EvaluacionDesempeno/contrato/11432");
-        
-
+    test('Selecciona primer contrato por Rut Proveedor', { tag: ['@smoke', '@evaluacionV2'] }, async ({ page }) => {
+        const evaPage = new EvaluacionV2Page(page);
+        await evaPage.buscarPorRut(RUT_CON_DATOS);
+        await evaPage.seleccionarContrato(1);
+        await expect(page).toHaveURL(/EvaluacionV2\/contrato\/\d+$/);
     });
 
-    test('Valida Botón "Vence en próximos 15 días"', { tag: ['@evaluacion', '@botonesEvaluador'] }, async ({ page }) => {
-        const evaPage = new EvaluacionDesempenoPage(page);
-        await evaPage.buscarPorRut("0987");
+    test('Selecciona primer contrato por N° contrato', { tag: ['@smoke', '@evaluacionV2'] }, async ({ page }) => {
+        const evaPage = new EvaluacionV2Page(page);
+        await evaPage.buscarPorContrato(CONTRATO_CON_DATOS);
+        await expect(evaPage.verPrograma).toHaveCount(1);
+        await evaPage.seleccionarContrato(1);
+        await expect(page).toHaveURL(/EvaluacionV2\/contrato\/\d+$/);
+    });
+
+    test('Valida encabezados de la tabla', { tag: ['@smoke', '@evaluacionV2'] }, async ({ page }) => {
+        const evaPage = new EvaluacionV2Page(page);
+        await evaPage.validaEncabezadosTabla();
+    });
+
+    test('Valida Botón "Por vencer" muestra contratos', { tag: ['@evaluacionV2', '@botonesEvaluador'] }, async ({ page }) => {
+        const evaPage = new EvaluacionV2Page(page);
+        await evaPage.filtrarPorVencer();
         await expect(evaPage.verPrograma.first()).toBeVisible();
-        await evaPage.filtroVenceEn15();
-        await expect(page.getByRole('cell')).toContainText('No se encontraron contratos');
-
-    });
-        
-    test('Valida Botón "Vence en próximos 5 días"', { tag: ['@evaluacion', '@botonesEvaluador'] }, async ({ page }) => {
-        const evaPage = new EvaluacionDesempenoPage(page);
-        await evaPage.buscarPorRut("0987");
-        await expect(evaPage.verPrograma.first()).toBeVisible();
-        await evaPage.filtroVenceEn5();
-        await expect(page.getByRole('cell')).toContainText('No se encontraron contratos');
-
     });
 
-    test('Valida Botón "Sin evaluaciones Pendientes"', { tag: ['@evaluacion', '@botonesEvaluador'] }, async ({ page }) => {
-        const evaPage = new EvaluacionDesempenoPage(page);
-        await evaPage.buscarPorRut("0987");
-        await expect(evaPage.verPrograma.first()).toBeVisible();
-        await evaPage.filtroSinEvaluar();
-        await expect(page.getByRole('cell')).toContainText('No se encontraron contratos');
+    // Prueba de filtros como pruebas independientes.
+    const filtrosSinContratos = [
+        { nombre: 'Atrasada', filtrar: (p: EvaluacionV2Page) => p.filtrarAtrasada() },
+        { nombre: 'En curso', filtrar: (p: EvaluacionV2Page) => p.filtrarEnCurso() },
+        { nombre: 'Sin iniciar', filtrar: (p: EvaluacionV2Page) => p.filtrarSinIniciar() },
+        { nombre: 'Al día', filtrar: (p: EvaluacionV2Page) => p.filtrarAlDia() },
+    ];
 
-    });
+    for (const { nombre, filtrar } of filtrosSinContratos) {
+        test(`Valida Botón "${nombre}" sin contratos`, { tag: ['@evaluacionV2', '@botonesEvaluador'] }, async ({ page }) => {
+            const evaPage = new EvaluacionV2Page(page);
+            await filtrar(evaPage);
+            await expect(evaPage.sinResultados).toBeVisible();
+        });
+    }
 
-    test('Selecciona primer por N° comntrato', { tag: ['@smoke', '@evaluacion'] }, async ({ page }) => {
-        const evaPage = new EvaluacionDesempenoPage(page);
-        await evaPage.buscarPorContrato("4501925266");
-        await evaPage.seleccionarContrato("1");
-        await expect(page).toHaveURL("https://devev.rednegocios.cl/EvaluacionDesempeno/contrato/3796");
-        
-
-    });
-
-
-        test('No hay resultados en tabla', { tag: ['@evaluacion'] }, async ({ page }) => {
-        const evaPage = new EvaluacionDesempenoPage(page);
-        await evaPage.buscarPorRut("09876");
-        await expect(page.getByRole('cell')).toContainText('No se encontraron contratos');
-
+    test('No hay resultados en tabla', { tag: ['@evaluacionV2'] }, async ({ page }) => {
+        const evaPage = new EvaluacionV2Page(page);
+        await evaPage.buscarPorRut(RUT_SIN_DATOS);
+        await expect(evaPage.sinResultados).toBeVisible();
     });
 
 });
