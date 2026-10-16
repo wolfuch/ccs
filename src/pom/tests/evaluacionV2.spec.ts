@@ -32,7 +32,7 @@ test.describe('Evaluación de Desempeño V2', () => {
     test('Selecciona primer contrato por Rut Proveedor', { tag: ['@smoke', '@evaluacionV2'] }, async ({ page }) => {
         const evaPage = new EvaluacionV2Page(page);
         await evaPage.buscarPorRut(RUT_CON_DATOS);
-        await evaPage.seleccionarContrato(1);
+        await evaPage.seleccionarContrato("1");
         await expect(page).toHaveURL(/EvaluacionV2\/contrato\/\d+$/);
     });
 
