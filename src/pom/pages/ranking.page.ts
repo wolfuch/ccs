@@ -38,8 +38,6 @@ export class RankingPage{
 
   async seleccionarPeriodo(){
     await this.periodo.click();
-    //await this.page.waitForLoadState('networkidle');
-
   }
   
   async seleccionarPeriodoMarzo2026(){
@@ -58,7 +56,6 @@ export class RankingPage{
   }
 
   async seleccinoarTamanoEmpresa(){
-
   }
 
   async seleccionaTamanoEmpresa(tamano: 'micro'|'pequena'|'mediana'|'grande' ) {
@@ -82,5 +79,4 @@ export class RankingPage{
   async verFichaEB(){
     await this.verFichaEBS.click();
   }
-
 }
