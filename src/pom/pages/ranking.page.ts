@@ -55,11 +55,8 @@ export class RankingPage{
     await this.page.getByRole('option', { name: 'M02.00.00 EQUIPOS' }).click();
   }
 
-  async seleccinoarTamanoEmpresa(){
-  }
-
   async seleccionaTamanoEmpresa(tamano: 'micro'|'pequena'|'mediana'|'grande' ) {
-    this.tamanoEmpresa.click();
+    await this.tamanoEmpresa.click();
     switch(tamano){
         case 'micro':
             await this.page.getByText('MicroEmpresa').click();

@@ -10,7 +10,7 @@ const user = process.env.USER_NAME;
 const pass = process.env.USER_PASS;
 const url = process.env.BASE_URL_MANDANTE; 
 
-test.describe('Evaluación de Desempeño', () => {
+test.describe('Ranking test', () => {
 
     test.beforeEach(async ({ page }) => {
         //Login con contraseña correcta, previo a cada test de esta suite
@@ -48,7 +48,7 @@ test.describe('Evaluación de Desempeño', () => {
         const ranking = new RankingPage(page);
         await ranking.buscarProveedor("77982298-2");
         await ranking.verFichaEB();
-        await expect(page.getByTestId('detalle-header')).toContainText('RANKING ACTUAL #48EARLY BIRD SPARUT: 77982298-2');
+        await expect(page).toHaveURL(`${url}Ranking/detalleRanking/45413/456/77982298-2/EARLY%20BIRD%20SPA/0`);
     });
     
     test('Utiliza los filtros y seleccionar EARLY BIRD SPA', { tag: ['@ranking'] }, async ({ page }) => {

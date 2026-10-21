@@ -40,7 +40,7 @@ test.describe('Evaluación de Desempeño V2', () => {
         const evaPage = new EvaluacionV2Page(page);
         await evaPage.buscarPorContrato(CONTRATO_CON_DATOS);
         await expect(evaPage.verPrograma).toHaveCount(1);
-        await evaPage.seleccionarContrato(1);
+        await evaPage.seleccionarContrato("1");
         await expect(page).toHaveURL(/EvaluacionV2\/contrato\/\d+$/);
     });
 
