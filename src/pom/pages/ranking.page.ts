@@ -2,49 +2,85 @@ import { expect, type Locator, type Page } from '@playwright/test';
 
 export class RankingPage{
   private readonly page: Page;
-  readonly rutProveedor: Locator;
-  readonly buscadorProveedor: Locator;
+  readonly proveedor: Locator;
   readonly botonBuscar: Locator;
   readonly periodo: Locator;
   readonly categoria: Locator;
   readonly tamanoEmpresa: Locator;
-  readonly verFicha: Locator;
+  readonly verFichaEBS: Locator;
   
   constructor(page: Page) {
     this.page = page;
-    this.rutProveedor = page.getByRole('textbox', { name: 'Buscar por nombre, RUT o Razó' });
-    this.buscadorProveedor = page.getByRole('button', { name: 'Buscar' });
+    this.proveedor = page.getByRole('textbox', { name: 'Buscar por nombre, RUT o Razó' });
     this.botonBuscar = page.getByRole('button', { name: 'Buscar' });
     this.periodo = page.getByRole('button', { name: 'Período' });
     this.categoria = page.locator('span').filter({ hasText: 'Categoría' });
     this.tamanoEmpresa = page.getByRole('button', { name: 'Tamaño Empresa' });
-    this.verFicha = page.getByRole('button', { name: 'Ver ficha completa' });
+    
+    //Esta es la ficha correspondiente a la empresa EARLY BIRD SPA
+    this.verFichaEBS = page
+                        .getByRole('row')
+                        .filter({ hasText: 'EARLY BIRD SPA' })
+                        .getByRole('button', { name: 'Ver ficha completa' })
 
     }
 
-}
+    // Para los campos Categoría y Tamaño de empresa, se requiere trabajar mejor el métodod e selección para 
+    // que permita recibir un string para las alternativas. Se crea el método de todas maneras y se
+    // deja uno para que funcione el happypath 
+   
+  async buscarProveedor(rut: string){
+    //Acepta rut o razón social. Se deja la cariable como RUT para 
+    // mantener nomenclatura con otros test. 
+    await this.proveedor.fill(rut);
+    await this.botonBuscar.click();
+  }
 
-/*
-  await page.getByText('2026 Febrero').click();
-  await page.getByText('PeríodoPeríodo').click();
-  await page.getByText('2026 Marzo').click();
-  await page.locator('span').filter({ hasText: 'Categoría' }).click();
-  await page.getByRole('option', { name: 'M01.00.00 CONSTRUCCION' }).click();
-  await page.getByRole('button', { name: 'Categoría' }).click();
-  await page.getByRole('option', { name: 'M02.00.00 EQUIPOS' }).click();
-  await page.getByRole('button', { name: 'Tamaño Empresa' }).click();
-  await page.getByText('MicroEmpresa').click();
-  await expect(page.getByRole('listbox', { name: 'Resultados de búsqueda' }).getByRole('listitem')).toContainText('Ningún resultado para "9487"');
-  await page.getByRole('listbox', { name: 'Resultados de búsqueda' }).click();
-  await expect(page.getByRole('option', { name: 'INVERSIONES PSI SPA' })).toBeVisible();
-  await expect(page.getByText('INVERSIONES PSI SPA×')).toBeVisible();
-  await expect(page.getByRole('cell', { name: 'INVERSIONES PSI SPA' })).toBeVisible();
-  await expect(page.getByText('Tabla de Posiciones completa(16 resultados)↓ Excel↓ CSVPOSICIÓ')).toBeVisible();
-  await page.getByRole('button', { name: 'Ver ficha completa' }).click();
-  await expect(page.getByRole('article').getByRole('heading', { name: 'INVERSIONES PSI SPA' })).toBeVisible();
-  await page.getByRole('button', { name: 'Cerrar' }).click();
-  await page.getByText('Tamaño EmpresaTamaño Empresa').click();
-  await page.getByText('Empresa Pequeña').click();
-  await expect(page.getByRole('option', { name: 'INGENIERIA Y MONTAJES' })).toBeVisible();
-});
-*/
+  async seleccionarPeriodo(){
+    await this.periodo.click();
+    //await this.page.waitForLoadState('networkidle');
+
+  }
+  
+  async seleccionarPeriodoMarzo2026(){
+    await this.periodo.click();
+    //await this.page.waitForLoadState('networkidle');
+    await this.page.getByRole('option', { name: 'Marzo' }).getByText('Marzo').click();
+  }
+
+  async seleccionarCategoria(){
+    await this.categoria.click();
+  }
+
+  async seleccionarCategoriaEquipo(){
+    await this.categoria.click();
+    await this.page.getByRole('option', { name: 'M02.00.00 EQUIPOS' }).click();
+  }
+
+  async seleccinoarTamanoEmpresa(){
+
+  }
+
+  async seleccionaTamanoEmpresa(tamano: 'micro'|'pequena'|'mediana'|'grande' ) {
+    this.tamanoEmpresa.click();
+    switch(tamano){
+        case 'micro':
+            await this.page.getByText('MicroEmpresa').click();
+            break;
+        case 'pequena':
+            await this.page.getByText('Empresa Pequeña').click();
+            break;
+        case 'mediana':
+            await this.page.getByText('Empresa Mediana').click();
+            break;
+        case 'grande':
+            await this.page.getByText('Empresa Grande').click();
+            break;
+    }
+  }
+
+  async verFichaEB(){
+    await this.verFichaEBS.click();
+  }
+
+}
