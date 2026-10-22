@@ -13,7 +13,7 @@ test.describe('Dashboard', () => {
     test.beforeEach(async ({ page }) => {
         //Login con contraseña correcta, previo a cada test de esta suite
         const loginPage = new LoginPage(page);
-         await page.goto(process.env.BASE_URL);
+         await page.goto(process.env.VITE_APP_URL_EVALUACION);
         await loginPage.submitLogin(user, pass);
         await page.waitForLoadState();
         await expect(page).toHaveURL("https://devmandante.rednegocios.cl/dashboard");

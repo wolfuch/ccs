@@ -219,7 +219,7 @@ Documentación ampliada, lista para publicar en la wiki de Azure DevOps: [`docs/
 El archivo `.env_playwright` en la raíz del proyecto (no versionado) contiene las variables necesarias para ejecutar los tests. Usar [`.env_example`](.env_example) como plantilla:
 
 ```dotenv
-BASE_URL=
+VITE_APP_URL_EVALUACION=
 USER_NAME=
 USER_PASS=
 ```
@@ -228,7 +228,7 @@ USER_PASS=
 
 | Variable | Descripción |
 |----------|-------------|
-| `BASE_URL` | URL a la que accede cada test al inicio (login). Debe apuntar al ambiente de testing correcto |
+| `VITE_APP_URL_EVALUACION` | URL a la que accede cada test al inicio (login). Debe apuntar al ambiente de testing correcto |
 | `USER_NAME` | Email del usuario de prueba. Debe ser un usuario válido en el ambiente |
 | `USER_PASS` | Contraseña del usuario de prueba. **Nota:** solo para ambientes de desarrollo/staging |
 
@@ -246,7 +246,7 @@ dotenv.config({ path: path.resolve('.env_playwright') });
 Esto deja disponibles las variables en `process.env` para todos los tests:
 
 ```typescript
-process.env.BASE_URL    // URL de la aplicación
+process.env.VITE_APP_URL_EVALUACION    // URL de la aplicación
 process.env.USER_NAME   // Credenciales del usuario
 process.env.USER_PASS   // Contraseña del usuario
 ```
@@ -268,14 +268,14 @@ Detalle completo de los 4 archivos de prueba (locators, métodos y casos) en [`d
 **Objetivo:** Validar que un usuario puede autenticarse exitosamente con credenciales válidas.
 
 **Proceso:**
-1. Navega a `BASE_URL` (la URL definida en variables de entorno)
+1. Navega a `VITE_APP_URL_EVALUACION` (la URL definida en variables de entorno)
 2. Completa el campo de email con `USER_NAME` desde variables de entorno
 3. Completa el campo de contraseña con `USER_PASS` desde variables de entorno
 4. Hace clic en el botón "Ingresar"
 5. Espera a que la página cargue completamente
 
 **Variables de Entorno Utilizadas:**
-- `BASE_URL` - Destino inicial de navegación
+- `VITE_APP_URL_EVALUACION` - Destino inicial de navegación
 - `USER_NAME` - Email del usuario válido
 - `USER_PASS` - Contraseña del usuario válido
 
@@ -285,12 +285,12 @@ Detalle completo de los 4 archivos de prueba (locators, métodos y casos) en [`d
 **Objetivo:** Validar que el sistema rechaza emails inválidos con un mensaje de error apropiado.
 
 **Proceso:**
-1. Navega a `BASE_URL`
+1. Navega a `VITE_APP_URL_EVALUACION`
 2. Ingresa usuario `UserTest` y contraseña `badPass` (valores fijos, no usa credenciales de variables de entorno)
 3. Verifica que aparezca el mensaje de error: "Ingrese un email válido"
 
 **Variables de Entorno Utilizadas:**
-- `BASE_URL` - Destino inicial de navegación
+- `VITE_APP_URL_EVALUACION` - Destino inicial de navegación
 
 **Resultado Esperado:** El sistema muestra un error de validación sin permitir el envío del formulario.
 
@@ -300,7 +300,7 @@ Detalle completo de los 4 archivos de prueba (locators, métodos y casos) en [`d
 **Objetivo:** Validar que el sistema rechaza credenciales incorrectas (contraseña inválida) con un mensaje de error del servidor.
 
 **Proceso:**
-1. Navega a `BASE_URL`
+1. Navega a `VITE_APP_URL_EVALUACION`
 2. Completa el email con `USER_NAME` válido desde variables de entorno
 3. Completa la contraseña con un valor inválido: `badPass`
 4. Hace clic en el botón "Ingresar"
@@ -308,7 +308,7 @@ Detalle completo de los 4 archivos de prueba (locators, métodos y casos) en [`d
 6. Cierra el diálogo de error haciendo clic en "Entendido"
 
 **Variables de Entorno Utilizadas:**
-- `BASE_URL` - Destino inicial de navegación
+- `VITE_APP_URL_EVALUACION` - Destino inicial de navegación
 - `USER_NAME` - Email válido (probando con contraseña incorrecta)
 
 **Resultado Esperado:** El servidor rechaza la autenticación y muestra un mensaje de error modal que el usuario puede cerrar.
@@ -363,7 +363,7 @@ npx playwright test --debug
 1. **Ambiente de Testing vs Producción**
    - Las credenciales en `.env_playwright` deben apuntar a un usuario de prueba válido
    - **Nunca usar credenciales reales de usuarios en producción**
-   - Para ambientes diferentes (dev, staging, prod), ajustar `BASE_URL` en `.env_playwright`
+   - Para ambientes diferentes (dev, staging, prod), ajustar `VITE_APP_URL_EVALUACION` en `.env_playwright`
 
 2. **Seguridad**
    - El archivo `.env_playwright` contiene credenciales sensibles
@@ -372,14 +372,14 @@ npx playwright test --debug
 
 #### 🔐 Variables de Entorno en CI/CD
 
-El pipeline actual de este repositorio es **GitHub Actions** ([`.github/workflows/playwright.yml`](.github/workflows/playwright.yml)), que se ejecuta en cada `push`/`pull request` a `main`/`master`, instala dependencias y navegadores, corre `npx playwright test` y publica `playwright-report/` como artefacto (30 días de retención). El workflow no define `BASE_URL`, `USER_NAME` ni `USER_PASS` (ni secrets); hoy esas variables no llegan a los tests en CI.
+El pipeline actual de este repositorio es **GitHub Actions** ([`.github/workflows/playwright.yml`](.github/workflows/playwright.yml)), que se ejecuta en cada `push`/`pull request` a `main`/`master`, instala dependencias y navegadores, corre `npx playwright test` y publica `playwright-report/` como artefacto (30 días de retención). El workflow no define `VITE_APP_URL_EVALUACION`, `USER_NAME` ni `USER_PASS` (ni secrets); hoy esas variables no llegan a los tests en CI.
 
 Si el proyecto se integra además con **Azure DevOps** (por ejemplo, para publicar esta documentación en la wiki o correr pipelines adicionales), las variables sensibles deben definirse como *variables secretas* del pipeline y no en un archivo `.env_playwright` versionado:
 
 ```yaml
 # Ejemplo de variables en un pipeline de Azure DevOps
 variables:
-  BASE_URL: 'https://staging.rednegocios.cl/'
+  VITE_APP_URL_EVALUACION: 'https://staging.rednegocios.cl/'
   USER_NAME: 'testuser@ccs.cl'
   USER_PASS: '$(TestUserPassword)'  # Variable secreta
 ```
@@ -414,8 +414,8 @@ Si un test falla:
 
 | Problema | Causa | Solución |
 |----------|-------|----------|
-| `process.env.BASE_URL is undefined` | `.env_playwright` no existe o no se carga | Crear `.env_playwright` en raíz a partir de `.env_example` |
-| Test timeout en login | La aplicación es lenta o URL inaccesible | Verificar `BASE_URL` en `.env_playwright`, aumentar timeout |
+| `process.env.VITE_APP_URL_EVALUACION is undefined` | `.env_playwright` no existe o no se carga | Crear `.env_playwright` en raíz a partir de `.env_example` |
+| Test timeout en login | La aplicación es lenta o URL inaccesible | Verificar `VITE_APP_URL_EVALUACION` en `.env_playwright`, aumentar timeout |
 | "Parámetros no válidos" en test de login correcto | Credenciales expiradas o inválidas | Actualizar `USER_NAME` y `USER_PASS` con un usuario válido |
 | Tests pasan localmente pero fallan en CI/CD | Variables de entorno no configuradas como secrets en el pipeline | Configurar variables secretas en GitHub Actions / Azure DevOps |
 
@@ -423,7 +423,7 @@ Si un test falla:
 
 - 🚧 Completar `MandanteMetricasPage`: `segmentacionPiramide` comentado, bloque grabado sin migrar, y test "Botón Dashboard 360" en `test.skip` (`//TODO`)
 - 🚧 Habilitar `goToRankingProveedores()` en `NavBar_Mandante_BlackPage` cuando el módulo de Ranking esté disponible para pruebas
-- 🚧 Reactivar el proyecto firefox en `playwright.config.ts` (comentado porque falla) y pasar `BASE_URL`/`USER_NAME`/`USER_PASS` al workflow de CI
+- 🚧 Reactivar el proyecto firefox en `playwright.config.ts` (comentado porque falla) y pasar `VITE_APP_URL_EVALUACION`/`USER_NAME`/`USER_PASS` al workflow de CI
 - 🚧 Cubrir `buscarPorAdmin()`, `filtroVencido()` y `nextPage()` de `EvaluacionDesempenoPage`, hoy sin test
 - ⚠️ Revisar deuda técnica conocida (ver sección de Pendientes en la [wiki](docs/wiki/Pruebas-Automatizadas-E2E.md))
 - ✅ Tests para cambio de contraseña (`FormChangePass.jsx`)
