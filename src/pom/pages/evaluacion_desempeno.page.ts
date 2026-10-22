@@ -86,5 +86,16 @@ export class EvaluacionDesempenoPage{
             await this.verPrograma.first().click();
         }
     }
+
+    // Valida el encabezado de las tablas
+  async validaEncabezadosTabla(){
+      const encabezados = [
+          'Rut Proveedor', 'Proveedor', 'N° de contrato', 'Dimensión', 'Periodicidad',
+          'Última evaluación', 'Fecha evaluación', 'Estado', 'Acción',
+      ];
+      for (const nombre of encabezados) {
+          await expect(this.page.getByRole('columnheader', { name: nombre, exact: true })).toBeVisible();
+      }
+  }
 }
 

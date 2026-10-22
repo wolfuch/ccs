@@ -11,11 +11,12 @@ export class NavBar_Mandante_BlackPage{
     readonly metricas: Locator;
     readonly evaluacion: Locator;
     readonly evaluacionDesempeno: Locator;
+    readonly evaluacionV2: Locator;
     readonly cargarDatosEvaluacion: Locator;
     readonly configuracionEscala: Locator;
     readonly configurarEvaluacion: Locator;
-    // readonly ranking: Locator;
-    // readonly rankingProveedores: Locator;
+    readonly ranking: Locator;
+    readonly rankingProveedores: Locator;
 
 
     constructor(page: Page) {
@@ -26,12 +27,13 @@ export class NavBar_Mandante_BlackPage{
         this.cartera = page.getByRole('menuitem', { name: 'Mi Cartera' }).locator('a');
         this.metricas = page.getByRole('menuitem', { name: 'Métricas' }).locator('a');
         this.evaluacion = page.locator('a').filter({ hasText: /^Evaluación$/ });
+        this.evaluacionV2 = page.locator('a').filter({ hasText: 'Evaluación v2' });
         this.evaluacionDesempeno = page.locator('a').filter({ hasText: 'Evaluación de desempeño' });
         this.cargarDatosEvaluacion = page.locator('a').filter({ hasText: 'Cargar datos evaluación' });
         this.configuracionEscala = page.locator('a').filter({ hasText: 'Configuración escala' });
         this.configurarEvaluacion = page.locator('a').filter({ hasText: 'Configurar evaluación' });
-        // this.ranking = page.locator('a').filter({ hasText: /^Ranking$/ });
-        // this.rankingProveedores = page.locator('a').filter({ hasText: 'Ranking proveedores' });
+        this.ranking = page.locator('a').filter({ hasText: /^Ranking$/ });
+        this.rankingProveedores = page.locator('a').filter({ hasText: 'Ranking proveedores' });
 
     }
 
@@ -71,10 +73,14 @@ export class NavBar_Mandante_BlackPage{
         await this.configurarEvaluacion.click();
     }
 
-    //Se agregará más adelante
-    // async goToRankingProveedores(){
-    //     await this.ranking.click();
-    //     await this.rankingProveedores.click();
-    // }
+    async goToConfigurarEvaluacionV2(){
+        await this.evaluacion.click();
+        await this.evaluacionV2.click();
+    }
+
+    async goToRankingProveedores(){
+        await this.ranking.click();
+        await this.rankingProveedores.click();
+    }
 
 }
