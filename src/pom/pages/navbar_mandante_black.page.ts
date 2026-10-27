@@ -1,10 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-//Nota importante: Ranking se agregara más adelante. Se dejan los locator para descomentar en su momento.
-
 
 export class NavBar_Mandante_BlackPage{
     private readonly page: Page;
-    private readonly getStartedLink: Locator;
     readonly buscaProveedores: Locator;
     readonly proveedores: Locator;
     readonly cartera: Locator;
@@ -21,7 +18,6 @@ export class NavBar_Mandante_BlackPage{
 
     constructor(page: Page) {
         this.page = page;
-        this.getStartedLink = page.locator('a', { hasText: 'Get started' });
         this.buscaProveedores= page.getByRole('menuitem', { name: 'Buscar proveedores' }).locator('a');
         this.proveedores = page.locator('a').filter({ hasText: /^Proveedores$/ });
         this.cartera = page.getByRole('menuitem', { name: 'Mi Cartera' }).locator('a');
@@ -82,5 +78,6 @@ export class NavBar_Mandante_BlackPage{
         await this.ranking.click();
         await this.rankingProveedores.click();
     }
+
 
 }
