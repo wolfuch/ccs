@@ -27,7 +27,12 @@ export class MandanteMetricasPage{
     await expect(this.columnaCantidad).toBeVisible();
   }
 
-  async irDashboard360(){
-    await this.dashboard360.click();
+  //Este médoto es para los test de Dashboard360. Se llamará directamente desde los 
+  async irDashboard360(): Promise<Page> {
+      const [popup] = await Promise.all([
+      this.page.waitForEvent('popup'),
+      this.dashboard360.click(),
+    ]);
+    return popup;
   }
 }

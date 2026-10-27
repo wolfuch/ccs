@@ -14,7 +14,6 @@ export class NavBar_Mandante_BlackPage{
     readonly configurarEvaluacion: Locator;
     readonly ranking: Locator;
     readonly rankingProveedores: Locator;
-    readonly dashboard360: Locator
 
 
     constructor(page: Page) {
@@ -31,7 +30,6 @@ export class NavBar_Mandante_BlackPage{
         this.configurarEvaluacion = page.locator('a').filter({ hasText: 'Configurar evaluación' });
         this.ranking = page.locator('a').filter({ hasText: /^Ranking$/ });
         this.rankingProveedores = page.locator('a').filter({ hasText: 'Ranking proveedores' });
-        this.dashboard360 = page.getByRole('button', { name: 'Dashboard 360 Visualiza mé' })
 
     }
 
@@ -79,11 +77,6 @@ export class NavBar_Mandante_BlackPage{
     async goToRankingProveedores(){
         await this.ranking.click();
         await this.rankingProveedores.click();
-    }
-
-    async goToDashboard(){
-        const page1 = await page1Promise;
-        this.dashboard360.click();
     }
 
 

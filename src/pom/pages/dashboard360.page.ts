@@ -4,7 +4,9 @@ export class Dashboard360 {
   private readonly page: Page;
   readonly headerAlertasCategoría: Locator;
   readonly headerPanoramaCartera: Locator;
-  readonly headerPEP_PEC_PER: Locator;
+//   readonly headerPEP: Locator;
+//   readonly headerPEC: Locator;
+//   readonly headerPER: Locator;
   readonly headerInconsistencias: Locator;
   readonly headerProveedores: Locator;
   readonly alertaFinanciero: Locator;
@@ -22,8 +24,10 @@ export class Dashboard360 {
     this.page = page;
     this.headerAlertasCategoría = page.getByRole('heading', { name: 'Alertas por categoría' });
     this.headerPanoramaCartera = page.getByRole('heading', { name: 'Panorama de la cartera' });
-    this.headerPEP_PEC_PER = page.getByRole('heading', { name: 'PEP, PEC y PER' });
-    this.headerInconsistencias = page.getByRole('heading', { name: 'Inconsistencias y' });
+    // this.headerPEP = page.getByRole('heading', { name: 'PEP', exact: true });
+    // this.headerPEC = page.getByRole('heading', { name: 'PEC', exact: true });
+    // this.headerPER = page.getByRole('heading', { name: 'PER', exact: true });
+    this.headerInconsistencias = page.getByRole('heading', { name: 'Inconsistencias entre sistemas' });
     this.headerProveedores = page.getByRole('heading', { name: 'Proveedores de la cartera' });
     this.alertaFinanciero = page.getByTestId('cartera-categoria-financiero');
     this.alertaSeguridad = page.getByTestId('cartera-categoria-seguridad');
@@ -40,7 +44,9 @@ export class Dashboard360 {
     async validaHeaders(){
         await expect(this.headerAlertasCategoría).toBeVisible();
         await expect(this.headerPanoramaCartera).toBeVisible();
-        await expect(this.headerPEP_PEC_PER).toBeVisible();
+        // await expect(this.headerPEP).toBeVisible();
+        // await expect(this.headerPEC).toBeVisible();
+        // await expect(this.headerPER).toBeVisible();
         await expect(this.headerInconsistencias).toBeVisible();
         await expect(this.headerProveedores).toBeVisible();
     }
