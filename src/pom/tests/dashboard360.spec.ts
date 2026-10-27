@@ -44,4 +44,13 @@ test.describe('Dashboard 360', () => {
         await dashboard.validaAlertas();
     });
 
+    test('Busca un proveedor y seleccionarlo', { tag: ['@dashboard360'] }, async () => {
+        await dashboard.proveedor360('70017');
+        await expect(popup.getByRole('cell', { name: 'CAMARA DE COMERCIO DE SANTIAGO A G', exact: true })).toBeVisible();
+        await popup.getByRole('button', { name: 'Ver el Centro de Alertas 360' }).click();
+        await expect(popup.getByTestId('alertas-header-proveedor').getByText('CAMARA DE COMERCIO DE')).toBeVisible();
+        //await expect(popup).toHaveURL("https://devmandante.rednegocios.cl/dashboard", { timeout: 15000 });
+        //TODO: Mejorar la comparación de la URL si es que es necesario
+    });
 });
+
