@@ -1,6 +1,6 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
-export class LoginPage {
+export class Dashboard360 {
   private readonly page: Page;
   readonly headerAlertasCategoría: Locator;
   readonly headerPanoramaCartera: Locator;

@@ -1,10 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-//Nota importante: Ranking se agregara más adelante. Se dejan los locator para descomentar en su momento.
-
 
 export class NavBar_Mandante_BlackPage{
     private readonly page: Page;
-    private readonly getStartedLink: Locator;
     readonly buscaProveedores: Locator;
     readonly proveedores: Locator;
     readonly cartera: Locator;
@@ -17,11 +14,11 @@ export class NavBar_Mandante_BlackPage{
     readonly configurarEvaluacion: Locator;
     readonly ranking: Locator;
     readonly rankingProveedores: Locator;
+    readonly dashboard360: Locator
 
 
     constructor(page: Page) {
         this.page = page;
-        this.getStartedLink = page.locator('a', { hasText: 'Get started' });
         this.buscaProveedores= page.getByRole('menuitem', { name: 'Buscar proveedores' }).locator('a');
         this.proveedores = page.locator('a').filter({ hasText: /^Proveedores$/ });
         this.cartera = page.getByRole('menuitem', { name: 'Mi Cartera' }).locator('a');
@@ -34,6 +31,7 @@ export class NavBar_Mandante_BlackPage{
         this.configurarEvaluacion = page.locator('a').filter({ hasText: 'Configurar evaluación' });
         this.ranking = page.locator('a').filter({ hasText: /^Ranking$/ });
         this.rankingProveedores = page.locator('a').filter({ hasText: 'Ranking proveedores' });
+        this.dashboard360 = page.getByRole('button', { name: 'Dashboard 360 Visualiza mé' })
 
     }
 
@@ -82,5 +80,11 @@ export class NavBar_Mandante_BlackPage{
         await this.ranking.click();
         await this.rankingProveedores.click();
     }
+
+    async goToDashboard(){
+        const page1 = await page1Promise;
+        this.dashboard360.click();
+    }
+
 
 }
