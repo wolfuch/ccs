@@ -9,6 +9,7 @@
     "smoke": "npx playwright test --grep @smoke",
     "ranking": "npx playwright test --grep @ranking",
     "dashboard360": "npx playwright test --grep @dashboard360",
+    "api": "npx playwright test --project=api",
     "testReport": "npx playwright show-report",
     "dev": "vite --open",
     "build": "vite build",

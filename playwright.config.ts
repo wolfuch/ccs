@@ -4,9 +4,10 @@ import { defineConfig, devices } from '@playwright/test';
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.playwright.env') });
+import dotenv from 'dotenv';
+import path from 'path';
+// Se carga aquí para que el proyecto "api" lea API_BASE_URL. Los specs de UI siguen cargando el archivo por su cuenta
+dotenv.config({ path: path.resolve('.env_playwright') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -41,9 +42,11 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    // Los specs de API (*.api.spec.ts) corren solo en el proyecto "api": no necesitan navegador
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      testIgnore: /.*\.api\.spec\.ts/,
     },
 
     // {
@@ -55,6 +58,17 @@ export default defineConfig({
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
+      testIgnore: /.*\.api\.spec\.ts/,
+    },
+
+    // Pruebas de API: usan el fixture `request`, sin navegador
+    {
+      name: 'api',
+      testMatch: /.*\.api\.spec\.ts/,
+      use: {
+        baseURL: process.env.API_BASE_URL,
+        extraHTTPHeaders: { Accept: 'application/json' },
+      },
     },
 
     /* Test against mobile viewports. */
